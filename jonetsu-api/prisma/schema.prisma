@@ -12,7 +12,146 @@ datasource db {
   provider = "postgresql"
 }
 
-model test{
-  id Int @id @default(autoincrement())
-  nombre String @unique
+enum estado_ticket {
+  reservado
+  pago_en_revision
+  confirmado
+  entregado
+  cancelado
+}
+
+enum estado_pago {
+  pendiente
+  verificado
+  rechazado
+  reembolsado
+}
+
+enum metodo_pago {
+  transferencia
+  efectivo
+  tarjeta
+}
+
+enum rol_persona {
+  cliente
+  admin
+}
+
+model persona {
+  id_persona    String     @id @default(uuid()) @db.Uuid
+  nombre        String
+  apellido      String
+  telefono      String
+  email         String     @unique
+  password_hash String?
+  rol           rol_persona @default(cliente)
+  created_at    DateTime   @default(now())
+
+  tickets       ticket[]
+  pagos_verificados pago[] @relation("PagoVerificadoPor")
+}
+
+model categoria {
+  id_categoria String     @id @default(uuid()) @db.Uuid
+  nombre       String     @unique
+
+  productos    producto[]
+}
+
+model producto {
+  id_producto  String   @id @default(uuid()) @db.Uuid
+  id_categoria String   @db.Uuid
+  nombre       String
+  descripcion  String?
+  imagen_url   String?
+  precio       Decimal
+  activo       Boolean  @default(true)
+
+  categoria    categoria @relation(fields: [id_categoria], references: [id_categoria])
+  ticket_items ticket_item[]
+  horarios     horario_producto[]
+}
+
+model evento {
+  id_evento    String   @id @default(uuid()) @db.Uuid
+  nombre       String
+  descripcion String?
+  fecha        DateTime @db.Date
+  activo       Boolean  @default(true)
+
+  horarios     horario[]
+}
+
+model horario {
+  id_horario String   @id @default(uuid()) @db.Uuid
+  id_evento  String   @db.Uuid
+  hora       DateTime @db.Time(6)
+  abierto    Boolean  @default(true)
+
+  evento     evento @relation(fields: [id_evento], references: [id_evento])
+  productos  horario_producto[]
+  tickets    ticket[]
+
+  @@unique([id_evento, hora])
+}
+
+model horario_producto {
+  id_horario  String @db.Uuid
+  id_producto String @db.Uuid
+  cupo_total  Int
+
+  horario  horario  @relation(fields: [id_horario], references: [id_horario])
+  producto producto @relation(fields: [id_producto], references: [id_producto])
+
+  @@id([id_horario, id_producto])
+}
+
+model ticket {
+  id_ticket     String        @id @default(uuid()) @db.Uuid
+  id_persona    String        @db.Uuid
+  id_horario    String        @db.Uuid
+  codigo_acceso String        @unique
+  estado        estado_ticket @default(reservado)
+  expira_en     DateTime
+  asistio       Boolean?
+  notas         String?
+  total         Decimal       @default(0)
+  created_at    DateTime      @default(now())
+
+  persona       persona       @relation(fields: [id_persona], references: [id_persona])
+  horario       horario       @relation(fields: [id_horario], references: [id_horario])
+  items         ticket_item[]
+  pagos         pago[]
+
+  @@index([id_horario, estado])
+  @@index([expira_en])
+}
+
+model ticket_item {
+  id_item         String  @id @default(uuid()) @db.Uuid
+  id_ticket       String  @db.Uuid
+  id_producto     String  @db.Uuid
+  cantidad        Int     @default(1)
+  precio_unitario Decimal
+
+  ticket   ticket   @relation(fields: [id_ticket], references: [id_ticket], onDelete: Cascade)
+  producto producto @relation(fields: [id_producto], references: [id_producto])
+
+  @@index([id_ticket])
+  @@index([id_producto, id_ticket])
+}
+
+model pago {
+  id_pago         String      @id @default(uuid()) @db.Uuid
+  id_ticket       String      @db.Uuid
+  monto           Decimal
+  metodo          metodo_pago
+  comprobante_url String?
+  estado          estado_pago @default(pendiente)
+  verificado_por  String?     @db.Uuid
+  created_at      DateTime    @default(now())
+
+  ticket          ticket   @relation(fields: [id_ticket], references: [id_ticket], onDelete: Cascade)
+  verificador     persona? @relation("PagoVerificadoPor", fields: [verificado_por], references: [id_persona])
 }

@@ -1,0 +1,77 @@
+@import "tailwindcss";
+@source "../components";
+
+/* Fuente de marca: copia el archivo en public/fonts/Montier-FlaredSemiBold.woff2.
+   Mientras no exista, se usa Marcellus como respaldo (ver layout.tsx). */
+@font-face {
+  font-family: "Montier";
+  src: url("/fonts/Montier-FlaredSemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+
+:root {
+  --ink: #000000;
+  --sun: #f0311f;
+  --paper: #ffffff;
+  --mist: #759ead;
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-sun: var(--sun);
+  --color-paper: var(--paper);
+  --color-mist: var(--mist);
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: "Montier", var(--font-marcellus), Georgia, serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+  }
+}
+
+/* Único movimiento de la página: el sol del hero aparece al cargar. */
+@keyframes sun-rise {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sun-enter {
+    animation: sun-rise 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    transition:
+      opacity 700ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .reveal-below {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  .reveal-above {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  .reveal-shown {
+    opacity: 1;
+    transform: none;
+  }
+}

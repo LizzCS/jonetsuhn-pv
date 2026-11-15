@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useSesion } from "@/lib/session";
 
 const links = [
   { href: "/servicios", label: "Servicios" },
@@ -15,10 +16,14 @@ const focus =
 
 export default function AppBar() {
   const pathname = usePathname();
+  const sesion = useSesion();
   const [open, setOpen] = useState(false);
 
+  const activo = (href: string) =>
+    pathname === href || pathname.startsWith(`${href}/`);
+
   return (
-    <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         {/* Reemplaza este texto por el logo real (public/logo.svg) cuando lo tengas */}
         <Link
@@ -41,7 +46,7 @@ export default function AppBar() {
               <Link
                 key={href}
                 href={href}
-                aria-current={pathname === href ? "page" : undefined}
+                aria-current={activo(href) ? "page" : undefined}
                 className={`text-base transition-colors hover:text-sun aria-[current=page]:underline aria-[current=page]:decoration-sun aria-[current=page]:decoration-2 aria-[current=page]:underline-offset-8 ${focus}`}
               >
                 {label}
@@ -51,23 +56,33 @@ export default function AppBar() {
 
           <div className="flex items-center gap-2">
             <Link
-              href="/login"
-              aria-label="Perfil"
-              className={`grid size-10 place-items-center rounded-full border border-ink transition-colors hover:bg-ink hover:text-paper ${focus}`}
+              href={sesion ? "/perfil" : "/login"}
+              aria-label={sesion ? "Mi perfil" : "Iniciar sesión"}
+              className={`grid size-10 place-items-center rounded-full border border-ink transition-colors ${focus} ${
+                sesion
+                  ? "bg-ink text-paper hover:bg-ink/85"
+                  : "hover:bg-ink hover:text-paper"
+              }`}
             >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                aria-hidden="true"
-              >
-                <circle cx="12" cy="8" r="4" />
-                <path d="M4 21a8 8 0 0 1 16 0" />
-              </svg>
+              {sesion ? (
+                <span aria-hidden="true" className="text-base font-medium">
+                  {sesion.nombre.charAt(0).toUpperCase()}
+                </span>
+              ) : (
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 21a8 8 0 0 1 16 0" />
+                </svg>
+              )}
             </Link>
 
             <button
@@ -111,7 +126,7 @@ export default function AppBar() {
                 <Link
                   href={href}
                   onClick={() => setOpen(false)}
-                  aria-current={pathname === href ? "page" : undefined}
+                  aria-current={activo(href) ? "page" : undefined}
                   className={`block py-3 text-lg aria-[current=page]:text-sun ${focus}`}
                 >
                   {label}

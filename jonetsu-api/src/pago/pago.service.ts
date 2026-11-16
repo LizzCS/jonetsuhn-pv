@@ -17,8 +17,8 @@ import { minutosDesdeAhora } from '../common/fechas.js';
 import { conReintento } from '../common/prisma-utils.js';
 import { MINUTOS_REINTENTO_PAGO } from '../common/reglas-negocio.js';
 
-import { ArchivoSubido } from './comprobante.pipe.js';
-import { ComprobanteStorageService } from './comprobante-storage.service.js';
+import type { ArchivoSubido } from '../common/archivos/imagen.pipe.js';
+import { ArchivosService } from '../common/archivos/archivos.service.js';
 import { CreatePagoDto } from './dto/create-pago.dto.js';
 import { FiltroPagosDto } from './dto/filtro-pagos.dto.js';
 import { AccionAdminDto } from '../common/dto/accion-admin.dto.js';
@@ -56,7 +56,7 @@ const incluirRelaciones = {
 export class PagoService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly comprobantes: ComprobanteStorageService,
+    private readonly archivos: ArchivosService,
   ) {}
 
   // CREATE - El cliente sube el comprobante de su transferencia.
@@ -66,7 +66,8 @@ export class PagoService {
     const metodo = dto.metodo ?? metodo_pago.transferencia;
 
     // Se guarda primero el archivo; si la transacción falla, se borra
-    const clave = await this.comprobantes.guardar(
+    const clave = await this.archivos.guardar(
+      'comprobantes',
       archivo.buffer,
       archivo.mimetype,
     );
@@ -139,7 +140,7 @@ export class PagoService {
         'Conflicto al registrar el pago. Intenta nuevamente',
       );
     } catch (error) {
-      await this.comprobantes.borrar(clave);
+      await this.archivos.borrar(clave);
       throw error;
     }
   }
@@ -180,7 +181,7 @@ export class PagoService {
   // TODO(auth): solo el dueño del ticket o un admin
   async comprobante(id: string) {
     const pago = await this.findOne(id);
-    return this.comprobantes.abrir(pago.comprobante_url);
+    return this.archivos.abrir(pago.comprobante_url);
   }
 
   // UPDATE - Reemplazar la imagen mientras el pago siga pendiente
@@ -193,7 +194,8 @@ export class PagoService {
       );
     }
 
-    const clave = await this.comprobantes.guardar(
+    const clave = await this.archivos.guardar(
+      'comprobantes',
       archivo.buffer,
       archivo.mimetype,
     );
@@ -205,13 +207,13 @@ export class PagoService {
     });
 
     if (count === 0) {
-      await this.comprobantes.borrar(clave);
+      await this.archivos.borrar(clave);
       throw new ConflictException(
         'El pago ya fue revisado; no se puede cambiar el comprobante',
       );
     }
 
-    await this.comprobantes.borrar(pago.comprobante_url);
+    await this.archivos.borrar(pago.comprobante_url);
 
     return this.findOne(id);
   }
@@ -366,7 +368,7 @@ export class PagoService {
     );
 
     // El archivo se borra solo después de confirmar la transacción
-    await this.comprobantes.borrar(pago.comprobante_url);
+    await this.archivos.borrar(pago.comprobante_url);
 
     return {
       mensaje: 'Pago pendiente eliminado correctamente',

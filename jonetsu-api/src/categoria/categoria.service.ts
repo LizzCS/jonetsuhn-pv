@@ -1,5 +1,6 @@
 import {
   Injectable,
+  BadRequestException,
   ConflictException,
   NotFoundException,
 } from '@nestjs/common';
@@ -12,8 +13,23 @@ import { UpdateCategoriaDto } from './dto/update-categoria.dto.js';
 export class CategoriaService {
   constructor(private readonly prisma: PrismaService) {}
 
-  // CREATE
+  // CREATE - Si existe una categoría borrada con ese nombre, se reactiva
   async create(dto: CreateCategoriaDto) {
+    const existente = await this.prisma.categoria.findUnique({
+      where: { nombre: dto.nombre },
+    });
+
+    if (existente?.activo) {
+      throw new ConflictException('Ya existe una categoría con ese nombre');
+    }
+
+    if (existente) {
+      return this.prisma.categoria.update({
+        where: { id_categoria: existente.id_categoria },
+        data: { activo: true },
+      });
+    }
+
     return this.prisma.categoria.create({
       data: {
         nombre: dto.nombre,
@@ -52,6 +68,22 @@ export class CategoriaService {
   // UPDATE
   async update(id: string, dto: UpdateCategoriaDto) {
     await this.findOne(id);
+
+    if (dto.nombre === undefined) {
+      throw new BadRequestException('No se enviaron campos para actualizar');
+    }
+
+    const repetida = await this.prisma.categoria.findFirst({
+      where: { nombre: dto.nombre, NOT: { id_categoria: id } },
+    });
+
+    if (repetida) {
+      throw new ConflictException(
+        repetida.activo
+          ? 'Ya existe una categoría con ese nombre'
+          : 'Ese nombre es de una categoría eliminada; créala de nuevo para reactivarla',
+      );
+    }
 
     return this.prisma.categoria.update({
       where: {

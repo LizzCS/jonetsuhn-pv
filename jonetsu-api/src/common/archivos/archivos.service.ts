@@ -5,6 +5,8 @@ import { createReadStream } from 'node:fs';
 import { access, mkdir, unlink, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
+export type CarpetaArchivos = 'comprobantes' | 'productos' | 'eventos';
+
 const EXTENSIONES: Record<string, string> = {
   'image/jpeg': 'jpg',
   'image/png': 'png',
@@ -17,29 +19,32 @@ const TIPOS_POR_EXTENSION: Record<string, string> = {
   webp: 'image/webp',
 };
 
-const CARPETA = 'comprobantes';
-
 // Solo se aceptan claves generadas por este servicio (evita leer otras rutas)
 const FORMATO_CLAVE =
-  /^comprobantes\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.(jpg|png|webp)$/;
+  /^(comprobantes|productos|eventos)\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.(jpg|png|webp)$/;
 
-// Guarda los comprobantes en disco, fuera de cualquier carpeta pública.
-// En pago.comprobante_url se guarda la clave relativa ("comprobantes/<uuid>.jpg");
-// el archivo se sirve por GET /pagos/:id/comprobante.
+// Guarda imágenes en disco, fuera de cualquier carpeta pública.
+// En la base se guarda la clave relativa ("productos/<uuid>.jpg") y el
+// archivo se sirve por un endpoint (GET /productos/:id/imagen, etc.).
 @Injectable()
-export class ComprobanteStorageService {
-  private readonly raiz = process.env.UPLOADS_DIR ?? join(process.cwd(), 'uploads');
+export class ArchivosService {
+  private readonly raiz =
+    process.env.UPLOADS_DIR ?? join(process.cwd(), 'uploads');
 
-  async guardar(buffer: Buffer, mimetype: string): Promise<string> {
+  async guardar(
+    carpeta: CarpetaArchivos,
+    buffer: Buffer,
+    mimetype: string,
+  ): Promise<string> {
     const extension = EXTENSIONES[mimetype];
 
     if (!extension) {
-      throw new Error(`Tipo de comprobante no soportado: ${mimetype}`);
+      throw new Error(`Tipo de imagen no soportado: ${mimetype}`);
     }
 
-    const clave = `${CARPETA}/${randomUUID()}.${extension}`;
+    const clave = `${carpeta}/${randomUUID()}.${extension}`;
 
-    await mkdir(join(this.raiz, CARPETA), { recursive: true });
+    await mkdir(join(this.raiz, carpeta), { recursive: true });
     await writeFile(join(this.raiz, clave), buffer, { flag: 'wx' });
 
     return clave;
@@ -54,7 +59,7 @@ export class ComprobanteStorageService {
 
   async abrir(clave: string | null | undefined) {
     if (!clave || !FORMATO_CLAVE.test(clave)) {
-      throw new NotFoundException('El pago no tiene comprobante');
+      throw new NotFoundException('No hay imagen registrada');
     }
 
     const ruta = join(this.raiz, clave);
@@ -62,7 +67,7 @@ export class ComprobanteStorageService {
     try {
       await access(ruta);
     } catch {
-      throw new NotFoundException('No se encontró el archivo del comprobante');
+      throw new NotFoundException('No se encontró el archivo de la imagen');
     }
 
     const extension = clave.slice(clave.lastIndexOf('.') + 1);

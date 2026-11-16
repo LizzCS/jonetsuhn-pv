@@ -23,10 +23,14 @@ export const METODOS_PAGO_HABILITADOS: metodo_pago[] = [
   metodo_pago.transferencia,
 ];
 
-// Comprobantes de pago
-export const COMPROBANTE_MAX_BYTES = 5 * 1024 * 1024;
-export const COMPROBANTE_TIPOS = /^image\/(jpeg|png|webp)$/;
+// Imágenes subidas (comprobantes de pago, platos y servicios)
+export const IMAGEN_MAX_BYTES = 5 * 1024 * 1024;
+export const IMAGEN_TIPOS = /^image\/(jpeg|png|webp)$/;
 export const COMPROBANTE_CAMPO = 'comprobante';
+export const IMAGEN_CAMPO = 'imagen';
+
+// Teléfonos: 8 dígitos sin prefijo se toman como de Honduras
+export const PREFIJO_TELEFONO_LOCAL = '+504';
 
 // Código de acceso del ticket: 8 caracteres sin 0/O, 1/I/L para que
 // no se confundan al leerlos, mostrados como XXXX-XXXX

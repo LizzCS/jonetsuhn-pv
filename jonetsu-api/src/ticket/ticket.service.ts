@@ -13,6 +13,7 @@ import { estado_pago, estado_ticket } from '../generated/prisma/enums.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
 import { exigirAdmin } from '../common/admin.js';
+import { unidadesOcupadas } from '../common/cupos.js';
 import { AccionAdminDto } from '../common/dto/accion-admin.dto.js';
 import { ahoraLocal, fechaHoraEvento, minutosDesdeAhora } from '../common/fechas.js';
 import { conReintento } from '../common/prisma-utils.js';
@@ -578,32 +579,7 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
       );
     }
 
-    const ocupacion = await tx.ticket_item.aggregate({
-      where: {
-        id_producto,
-        ticket: {
-          id_horario,
-          OR: [
-            {
-              estado: {
-                in: [
-                  estado_ticket.pago_en_revision,
-                  estado_ticket.confirmado,
-                  estado_ticket.entregado,
-                ],
-              },
-            },
-            {
-              estado: estado_ticket.reservado,
-              expira_en: { gt: new Date() },
-            },
-          ],
-        },
-      },
-      _sum: { cantidad: true },
-    });
-
-    const ocupados = ocupacion._sum.cantidad ?? 0;
+    const ocupados = await unidadesOcupadas(tx, id_horario, id_producto);
     const disponibles = disponibilidad.cupo_total - ocupados;
 
     if (cantidad > disponibles) {

@@ -28,6 +28,7 @@ export type EventoMinAggregateOutputType = {
   id_evento: string | null
   nombre: string | null
   descripcion: string | null
+  imagen_url: string | null
   fecha: Date | null
   activo: boolean | null
 }
@@ -36,6 +37,7 @@ export type EventoMaxAggregateOutputType = {
   id_evento: string | null
   nombre: string | null
   descripcion: string | null
+  imagen_url: string | null
   fecha: Date | null
   activo: boolean | null
 }
@@ -44,6 +46,7 @@ export type EventoCountAggregateOutputType = {
   id_evento: number
   nombre: number
   descripcion: number
+  imagen_url: number
   fecha: number
   activo: number
   _all: number
@@ -54,6 +57,7 @@ export type EventoMinAggregateInputType = {
   id_evento?: true
   nombre?: true
   descripcion?: true
+  imagen_url?: true
   fecha?: true
   activo?: true
 }
@@ -62,6 +66,7 @@ export type EventoMaxAggregateInputType = {
   id_evento?: true
   nombre?: true
   descripcion?: true
+  imagen_url?: true
   fecha?: true
   activo?: true
 }
@@ -70,6 +75,7 @@ export type EventoCountAggregateInputType = {
   id_evento?: true
   nombre?: true
   descripcion?: true
+  imagen_url?: true
   fecha?: true
   activo?: true
   _all?: true
@@ -151,6 +157,7 @@ export type EventoGroupByOutputType = {
   id_evento: string
   nombre: string
   descripcion: string | null
+  imagen_url: string | null
   fecha: Date
   activo: boolean
   _count: EventoCountAggregateOutputType | null
@@ -180,6 +187,7 @@ export type eventoWhereInput = {
   id_evento?: Prisma.UuidFilter<"evento"> | string
   nombre?: Prisma.StringFilter<"evento"> | string
   descripcion?: Prisma.StringNullableFilter<"evento"> | string | null
+  imagen_url?: Prisma.StringNullableFilter<"evento"> | string | null
   fecha?: Prisma.DateTimeFilter<"evento"> | Date | string
   activo?: Prisma.BoolFilter<"evento"> | boolean
   horarios?: Prisma.HorarioListRelationFilter
@@ -189,6 +197,7 @@ export type eventoOrderByWithRelationInput = {
   id_evento?: Prisma.SortOrder
   nombre?: Prisma.SortOrder
   descripcion?: Prisma.SortOrderInput | Prisma.SortOrder
+  imagen_url?: Prisma.SortOrderInput | Prisma.SortOrder
   fecha?: Prisma.SortOrder
   activo?: Prisma.SortOrder
   horarios?: Prisma.horarioOrderByRelationAggregateInput
@@ -201,6 +210,7 @@ export type eventoWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.eventoWhereInput | Prisma.eventoWhereInput[]
   nombre?: Prisma.StringFilter<"evento"> | string
   descripcion?: Prisma.StringNullableFilter<"evento"> | string | null
+  imagen_url?: Prisma.StringNullableFilter<"evento"> | string | null
   fecha?: Prisma.DateTimeFilter<"evento"> | Date | string
   activo?: Prisma.BoolFilter<"evento"> | boolean
   horarios?: Prisma.HorarioListRelationFilter
@@ -210,6 +220,7 @@ export type eventoOrderByWithAggregationInput = {
   id_evento?: Prisma.SortOrder
   nombre?: Prisma.SortOrder
   descripcion?: Prisma.SortOrderInput | Prisma.SortOrder
+  imagen_url?: Prisma.SortOrderInput | Prisma.SortOrder
   fecha?: Prisma.SortOrder
   activo?: Prisma.SortOrder
   _count?: Prisma.eventoCountOrderByAggregateInput
@@ -224,6 +235,7 @@ export type eventoScalarWhereWithAggregatesInput = {
   id_evento?: Prisma.UuidWithAggregatesFilter<"evento"> | string
   nombre?: Prisma.StringWithAggregatesFilter<"evento"> | string
   descripcion?: Prisma.StringNullableWithAggregatesFilter<"evento"> | string | null
+  imagen_url?: Prisma.StringNullableWithAggregatesFilter<"evento"> | string | null
   fecha?: Prisma.DateTimeWithAggregatesFilter<"evento"> | Date | string
   activo?: Prisma.BoolWithAggregatesFilter<"evento"> | boolean
 }
@@ -232,6 +244,7 @@ export type eventoCreateInput = {
   id_evento?: string
   nombre: string
   descripcion?: string | null
+  imagen_url?: string | null
   fecha: Date | string
   activo?: boolean
   horarios?: Prisma.horarioCreateNestedManyWithoutEventoInput
@@ -241,6 +254,7 @@ export type eventoUncheckedCreateInput = {
   id_evento?: string
   nombre: string
   descripcion?: string | null
+  imagen_url?: string | null
   fecha: Date | string
   activo?: boolean
   horarios?: Prisma.horarioUncheckedCreateNestedManyWithoutEventoInput
@@ -250,6 +264,7 @@ export type eventoUpdateInput = {
   id_evento?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imagen_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   horarios?: Prisma.horarioUpdateManyWithoutEventoNestedInput
@@ -259,6 +274,7 @@ export type eventoUncheckedUpdateInput = {
   id_evento?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imagen_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   horarios?: Prisma.horarioUncheckedUpdateManyWithoutEventoNestedInput
@@ -268,6 +284,7 @@ export type eventoCreateManyInput = {
   id_evento?: string
   nombre: string
   descripcion?: string | null
+  imagen_url?: string | null
   fecha: Date | string
   activo?: boolean
 }
@@ -276,6 +293,7 @@ export type eventoUpdateManyMutationInput = {
   id_evento?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imagen_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
@@ -284,6 +302,7 @@ export type eventoUncheckedUpdateManyInput = {
   id_evento?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imagen_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
@@ -292,6 +311,7 @@ export type eventoCountOrderByAggregateInput = {
   id_evento?: Prisma.SortOrder
   nombre?: Prisma.SortOrder
   descripcion?: Prisma.SortOrder
+  imagen_url?: Prisma.SortOrder
   fecha?: Prisma.SortOrder
   activo?: Prisma.SortOrder
 }
@@ -300,6 +320,7 @@ export type eventoMaxOrderByAggregateInput = {
   id_evento?: Prisma.SortOrder
   nombre?: Prisma.SortOrder
   descripcion?: Prisma.SortOrder
+  imagen_url?: Prisma.SortOrder
   fecha?: Prisma.SortOrder
   activo?: Prisma.SortOrder
 }
@@ -308,6 +329,7 @@ export type eventoMinOrderByAggregateInput = {
   id_evento?: Prisma.SortOrder
   nombre?: Prisma.SortOrder
   descripcion?: Prisma.SortOrder
+  imagen_url?: Prisma.SortOrder
   fecha?: Prisma.SortOrder
   activo?: Prisma.SortOrder
 }
@@ -335,6 +357,7 @@ export type eventoCreateWithoutHorariosInput = {
   id_evento?: string
   nombre: string
   descripcion?: string | null
+  imagen_url?: string | null
   fecha: Date | string
   activo?: boolean
 }
@@ -343,6 +366,7 @@ export type eventoUncheckedCreateWithoutHorariosInput = {
   id_evento?: string
   nombre: string
   descripcion?: string | null
+  imagen_url?: string | null
   fecha: Date | string
   activo?: boolean
 }
@@ -367,6 +391,7 @@ export type eventoUpdateWithoutHorariosInput = {
   id_evento?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imagen_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
@@ -375,6 +400,7 @@ export type eventoUncheckedUpdateWithoutHorariosInput = {
   id_evento?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imagen_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
@@ -414,6 +440,7 @@ export type eventoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   id_evento?: boolean
   nombre?: boolean
   descripcion?: boolean
+  imagen_url?: boolean
   fecha?: boolean
   activo?: boolean
   horarios?: boolean | Prisma.evento$horariosArgs<ExtArgs>
@@ -424,6 +451,7 @@ export type eventoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id_evento?: boolean
   nombre?: boolean
   descripcion?: boolean
+  imagen_url?: boolean
   fecha?: boolean
   activo?: boolean
 }, ExtArgs["result"]["evento"]>
@@ -432,6 +460,7 @@ export type eventoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id_evento?: boolean
   nombre?: boolean
   descripcion?: boolean
+  imagen_url?: boolean
   fecha?: boolean
   activo?: boolean
 }, ExtArgs["result"]["evento"]>
@@ -440,11 +469,12 @@ export type eventoSelectScalar = {
   id_evento?: boolean
   nombre?: boolean
   descripcion?: boolean
+  imagen_url?: boolean
   fecha?: boolean
   activo?: boolean
 }
 
-export type eventoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_evento" | "nombre" | "descripcion" | "fecha" | "activo", ExtArgs["result"]["evento"]>
+export type eventoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_evento" | "nombre" | "descripcion" | "imagen_url" | "fecha" | "activo", ExtArgs["result"]["evento"]>
 export type eventoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   horarios?: boolean | Prisma.evento$horariosArgs<ExtArgs>
   _count?: boolean | Prisma.EventoCountOutputTypeDefaultArgs<ExtArgs>
@@ -461,6 +491,7 @@ export type $eventoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     id_evento: string
     nombre: string
     descripcion: string | null
+    imagen_url: string | null
     fecha: Date
     activo: boolean
   }, ExtArgs["result"]["evento"]>
@@ -890,6 +921,7 @@ export interface eventoFieldRefs {
   readonly id_evento: Prisma.FieldRef<"evento", 'String'>
   readonly nombre: Prisma.FieldRef<"evento", 'String'>
   readonly descripcion: Prisma.FieldRef<"evento", 'String'>
+  readonly imagen_url: Prisma.FieldRef<"evento", 'String'>
   readonly fecha: Prisma.FieldRef<"evento", 'DateTime'>
   readonly activo: Prisma.FieldRef<"evento", 'Boolean'>
 }

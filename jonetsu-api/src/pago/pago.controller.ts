@@ -7,29 +7,28 @@ import {
   Body,
   Param,
   Query,
-  ParseUUIDPipe,
   StreamableFile,
   UploadedFile,
   UseInterceptors,
-  UsePipes,
 } from '@nestjs/common';
+import { idValido } from '../common/id-valido.pipe.js';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-import { validacionDto } from '../common/validacion.pipe.js';
-import { COMPROBANTE_CAMPO } from '../common/reglas-negocio.js';
-import type { ArchivoSubido } from './comprobante.pipe.js';
+import type { ArchivoSubido } from '../common/archivos/imagen.pipe.js';
 import {
-  comprobantePipe,
-  opcionesMulterComprobante,
-} from './comprobante.pipe.js';
+  crearPipeImagen,
+  opcionesMulterImagen,
+} from '../common/archivos/imagen.pipe.js';
+import { AccionAdminDto } from '../common/dto/accion-admin.dto.js';
+import { COMPROBANTE_CAMPO } from '../common/reglas-negocio.js';
 import { PagoService } from './pago.service.js';
 import { CreatePagoDto } from './dto/create-pago.dto.js';
 import { FiltroPagosDto } from './dto/filtro-pagos.dto.js';
-import { AccionAdminDto } from '../common/dto/accion-admin.dto.js';
 import { VerificarPagoDto } from './dto/verificar-pago.dto.js';
 
+const comprobantePipe = crearPipeImagen(COMPROBANTE_CAMPO, 'El comprobante');
+
 @Controller('pagos')
-@UsePipes(validacionDto)
 export class PagoController {
   constructor(
     private readonly pagoService: PagoService,
@@ -38,7 +37,7 @@ export class PagoController {
   // POST /pagos  (multipart/form-data: id_ticket, metodo?, comprobante)
   @Post()
   @UseInterceptors(
-    FileInterceptor(COMPROBANTE_CAMPO, opcionesMulterComprobante),
+    FileInterceptor(COMPROBANTE_CAMPO, opcionesMulterImagen),
   )
   create(
     @Body() dto: CreatePagoDto,
@@ -56,7 +55,7 @@ export class PagoController {
   // GET /pagos/:id
   @Get(':id')
   findOne(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', idValido) id: string,
   ) {
     return this.pagoService.findOne(id);
   }
@@ -64,7 +63,7 @@ export class PagoController {
   // GET /pagos/:id/comprobante  → devuelve la imagen
   @Get(':id/comprobante')
   async comprobante(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', idValido) id: string,
   ) {
     const { stream, tipo } = await this.pagoService.comprobante(id);
     return new StreamableFile(stream, { type: tipo });
@@ -73,10 +72,10 @@ export class PagoController {
   // PATCH /pagos/:id/comprobante  (multipart: comprobante)
   @Patch(':id/comprobante')
   @UseInterceptors(
-    FileInterceptor(COMPROBANTE_CAMPO, opcionesMulterComprobante),
+    FileInterceptor(COMPROBANTE_CAMPO, opcionesMulterImagen),
   )
   reemplazarComprobante(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', idValido) id: string,
     @UploadedFile(comprobantePipe) archivo: ArchivoSubido,
   ) {
     return this.pagoService.reemplazarComprobante(id, archivo);
@@ -85,7 +84,7 @@ export class PagoController {
   // PATCH /pagos/:id/verificar  (admin)
   @Patch(':id/verificar')
   verificar(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', idValido) id: string,
     @Body() dto: VerificarPagoDto,
   ) {
     return this.pagoService.verificar(id, dto);
@@ -94,7 +93,7 @@ export class PagoController {
   // PATCH /pagos/:id/reembolsar  (admin)
   @Patch(':id/reembolsar')
   reembolsar(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', idValido) id: string,
     @Body() dto: AccionAdminDto,
   ) {
     return this.pagoService.reembolsar(id, dto);
@@ -103,7 +102,7 @@ export class PagoController {
   // DELETE /pagos/:id
   @Delete(':id')
   remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', idValido) id: string,
   ) {
     return this.pagoService.remove(id);
   }

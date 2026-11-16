@@ -119,6 +119,7 @@ export const EventoScalarFieldEnum = {
   id_evento: 'id_evento',
   nombre: 'nombre',
   descripcion: 'descripcion',
+  imagen_url: 'imagen_url',
   fecha: 'fecha',
   activo: 'activo'
 } as const

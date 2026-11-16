@@ -80,6 +80,7 @@ model evento {
   id_evento    String   @id @default(uuid()) @db.Uuid
   nombre       String
   descripcion String?
+  imagen_url   String?
   fecha        DateTime @db.Date
   activo       Boolean  @default(true)
 

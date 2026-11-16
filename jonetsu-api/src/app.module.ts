@@ -10,6 +10,7 @@ import { EventoModule } from './evento/evento.module.js';
 import { HorarioModule } from './horario/horario.module.js';
 import { TicketModule } from './ticket/ticket.module.js';
 import { PagoModule } from './pago/pago.module.js';
+import { ProductosModule } from './productos/productos.module.js';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PagoModule } from './pago/pago.module.js';
     HorarioModule,
     TicketModule,
     PagoModule,
+    ProductosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

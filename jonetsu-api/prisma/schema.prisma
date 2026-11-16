@@ -161,6 +161,8 @@ model pago {
   comprobante_url String?
   estado          estado_pago @default(pendiente)
   verificado_por  String?     @db.Uuid
+  verificado_en   DateTime?
+  motivo_rechazo  String?
   created_at      DateTime    @default(now())
   activo       Boolean @default(true)
   

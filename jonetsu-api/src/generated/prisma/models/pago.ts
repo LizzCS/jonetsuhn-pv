@@ -42,6 +42,8 @@ export type PagoMinAggregateOutputType = {
   comprobante_url: string | null
   estado: $Enums.estado_pago | null
   verificado_por: string | null
+  verificado_en: Date | null
+  motivo_rechazo: string | null
   created_at: Date | null
   activo: boolean | null
 }
@@ -54,6 +56,8 @@ export type PagoMaxAggregateOutputType = {
   comprobante_url: string | null
   estado: $Enums.estado_pago | null
   verificado_por: string | null
+  verificado_en: Date | null
+  motivo_rechazo: string | null
   created_at: Date | null
   activo: boolean | null
 }
@@ -66,6 +70,8 @@ export type PagoCountAggregateOutputType = {
   comprobante_url: number
   estado: number
   verificado_por: number
+  verificado_en: number
+  motivo_rechazo: number
   created_at: number
   activo: number
   _all: number
@@ -88,6 +94,8 @@ export type PagoMinAggregateInputType = {
   comprobante_url?: true
   estado?: true
   verificado_por?: true
+  verificado_en?: true
+  motivo_rechazo?: true
   created_at?: true
   activo?: true
 }
@@ -100,6 +108,8 @@ export type PagoMaxAggregateInputType = {
   comprobante_url?: true
   estado?: true
   verificado_por?: true
+  verificado_en?: true
+  motivo_rechazo?: true
   created_at?: true
   activo?: true
 }
@@ -112,6 +122,8 @@ export type PagoCountAggregateInputType = {
   comprobante_url?: true
   estado?: true
   verificado_por?: true
+  verificado_en?: true
+  motivo_rechazo?: true
   created_at?: true
   activo?: true
   _all?: true
@@ -211,6 +223,8 @@ export type PagoGroupByOutputType = {
   comprobante_url: string | null
   estado: $Enums.estado_pago
   verificado_por: string | null
+  verificado_en: Date | null
+  motivo_rechazo: string | null
   created_at: Date
   activo: boolean
   _count: PagoCountAggregateOutputType | null
@@ -246,6 +260,8 @@ export type pagoWhereInput = {
   comprobante_url?: Prisma.StringNullableFilter<"pago"> | string | null
   estado?: Prisma.Enumestado_pagoFilter<"pago"> | $Enums.estado_pago
   verificado_por?: Prisma.UuidNullableFilter<"pago"> | string | null
+  verificado_en?: Prisma.DateTimeNullableFilter<"pago"> | Date | string | null
+  motivo_rechazo?: Prisma.StringNullableFilter<"pago"> | string | null
   created_at?: Prisma.DateTimeFilter<"pago"> | Date | string
   activo?: Prisma.BoolFilter<"pago"> | boolean
   ticket?: Prisma.XOR<Prisma.TicketScalarRelationFilter, Prisma.ticketWhereInput>
@@ -260,6 +276,8 @@ export type pagoOrderByWithRelationInput = {
   comprobante_url?: Prisma.SortOrderInput | Prisma.SortOrder
   estado?: Prisma.SortOrder
   verificado_por?: Prisma.SortOrderInput | Prisma.SortOrder
+  verificado_en?: Prisma.SortOrderInput | Prisma.SortOrder
+  motivo_rechazo?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   activo?: Prisma.SortOrder
   ticket?: Prisma.ticketOrderByWithRelationInput
@@ -277,6 +295,8 @@ export type pagoWhereUniqueInput = Prisma.AtLeast<{
   comprobante_url?: Prisma.StringNullableFilter<"pago"> | string | null
   estado?: Prisma.Enumestado_pagoFilter<"pago"> | $Enums.estado_pago
   verificado_por?: Prisma.UuidNullableFilter<"pago"> | string | null
+  verificado_en?: Prisma.DateTimeNullableFilter<"pago"> | Date | string | null
+  motivo_rechazo?: Prisma.StringNullableFilter<"pago"> | string | null
   created_at?: Prisma.DateTimeFilter<"pago"> | Date | string
   activo?: Prisma.BoolFilter<"pago"> | boolean
   ticket?: Prisma.XOR<Prisma.TicketScalarRelationFilter, Prisma.ticketWhereInput>
@@ -291,6 +311,8 @@ export type pagoOrderByWithAggregationInput = {
   comprobante_url?: Prisma.SortOrderInput | Prisma.SortOrder
   estado?: Prisma.SortOrder
   verificado_por?: Prisma.SortOrderInput | Prisma.SortOrder
+  verificado_en?: Prisma.SortOrderInput | Prisma.SortOrder
+  motivo_rechazo?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   activo?: Prisma.SortOrder
   _count?: Prisma.pagoCountOrderByAggregateInput
@@ -311,6 +333,8 @@ export type pagoScalarWhereWithAggregatesInput = {
   comprobante_url?: Prisma.StringNullableWithAggregatesFilter<"pago"> | string | null
   estado?: Prisma.Enumestado_pagoWithAggregatesFilter<"pago"> | $Enums.estado_pago
   verificado_por?: Prisma.UuidNullableWithAggregatesFilter<"pago"> | string | null
+  verificado_en?: Prisma.DateTimeNullableWithAggregatesFilter<"pago"> | Date | string | null
+  motivo_rechazo?: Prisma.StringNullableWithAggregatesFilter<"pago"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"pago"> | Date | string
   activo?: Prisma.BoolWithAggregatesFilter<"pago"> | boolean
 }
@@ -321,6 +345,8 @@ export type pagoCreateInput = {
   metodo: $Enums.metodo_pago
   comprobante_url?: string | null
   estado?: $Enums.estado_pago
+  verificado_en?: Date | string | null
+  motivo_rechazo?: string | null
   created_at?: Date | string
   activo?: boolean
   ticket: Prisma.ticketCreateNestedOneWithoutPagosInput
@@ -335,6 +361,8 @@ export type pagoUncheckedCreateInput = {
   comprobante_url?: string | null
   estado?: $Enums.estado_pago
   verificado_por?: string | null
+  verificado_en?: Date | string | null
+  motivo_rechazo?: string | null
   created_at?: Date | string
   activo?: boolean
 }
@@ -345,6 +373,8 @@ export type pagoUpdateInput = {
   metodo?: Prisma.Enummetodo_pagoFieldUpdateOperationsInput | $Enums.metodo_pago
   comprobante_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   estado?: Prisma.Enumestado_pagoFieldUpdateOperationsInput | $Enums.estado_pago
+  verificado_en?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivo_rechazo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ticket?: Prisma.ticketUpdateOneRequiredWithoutPagosNestedInput
@@ -359,6 +389,8 @@ export type pagoUncheckedUpdateInput = {
   comprobante_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   estado?: Prisma.Enumestado_pagoFieldUpdateOperationsInput | $Enums.estado_pago
   verificado_por?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificado_en?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivo_rechazo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
@@ -371,6 +403,8 @@ export type pagoCreateManyInput = {
   comprobante_url?: string | null
   estado?: $Enums.estado_pago
   verificado_por?: string | null
+  verificado_en?: Date | string | null
+  motivo_rechazo?: string | null
   created_at?: Date | string
   activo?: boolean
 }
@@ -381,6 +415,8 @@ export type pagoUpdateManyMutationInput = {
   metodo?: Prisma.Enummetodo_pagoFieldUpdateOperationsInput | $Enums.metodo_pago
   comprobante_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   estado?: Prisma.Enumestado_pagoFieldUpdateOperationsInput | $Enums.estado_pago
+  verificado_en?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivo_rechazo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
@@ -393,6 +429,8 @@ export type pagoUncheckedUpdateManyInput = {
   comprobante_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   estado?: Prisma.Enumestado_pagoFieldUpdateOperationsInput | $Enums.estado_pago
   verificado_por?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificado_en?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivo_rechazo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
@@ -415,6 +453,8 @@ export type pagoCountOrderByAggregateInput = {
   comprobante_url?: Prisma.SortOrder
   estado?: Prisma.SortOrder
   verificado_por?: Prisma.SortOrder
+  verificado_en?: Prisma.SortOrder
+  motivo_rechazo?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   activo?: Prisma.SortOrder
 }
@@ -431,6 +471,8 @@ export type pagoMaxOrderByAggregateInput = {
   comprobante_url?: Prisma.SortOrder
   estado?: Prisma.SortOrder
   verificado_por?: Prisma.SortOrder
+  verificado_en?: Prisma.SortOrder
+  motivo_rechazo?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   activo?: Prisma.SortOrder
 }
@@ -443,6 +485,8 @@ export type pagoMinOrderByAggregateInput = {
   comprobante_url?: Prisma.SortOrder
   estado?: Prisma.SortOrder
   verificado_por?: Prisma.SortOrder
+  verificado_en?: Prisma.SortOrder
+  motivo_rechazo?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   activo?: Prisma.SortOrder
 }
@@ -543,12 +587,18 @@ export type Enumestado_pagoFieldUpdateOperationsInput = {
   set?: $Enums.estado_pago
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type pagoCreateWithoutVerificadorInput = {
   id_pago?: string
   monto: runtime.Decimal | runtime.DecimalJsLike | number | string
   metodo: $Enums.metodo_pago
   comprobante_url?: string | null
   estado?: $Enums.estado_pago
+  verificado_en?: Date | string | null
+  motivo_rechazo?: string | null
   created_at?: Date | string
   activo?: boolean
   ticket: Prisma.ticketCreateNestedOneWithoutPagosInput
@@ -561,6 +611,8 @@ export type pagoUncheckedCreateWithoutVerificadorInput = {
   metodo: $Enums.metodo_pago
   comprobante_url?: string | null
   estado?: $Enums.estado_pago
+  verificado_en?: Date | string | null
+  motivo_rechazo?: string | null
   created_at?: Date | string
   activo?: boolean
 }
@@ -602,6 +654,8 @@ export type pagoScalarWhereInput = {
   comprobante_url?: Prisma.StringNullableFilter<"pago"> | string | null
   estado?: Prisma.Enumestado_pagoFilter<"pago"> | $Enums.estado_pago
   verificado_por?: Prisma.UuidNullableFilter<"pago"> | string | null
+  verificado_en?: Prisma.DateTimeNullableFilter<"pago"> | Date | string | null
+  motivo_rechazo?: Prisma.StringNullableFilter<"pago"> | string | null
   created_at?: Prisma.DateTimeFilter<"pago"> | Date | string
   activo?: Prisma.BoolFilter<"pago"> | boolean
 }
@@ -612,6 +666,8 @@ export type pagoCreateWithoutTicketInput = {
   metodo: $Enums.metodo_pago
   comprobante_url?: string | null
   estado?: $Enums.estado_pago
+  verificado_en?: Date | string | null
+  motivo_rechazo?: string | null
   created_at?: Date | string
   activo?: boolean
   verificador?: Prisma.personaCreateNestedOneWithoutPagos_verificadosInput
@@ -624,6 +680,8 @@ export type pagoUncheckedCreateWithoutTicketInput = {
   comprobante_url?: string | null
   estado?: $Enums.estado_pago
   verificado_por?: string | null
+  verificado_en?: Date | string | null
+  motivo_rechazo?: string | null
   created_at?: Date | string
   activo?: boolean
 }
@@ -661,6 +719,8 @@ export type pagoCreateManyVerificadorInput = {
   metodo: $Enums.metodo_pago
   comprobante_url?: string | null
   estado?: $Enums.estado_pago
+  verificado_en?: Date | string | null
+  motivo_rechazo?: string | null
   created_at?: Date | string
   activo?: boolean
 }
@@ -671,6 +731,8 @@ export type pagoUpdateWithoutVerificadorInput = {
   metodo?: Prisma.Enummetodo_pagoFieldUpdateOperationsInput | $Enums.metodo_pago
   comprobante_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   estado?: Prisma.Enumestado_pagoFieldUpdateOperationsInput | $Enums.estado_pago
+  verificado_en?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivo_rechazo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ticket?: Prisma.ticketUpdateOneRequiredWithoutPagosNestedInput
@@ -683,6 +745,8 @@ export type pagoUncheckedUpdateWithoutVerificadorInput = {
   metodo?: Prisma.Enummetodo_pagoFieldUpdateOperationsInput | $Enums.metodo_pago
   comprobante_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   estado?: Prisma.Enumestado_pagoFieldUpdateOperationsInput | $Enums.estado_pago
+  verificado_en?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivo_rechazo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
@@ -694,6 +758,8 @@ export type pagoUncheckedUpdateManyWithoutVerificadorInput = {
   metodo?: Prisma.Enummetodo_pagoFieldUpdateOperationsInput | $Enums.metodo_pago
   comprobante_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   estado?: Prisma.Enumestado_pagoFieldUpdateOperationsInput | $Enums.estado_pago
+  verificado_en?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivo_rechazo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
@@ -705,6 +771,8 @@ export type pagoCreateManyTicketInput = {
   comprobante_url?: string | null
   estado?: $Enums.estado_pago
   verificado_por?: string | null
+  verificado_en?: Date | string | null
+  motivo_rechazo?: string | null
   created_at?: Date | string
   activo?: boolean
 }
@@ -715,6 +783,8 @@ export type pagoUpdateWithoutTicketInput = {
   metodo?: Prisma.Enummetodo_pagoFieldUpdateOperationsInput | $Enums.metodo_pago
   comprobante_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   estado?: Prisma.Enumestado_pagoFieldUpdateOperationsInput | $Enums.estado_pago
+  verificado_en?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivo_rechazo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   verificador?: Prisma.personaUpdateOneWithoutPagos_verificadosNestedInput
@@ -727,6 +797,8 @@ export type pagoUncheckedUpdateWithoutTicketInput = {
   comprobante_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   estado?: Prisma.Enumestado_pagoFieldUpdateOperationsInput | $Enums.estado_pago
   verificado_por?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificado_en?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivo_rechazo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
@@ -738,6 +810,8 @@ export type pagoUncheckedUpdateManyWithoutTicketInput = {
   comprobante_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   estado?: Prisma.Enumestado_pagoFieldUpdateOperationsInput | $Enums.estado_pago
   verificado_por?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificado_en?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivo_rechazo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
@@ -752,6 +826,8 @@ export type pagoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   comprobante_url?: boolean
   estado?: boolean
   verificado_por?: boolean
+  verificado_en?: boolean
+  motivo_rechazo?: boolean
   created_at?: boolean
   activo?: boolean
   ticket?: boolean | Prisma.ticketDefaultArgs<ExtArgs>
@@ -766,6 +842,8 @@ export type pagoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   comprobante_url?: boolean
   estado?: boolean
   verificado_por?: boolean
+  verificado_en?: boolean
+  motivo_rechazo?: boolean
   created_at?: boolean
   activo?: boolean
   ticket?: boolean | Prisma.ticketDefaultArgs<ExtArgs>
@@ -780,6 +858,8 @@ export type pagoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   comprobante_url?: boolean
   estado?: boolean
   verificado_por?: boolean
+  verificado_en?: boolean
+  motivo_rechazo?: boolean
   created_at?: boolean
   activo?: boolean
   ticket?: boolean | Prisma.ticketDefaultArgs<ExtArgs>
@@ -794,11 +874,13 @@ export type pagoSelectScalar = {
   comprobante_url?: boolean
   estado?: boolean
   verificado_por?: boolean
+  verificado_en?: boolean
+  motivo_rechazo?: boolean
   created_at?: boolean
   activo?: boolean
 }
 
-export type pagoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_pago" | "id_ticket" | "monto" | "metodo" | "comprobante_url" | "estado" | "verificado_por" | "created_at" | "activo", ExtArgs["result"]["pago"]>
+export type pagoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_pago" | "id_ticket" | "monto" | "metodo" | "comprobante_url" | "estado" | "verificado_por" | "verificado_en" | "motivo_rechazo" | "created_at" | "activo", ExtArgs["result"]["pago"]>
 export type pagoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ticket?: boolean | Prisma.ticketDefaultArgs<ExtArgs>
   verificador?: boolean | Prisma.pago$verificadorArgs<ExtArgs>
@@ -826,6 +908,8 @@ export type $pagoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     comprobante_url: string | null
     estado: $Enums.estado_pago
     verificado_por: string | null
+    verificado_en: Date | null
+    motivo_rechazo: string | null
     created_at: Date
     activo: boolean
   }, ExtArgs["result"]["pago"]>
@@ -1260,6 +1344,8 @@ export interface pagoFieldRefs {
   readonly comprobante_url: Prisma.FieldRef<"pago", 'String'>
   readonly estado: Prisma.FieldRef<"pago", 'estado_pago'>
   readonly verificado_por: Prisma.FieldRef<"pago", 'String'>
+  readonly verificado_en: Prisma.FieldRef<"pago", 'DateTime'>
+  readonly motivo_rechazo: Prisma.FieldRef<"pago", 'String'>
   readonly created_at: Prisma.FieldRef<"pago", 'DateTime'>
   readonly activo: Prisma.FieldRef<"pago", 'Boolean'>
 }

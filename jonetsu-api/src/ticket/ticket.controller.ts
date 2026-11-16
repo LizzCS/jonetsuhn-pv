@@ -17,6 +17,7 @@ import { TicketService } from './ticket.service.js';
 import { CreateTicketDto } from './dto/create-ticket.dto.js';
 import { EntregarTicketDto } from './dto/entregar-ticket.dto.js';
 import { FiltroTicketsDto } from './dto/filtro-tickets.dto.js';
+import { ReagendarTicketDto } from './dto/reagendar-ticket.dto.js';
 import { UpdateTicketDto } from './dto/update-ticket.dto.js';
 
 @Controller('tickets')
@@ -61,7 +62,16 @@ export class TicketController {
     return this.ticketService.reactivar(id, dto);
   }
 
-  // PATCH /tickets/:id
+  // PATCH /tickets/:id/reagendar  (admin, solo confirmados)
+  @Patch(':id/reagendar')
+  reagendar(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: ReagendarTicketDto,
+  ) {
+    return this.ticketService.reagendar(id, dto);
+  }
+
+  // PATCH /tickets/:id  (admin: notas o cancelar)
   @Patch(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,
@@ -70,7 +80,7 @@ export class TicketController {
     return this.ticketService.update(id, dto);
   }
 
-  // DELETE /tickets/:id
+  // DELETE /tickets/:id  ("Volver" desde la ventana de pago)
   @Delete(':id')
   remove(
     @Param('id', ParseUUIDPipe) id: string,

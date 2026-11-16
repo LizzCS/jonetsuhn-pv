@@ -28,6 +28,7 @@ import { generarCodigoAcceso, normalizarCodigoAcceso } from './codigo-acceso.js'
 import { CreateTicketDto } from './dto/create-ticket.dto.js';
 import { EntregarTicketDto } from './dto/entregar-ticket.dto.js';
 import { FiltroTicketsDto } from './dto/filtro-tickets.dto.js';
+import { ReagendarTicketDto } from './dto/reagendar-ticket.dto.js';
 import { UpdateTicketDto } from './dto/update-ticket.dto.js';
 
 // Estados de pago que cuentan como pago en curso o aprobado
@@ -256,27 +257,18 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
     return ticket;
   }
 
-  // UPDATE - El cliente edita notas o cancela mientras espera pago.
-  // Con el ticket en revisión o confirmado, solo un admin puede editarlo.
+  // UPDATE - Solo admin: editar notas o cancelar a pedido del cliente
   async update(id: string, dto: UpdateTicketDto) {
+    await exigirAdmin(this.prisma, dto.id_admin);
+
     const ticket = await this.findOne(id);
 
     if (TICKETS_CERRADOS.includes(ticket.estado)) {
       throw new ConflictException(
         ticket.estado === estado_ticket.cancelado
-          ? 'El ticket está cancelado. Si ya pagaste, comunícate con el staff'
+          ? 'El ticket está cancelado; si corresponde, reactívalo'
           : 'El pedido ya fue entregado y no se puede modificar',
       );
-    }
-
-    if (ticket.estado !== estado_ticket.reservado) {
-      if (!dto.id_admin) {
-        throw new ConflictException(
-          'Este ticket ya tiene un pago registrado; solo un administrador puede modificarlo',
-        );
-      }
-
-      await exigirAdmin(this.prisma, dto.id_admin);
     }
 
     const data: {
@@ -384,6 +376,62 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
     );
   }
 
+  // REAGENDAR - El admin mueve un ticket confirmado a otro horario cuando
+  // el cliente no puede asistir por fuerza mayor. Mismos platos y
+  // cantidades; se respetan el total pagado y el código de acceso.
+  // El cupo del horario anterior se libera solo al mover el ticket.
+  async reagendar(id: string, dto: ReagendarTicketDto) {
+    return conReintento(
+      () =>
+        this.prisma.$transaction(async (tx) => {
+          await exigirAdmin(tx, dto.id_admin);
+
+          const ticket = await tx.ticket.findUnique({
+            where: { id_ticket: id },
+            include: { items: { include: { producto: true } } },
+          });
+
+          if (!ticket) {
+            throw new NotFoundException('El ticket no existe');
+          }
+
+          if (ticket.estado !== estado_ticket.confirmado) {
+            throw new ConflictException(
+              'Solo se pueden reagendar tickets confirmados',
+            );
+          }
+
+          if (ticket.id_horario === dto.id_horario) {
+            throw new BadRequestException(
+              'El ticket ya está en ese horario',
+            );
+          }
+
+          await this.validarHorarioDisponible(tx, dto.id_horario);
+
+          for (const item of ticket.items) {
+            await this.validarCupo(
+              tx,
+              dto.id_horario,
+              item.id_producto,
+              item.cantidad,
+              item.producto.nombre,
+            );
+          }
+
+          return tx.ticket.update({
+            where: { id_ticket: id },
+            data: { id_horario: dto.id_horario },
+            include: {
+              items: true,
+              horario: { include: { evento: true } },
+            },
+          });
+        }, SERIALIZABLE),
+      'Conflicto al reagendar el ticket. Intenta nuevamente',
+    );
+  }
+
   // ENTREGAR - El admin valida el código el día del servicio
   async entregar(dto: EntregarTicketDto) {
     const codigo_acceso = normalizarCodigoAcceso(dto.codigo_acceso);
@@ -446,23 +494,22 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
     });
   }
 
-  // DELETE - Solo tickets sin confirmar y sin ningún pago (ni rechazado),
-  // para no perder el historial de pagos
+  // DELETE - "Volver" desde la ventana de pago: libera los platos al
+  // instante y el cliente arma un pedido nuevo desde su carrito.
+  // Solo tickets reservados sin ningún pago; los cancelados se conservan.
   async remove(id: string) {
+    // findOne ya marca como cancelado el ticket si venció
     const ticket = await this.findOne(id);
 
-    if (
-      ticket.estado !== estado_ticket.reservado &&
-      ticket.estado !== estado_ticket.cancelado
-    ) {
+    if (ticket.estado !== estado_ticket.reservado) {
       throw new ConflictException(
-        'Solo se pueden eliminar tickets sin confirmar',
+        'Este pedido ya no se puede retirar. Para cancelarlo, comunícate con el staff',
       );
     }
 
     if (ticket.pagos.length > 0) {
       throw new ConflictException(
-        'No se puede eliminar un ticket con pagos registrados. Cancélalo en su lugar',
+        'Este pedido tiene pagos registrados. Para cancelarlo, comunícate con el staff',
       );
     }
 
@@ -510,6 +557,7 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
     id_horario: string,
     id_producto: string,
     cantidad: number,
+    nombreProducto?: string,
   ) {
     const disponibilidad = await tx.horario_producto.findUnique({
       where: {
@@ -523,7 +571,11 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
       !disponibilidad.activo ||
       !disponibilidad.producto.activo
     ) {
-      throw new BadRequestException('Producto no disponible para este horario');
+      throw new BadRequestException(
+        nombreProducto
+          ? `${nombreProducto} no está disponible en ese horario`
+          : 'Producto no disponible para este horario',
+      );
     }
 
     const ocupacion = await tx.ticket_item.aggregate({

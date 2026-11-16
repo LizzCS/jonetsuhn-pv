@@ -1,4 +1,3 @@
-
 import {
   Controller,
   Get,
@@ -16,9 +15,7 @@ import { UpdateCategoriaDto } from './dto/update-categoria.dto.js';
 
 @Controller('categorias')
 export class CategoriaController {
-  constructor(
-    private readonly categoriaService: CategoriaService,
-  ) {}
+  constructor(private readonly categoriaService: CategoriaService) {}
 
   // POST /categorias
   @Post()
@@ -34,9 +31,7 @@ export class CategoriaController {
 
   // GET /categorias/:id
   @Get(':id')
-  findOne(
-    @Param('id', ParseUUIDPipe) id: string,
-  ) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.categoriaService.findOne(id);
   }
 
@@ -51,9 +46,7 @@ export class CategoriaController {
 
   // DELETE /categorias/:id
   @Delete(':id')
-  remove(
-    @Param('id', ParseUUIDPipe) id: string,
-  ) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.categoriaService.remove(id);
   }
 }

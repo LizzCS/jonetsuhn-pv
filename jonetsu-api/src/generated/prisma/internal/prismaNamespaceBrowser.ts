@@ -86,7 +86,8 @@ export const PersonaScalarFieldEnum = {
   email: 'email',
   password_hash: 'password_hash',
   rol: 'rol',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  activo: 'activo'
 } as const
 
 export type PersonaScalarFieldEnum = (typeof PersonaScalarFieldEnum)[keyof typeof PersonaScalarFieldEnum]
@@ -94,7 +95,8 @@ export type PersonaScalarFieldEnum = (typeof PersonaScalarFieldEnum)[keyof typeo
 
 export const CategoriaScalarFieldEnum = {
   id_categoria: 'id_categoria',
-  nombre: 'nombre'
+  nombre: 'nombre',
+  activo: 'activo'
 } as const
 
 export type CategoriaScalarFieldEnum = (typeof CategoriaScalarFieldEnum)[keyof typeof CategoriaScalarFieldEnum]
@@ -128,7 +130,8 @@ export const HorarioScalarFieldEnum = {
   id_horario: 'id_horario',
   id_evento: 'id_evento',
   hora: 'hora',
-  abierto: 'abierto'
+  abierto: 'abierto',
+  activo: 'activo'
 } as const
 
 export type HorarioScalarFieldEnum = (typeof HorarioScalarFieldEnum)[keyof typeof HorarioScalarFieldEnum]
@@ -137,7 +140,8 @@ export type HorarioScalarFieldEnum = (typeof HorarioScalarFieldEnum)[keyof typeo
 export const Horario_productoScalarFieldEnum = {
   id_horario: 'id_horario',
   id_producto: 'id_producto',
-  cupo_total: 'cupo_total'
+  cupo_total: 'cupo_total',
+  activo: 'activo'
 } as const
 
 export type Horario_productoScalarFieldEnum = (typeof Horario_productoScalarFieldEnum)[keyof typeof Horario_productoScalarFieldEnum]
@@ -153,7 +157,8 @@ export const TicketScalarFieldEnum = {
   asistio: 'asistio',
   notas: 'notas',
   total: 'total',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  activo: 'activo'
 } as const
 
 export type TicketScalarFieldEnum = (typeof TicketScalarFieldEnum)[keyof typeof TicketScalarFieldEnum]
@@ -164,7 +169,8 @@ export const Ticket_itemScalarFieldEnum = {
   id_ticket: 'id_ticket',
   id_producto: 'id_producto',
   cantidad: 'cantidad',
-  precio_unitario: 'precio_unitario'
+  precio_unitario: 'precio_unitario',
+  activo: 'activo'
 } as const
 
 export type Ticket_itemScalarFieldEnum = (typeof Ticket_itemScalarFieldEnum)[keyof typeof Ticket_itemScalarFieldEnum]
@@ -178,7 +184,8 @@ export const PagoScalarFieldEnum = {
   comprobante_url: 'comprobante_url',
   estado: 'estado',
   verificado_por: 'verificado_por',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  activo: 'activo'
 } as const
 
 export type PagoScalarFieldEnum = (typeof PagoScalarFieldEnum)[keyof typeof PagoScalarFieldEnum]

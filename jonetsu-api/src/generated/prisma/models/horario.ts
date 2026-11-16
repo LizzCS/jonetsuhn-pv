@@ -29,6 +29,7 @@ export type HorarioMinAggregateOutputType = {
   id_evento: string | null
   hora: Date | null
   abierto: boolean | null
+  activo: boolean | null
 }
 
 export type HorarioMaxAggregateOutputType = {
@@ -36,6 +37,7 @@ export type HorarioMaxAggregateOutputType = {
   id_evento: string | null
   hora: Date | null
   abierto: boolean | null
+  activo: boolean | null
 }
 
 export type HorarioCountAggregateOutputType = {
@@ -43,6 +45,7 @@ export type HorarioCountAggregateOutputType = {
   id_evento: number
   hora: number
   abierto: number
+  activo: number
   _all: number
 }
 
@@ -52,6 +55,7 @@ export type HorarioMinAggregateInputType = {
   id_evento?: true
   hora?: true
   abierto?: true
+  activo?: true
 }
 
 export type HorarioMaxAggregateInputType = {
@@ -59,6 +63,7 @@ export type HorarioMaxAggregateInputType = {
   id_evento?: true
   hora?: true
   abierto?: true
+  activo?: true
 }
 
 export type HorarioCountAggregateInputType = {
@@ -66,6 +71,7 @@ export type HorarioCountAggregateInputType = {
   id_evento?: true
   hora?: true
   abierto?: true
+  activo?: true
   _all?: true
 }
 
@@ -146,6 +152,7 @@ export type HorarioGroupByOutputType = {
   id_evento: string
   hora: Date
   abierto: boolean
+  activo: boolean
   _count: HorarioCountAggregateOutputType | null
   _min: HorarioMinAggregateOutputType | null
   _max: HorarioMaxAggregateOutputType | null
@@ -174,6 +181,7 @@ export type horarioWhereInput = {
   id_evento?: Prisma.UuidFilter<"horario"> | string
   hora?: Prisma.DateTimeFilter<"horario"> | Date | string
   abierto?: Prisma.BoolFilter<"horario"> | boolean
+  activo?: Prisma.BoolFilter<"horario"> | boolean
   evento?: Prisma.XOR<Prisma.EventoScalarRelationFilter, Prisma.eventoWhereInput>
   productos?: Prisma.Horario_productoListRelationFilter
   tickets?: Prisma.TicketListRelationFilter
@@ -184,6 +192,7 @@ export type horarioOrderByWithRelationInput = {
   id_evento?: Prisma.SortOrder
   hora?: Prisma.SortOrder
   abierto?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
   evento?: Prisma.eventoOrderByWithRelationInput
   productos?: Prisma.horario_productoOrderByRelationAggregateInput
   tickets?: Prisma.ticketOrderByRelationAggregateInput
@@ -198,6 +207,7 @@ export type horarioWhereUniqueInput = Prisma.AtLeast<{
   id_evento?: Prisma.UuidFilter<"horario"> | string
   hora?: Prisma.DateTimeFilter<"horario"> | Date | string
   abierto?: Prisma.BoolFilter<"horario"> | boolean
+  activo?: Prisma.BoolFilter<"horario"> | boolean
   evento?: Prisma.XOR<Prisma.EventoScalarRelationFilter, Prisma.eventoWhereInput>
   productos?: Prisma.Horario_productoListRelationFilter
   tickets?: Prisma.TicketListRelationFilter
@@ -208,6 +218,7 @@ export type horarioOrderByWithAggregationInput = {
   id_evento?: Prisma.SortOrder
   hora?: Prisma.SortOrder
   abierto?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
   _count?: Prisma.horarioCountOrderByAggregateInput
   _max?: Prisma.horarioMaxOrderByAggregateInput
   _min?: Prisma.horarioMinOrderByAggregateInput
@@ -221,12 +232,14 @@ export type horarioScalarWhereWithAggregatesInput = {
   id_evento?: Prisma.UuidWithAggregatesFilter<"horario"> | string
   hora?: Prisma.DateTimeWithAggregatesFilter<"horario"> | Date | string
   abierto?: Prisma.BoolWithAggregatesFilter<"horario"> | boolean
+  activo?: Prisma.BoolWithAggregatesFilter<"horario"> | boolean
 }
 
 export type horarioCreateInput = {
   id_horario?: string
   hora: Date | string
   abierto?: boolean
+  activo?: boolean
   evento: Prisma.eventoCreateNestedOneWithoutHorariosInput
   productos?: Prisma.horario_productoCreateNestedManyWithoutHorarioInput
   tickets?: Prisma.ticketCreateNestedManyWithoutHorarioInput
@@ -237,6 +250,7 @@ export type horarioUncheckedCreateInput = {
   id_evento: string
   hora: Date | string
   abierto?: boolean
+  activo?: boolean
   productos?: Prisma.horario_productoUncheckedCreateNestedManyWithoutHorarioInput
   tickets?: Prisma.ticketUncheckedCreateNestedManyWithoutHorarioInput
 }
@@ -245,6 +259,7 @@ export type horarioUpdateInput = {
   id_horario?: Prisma.StringFieldUpdateOperationsInput | string
   hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   abierto?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   evento?: Prisma.eventoUpdateOneRequiredWithoutHorariosNestedInput
   productos?: Prisma.horario_productoUpdateManyWithoutHorarioNestedInput
   tickets?: Prisma.ticketUpdateManyWithoutHorarioNestedInput
@@ -255,6 +270,7 @@ export type horarioUncheckedUpdateInput = {
   id_evento?: Prisma.StringFieldUpdateOperationsInput | string
   hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   abierto?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   productos?: Prisma.horario_productoUncheckedUpdateManyWithoutHorarioNestedInput
   tickets?: Prisma.ticketUncheckedUpdateManyWithoutHorarioNestedInput
 }
@@ -264,12 +280,14 @@ export type horarioCreateManyInput = {
   id_evento: string
   hora: Date | string
   abierto?: boolean
+  activo?: boolean
 }
 
 export type horarioUpdateManyMutationInput = {
   id_horario?: Prisma.StringFieldUpdateOperationsInput | string
   hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   abierto?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type horarioUncheckedUpdateManyInput = {
@@ -277,6 +295,7 @@ export type horarioUncheckedUpdateManyInput = {
   id_evento?: Prisma.StringFieldUpdateOperationsInput | string
   hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   abierto?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type HorarioListRelationFilter = {
@@ -299,6 +318,7 @@ export type horarioCountOrderByAggregateInput = {
   id_evento?: Prisma.SortOrder
   hora?: Prisma.SortOrder
   abierto?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
 }
 
 export type horarioMaxOrderByAggregateInput = {
@@ -306,6 +326,7 @@ export type horarioMaxOrderByAggregateInput = {
   id_evento?: Prisma.SortOrder
   hora?: Prisma.SortOrder
   abierto?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
 }
 
 export type horarioMinOrderByAggregateInput = {
@@ -313,6 +334,7 @@ export type horarioMinOrderByAggregateInput = {
   id_evento?: Prisma.SortOrder
   hora?: Prisma.SortOrder
   abierto?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
 }
 
 export type HorarioScalarRelationFilter = {
@@ -394,6 +416,7 @@ export type horarioCreateWithoutEventoInput = {
   id_horario?: string
   hora: Date | string
   abierto?: boolean
+  activo?: boolean
   productos?: Prisma.horario_productoCreateNestedManyWithoutHorarioInput
   tickets?: Prisma.ticketCreateNestedManyWithoutHorarioInput
 }
@@ -402,6 +425,7 @@ export type horarioUncheckedCreateWithoutEventoInput = {
   id_horario?: string
   hora: Date | string
   abierto?: boolean
+  activo?: boolean
   productos?: Prisma.horario_productoUncheckedCreateNestedManyWithoutHorarioInput
   tickets?: Prisma.ticketUncheckedCreateNestedManyWithoutHorarioInput
 }
@@ -440,12 +464,14 @@ export type horarioScalarWhereInput = {
   id_evento?: Prisma.UuidFilter<"horario"> | string
   hora?: Prisma.DateTimeFilter<"horario"> | Date | string
   abierto?: Prisma.BoolFilter<"horario"> | boolean
+  activo?: Prisma.BoolFilter<"horario"> | boolean
 }
 
 export type horarioCreateWithoutProductosInput = {
   id_horario?: string
   hora: Date | string
   abierto?: boolean
+  activo?: boolean
   evento: Prisma.eventoCreateNestedOneWithoutHorariosInput
   tickets?: Prisma.ticketCreateNestedManyWithoutHorarioInput
 }
@@ -455,6 +481,7 @@ export type horarioUncheckedCreateWithoutProductosInput = {
   id_evento: string
   hora: Date | string
   abierto?: boolean
+  activo?: boolean
   tickets?: Prisma.ticketUncheckedCreateNestedManyWithoutHorarioInput
 }
 
@@ -478,6 +505,7 @@ export type horarioUpdateWithoutProductosInput = {
   id_horario?: Prisma.StringFieldUpdateOperationsInput | string
   hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   abierto?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   evento?: Prisma.eventoUpdateOneRequiredWithoutHorariosNestedInput
   tickets?: Prisma.ticketUpdateManyWithoutHorarioNestedInput
 }
@@ -487,6 +515,7 @@ export type horarioUncheckedUpdateWithoutProductosInput = {
   id_evento?: Prisma.StringFieldUpdateOperationsInput | string
   hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   abierto?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   tickets?: Prisma.ticketUncheckedUpdateManyWithoutHorarioNestedInput
 }
 
@@ -494,6 +523,7 @@ export type horarioCreateWithoutTicketsInput = {
   id_horario?: string
   hora: Date | string
   abierto?: boolean
+  activo?: boolean
   evento: Prisma.eventoCreateNestedOneWithoutHorariosInput
   productos?: Prisma.horario_productoCreateNestedManyWithoutHorarioInput
 }
@@ -503,6 +533,7 @@ export type horarioUncheckedCreateWithoutTicketsInput = {
   id_evento: string
   hora: Date | string
   abierto?: boolean
+  activo?: boolean
   productos?: Prisma.horario_productoUncheckedCreateNestedManyWithoutHorarioInput
 }
 
@@ -526,6 +557,7 @@ export type horarioUpdateWithoutTicketsInput = {
   id_horario?: Prisma.StringFieldUpdateOperationsInput | string
   hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   abierto?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   evento?: Prisma.eventoUpdateOneRequiredWithoutHorariosNestedInput
   productos?: Prisma.horario_productoUpdateManyWithoutHorarioNestedInput
 }
@@ -535,6 +567,7 @@ export type horarioUncheckedUpdateWithoutTicketsInput = {
   id_evento?: Prisma.StringFieldUpdateOperationsInput | string
   hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   abierto?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   productos?: Prisma.horario_productoUncheckedUpdateManyWithoutHorarioNestedInput
 }
 
@@ -542,12 +575,14 @@ export type horarioCreateManyEventoInput = {
   id_horario?: string
   hora: Date | string
   abierto?: boolean
+  activo?: boolean
 }
 
 export type horarioUpdateWithoutEventoInput = {
   id_horario?: Prisma.StringFieldUpdateOperationsInput | string
   hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   abierto?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   productos?: Prisma.horario_productoUpdateManyWithoutHorarioNestedInput
   tickets?: Prisma.ticketUpdateManyWithoutHorarioNestedInput
 }
@@ -556,6 +591,7 @@ export type horarioUncheckedUpdateWithoutEventoInput = {
   id_horario?: Prisma.StringFieldUpdateOperationsInput | string
   hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   abierto?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   productos?: Prisma.horario_productoUncheckedUpdateManyWithoutHorarioNestedInput
   tickets?: Prisma.ticketUncheckedUpdateManyWithoutHorarioNestedInput
 }
@@ -564,6 +600,7 @@ export type horarioUncheckedUpdateManyWithoutEventoInput = {
   id_horario?: Prisma.StringFieldUpdateOperationsInput | string
   hora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   abierto?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -611,6 +648,7 @@ export type horarioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   id_evento?: boolean
   hora?: boolean
   abierto?: boolean
+  activo?: boolean
   evento?: boolean | Prisma.eventoDefaultArgs<ExtArgs>
   productos?: boolean | Prisma.horario$productosArgs<ExtArgs>
   tickets?: boolean | Prisma.horario$ticketsArgs<ExtArgs>
@@ -622,6 +660,7 @@ export type horarioSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id_evento?: boolean
   hora?: boolean
   abierto?: boolean
+  activo?: boolean
   evento?: boolean | Prisma.eventoDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["horario"]>
 
@@ -630,6 +669,7 @@ export type horarioSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id_evento?: boolean
   hora?: boolean
   abierto?: boolean
+  activo?: boolean
   evento?: boolean | Prisma.eventoDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["horario"]>
 
@@ -638,9 +678,10 @@ export type horarioSelectScalar = {
   id_evento?: boolean
   hora?: boolean
   abierto?: boolean
+  activo?: boolean
 }
 
-export type horarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_horario" | "id_evento" | "hora" | "abierto", ExtArgs["result"]["horario"]>
+export type horarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_horario" | "id_evento" | "hora" | "abierto" | "activo", ExtArgs["result"]["horario"]>
 export type horarioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   evento?: boolean | Prisma.eventoDefaultArgs<ExtArgs>
   productos?: boolean | Prisma.horario$productosArgs<ExtArgs>
@@ -666,6 +707,7 @@ export type $horarioPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     id_evento: string
     hora: Date
     abierto: boolean
+    activo: boolean
   }, ExtArgs["result"]["horario"]>
   composites: {}
 }
@@ -1096,6 +1138,7 @@ export interface horarioFieldRefs {
   readonly id_evento: Prisma.FieldRef<"horario", 'String'>
   readonly hora: Prisma.FieldRef<"horario", 'DateTime'>
   readonly abierto: Prisma.FieldRef<"horario", 'Boolean'>
+  readonly activo: Prisma.FieldRef<"horario", 'Boolean'>
 }
     
 

@@ -38,18 +38,21 @@ export type Horario_productoMinAggregateOutputType = {
   id_horario: string | null
   id_producto: string | null
   cupo_total: number | null
+  activo: boolean | null
 }
 
 export type Horario_productoMaxAggregateOutputType = {
   id_horario: string | null
   id_producto: string | null
   cupo_total: number | null
+  activo: boolean | null
 }
 
 export type Horario_productoCountAggregateOutputType = {
   id_horario: number
   id_producto: number
   cupo_total: number
+  activo: number
   _all: number
 }
 
@@ -66,18 +69,21 @@ export type Horario_productoMinAggregateInputType = {
   id_horario?: true
   id_producto?: true
   cupo_total?: true
+  activo?: true
 }
 
 export type Horario_productoMaxAggregateInputType = {
   id_horario?: true
   id_producto?: true
   cupo_total?: true
+  activo?: true
 }
 
 export type Horario_productoCountAggregateInputType = {
   id_horario?: true
   id_producto?: true
   cupo_total?: true
+  activo?: true
   _all?: true
 }
 
@@ -171,6 +177,7 @@ export type Horario_productoGroupByOutputType = {
   id_horario: string
   id_producto: string
   cupo_total: number
+  activo: boolean
   _count: Horario_productoCountAggregateOutputType | null
   _avg: Horario_productoAvgAggregateOutputType | null
   _sum: Horario_productoSumAggregateOutputType | null
@@ -200,6 +207,7 @@ export type horario_productoWhereInput = {
   id_horario?: Prisma.UuidFilter<"horario_producto"> | string
   id_producto?: Prisma.UuidFilter<"horario_producto"> | string
   cupo_total?: Prisma.IntFilter<"horario_producto"> | number
+  activo?: Prisma.BoolFilter<"horario_producto"> | boolean
   horario?: Prisma.XOR<Prisma.HorarioScalarRelationFilter, Prisma.horarioWhereInput>
   producto?: Prisma.XOR<Prisma.ProductoScalarRelationFilter, Prisma.productoWhereInput>
 }
@@ -208,6 +216,7 @@ export type horario_productoOrderByWithRelationInput = {
   id_horario?: Prisma.SortOrder
   id_producto?: Prisma.SortOrder
   cupo_total?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
   horario?: Prisma.horarioOrderByWithRelationInput
   producto?: Prisma.productoOrderByWithRelationInput
 }
@@ -220,6 +229,7 @@ export type horario_productoWhereUniqueInput = Prisma.AtLeast<{
   id_horario?: Prisma.UuidFilter<"horario_producto"> | string
   id_producto?: Prisma.UuidFilter<"horario_producto"> | string
   cupo_total?: Prisma.IntFilter<"horario_producto"> | number
+  activo?: Prisma.BoolFilter<"horario_producto"> | boolean
   horario?: Prisma.XOR<Prisma.HorarioScalarRelationFilter, Prisma.horarioWhereInput>
   producto?: Prisma.XOR<Prisma.ProductoScalarRelationFilter, Prisma.productoWhereInput>
 }, "id_horario_id_producto">
@@ -228,6 +238,7 @@ export type horario_productoOrderByWithAggregationInput = {
   id_horario?: Prisma.SortOrder
   id_producto?: Prisma.SortOrder
   cupo_total?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
   _count?: Prisma.horario_productoCountOrderByAggregateInput
   _avg?: Prisma.horario_productoAvgOrderByAggregateInput
   _max?: Prisma.horario_productoMaxOrderByAggregateInput
@@ -242,10 +253,12 @@ export type horario_productoScalarWhereWithAggregatesInput = {
   id_horario?: Prisma.UuidWithAggregatesFilter<"horario_producto"> | string
   id_producto?: Prisma.UuidWithAggregatesFilter<"horario_producto"> | string
   cupo_total?: Prisma.IntWithAggregatesFilter<"horario_producto"> | number
+  activo?: Prisma.BoolWithAggregatesFilter<"horario_producto"> | boolean
 }
 
 export type horario_productoCreateInput = {
   cupo_total: number
+  activo?: boolean
   horario: Prisma.horarioCreateNestedOneWithoutProductosInput
   producto: Prisma.productoCreateNestedOneWithoutHorariosInput
 }
@@ -254,10 +267,12 @@ export type horario_productoUncheckedCreateInput = {
   id_horario: string
   id_producto: string
   cupo_total: number
+  activo?: boolean
 }
 
 export type horario_productoUpdateInput = {
   cupo_total?: Prisma.IntFieldUpdateOperationsInput | number
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   horario?: Prisma.horarioUpdateOneRequiredWithoutProductosNestedInput
   producto?: Prisma.productoUpdateOneRequiredWithoutHorariosNestedInput
 }
@@ -266,22 +281,26 @@ export type horario_productoUncheckedUpdateInput = {
   id_horario?: Prisma.StringFieldUpdateOperationsInput | string
   id_producto?: Prisma.StringFieldUpdateOperationsInput | string
   cupo_total?: Prisma.IntFieldUpdateOperationsInput | number
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type horario_productoCreateManyInput = {
   id_horario: string
   id_producto: string
   cupo_total: number
+  activo?: boolean
 }
 
 export type horario_productoUpdateManyMutationInput = {
   cupo_total?: Prisma.IntFieldUpdateOperationsInput | number
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type horario_productoUncheckedUpdateManyInput = {
   id_horario?: Prisma.StringFieldUpdateOperationsInput | string
   id_producto?: Prisma.StringFieldUpdateOperationsInput | string
   cupo_total?: Prisma.IntFieldUpdateOperationsInput | number
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type Horario_productoListRelationFilter = {
@@ -303,6 +322,7 @@ export type horario_productoCountOrderByAggregateInput = {
   id_horario?: Prisma.SortOrder
   id_producto?: Prisma.SortOrder
   cupo_total?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
 }
 
 export type horario_productoAvgOrderByAggregateInput = {
@@ -313,12 +333,14 @@ export type horario_productoMaxOrderByAggregateInput = {
   id_horario?: Prisma.SortOrder
   id_producto?: Prisma.SortOrder
   cupo_total?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
 }
 
 export type horario_productoMinOrderByAggregateInput = {
   id_horario?: Prisma.SortOrder
   id_producto?: Prisma.SortOrder
   cupo_total?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
 }
 
 export type horario_productoSumOrderByAggregateInput = {
@@ -419,12 +441,14 @@ export type IntFieldUpdateOperationsInput = {
 
 export type horario_productoCreateWithoutProductoInput = {
   cupo_total: number
+  activo?: boolean
   horario: Prisma.horarioCreateNestedOneWithoutProductosInput
 }
 
 export type horario_productoUncheckedCreateWithoutProductoInput = {
   id_horario: string
   cupo_total: number
+  activo?: boolean
 }
 
 export type horario_productoCreateOrConnectWithoutProductoInput = {
@@ -460,16 +484,19 @@ export type horario_productoScalarWhereInput = {
   id_horario?: Prisma.UuidFilter<"horario_producto"> | string
   id_producto?: Prisma.UuidFilter<"horario_producto"> | string
   cupo_total?: Prisma.IntFilter<"horario_producto"> | number
+  activo?: Prisma.BoolFilter<"horario_producto"> | boolean
 }
 
 export type horario_productoCreateWithoutHorarioInput = {
   cupo_total: number
+  activo?: boolean
   producto: Prisma.productoCreateNestedOneWithoutHorariosInput
 }
 
 export type horario_productoUncheckedCreateWithoutHorarioInput = {
   id_producto: string
   cupo_total: number
+  activo?: boolean
 }
 
 export type horario_productoCreateOrConnectWithoutHorarioInput = {
@@ -501,41 +528,49 @@ export type horario_productoUpdateManyWithWhereWithoutHorarioInput = {
 export type horario_productoCreateManyProductoInput = {
   id_horario: string
   cupo_total: number
+  activo?: boolean
 }
 
 export type horario_productoUpdateWithoutProductoInput = {
   cupo_total?: Prisma.IntFieldUpdateOperationsInput | number
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   horario?: Prisma.horarioUpdateOneRequiredWithoutProductosNestedInput
 }
 
 export type horario_productoUncheckedUpdateWithoutProductoInput = {
   id_horario?: Prisma.StringFieldUpdateOperationsInput | string
   cupo_total?: Prisma.IntFieldUpdateOperationsInput | number
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type horario_productoUncheckedUpdateManyWithoutProductoInput = {
   id_horario?: Prisma.StringFieldUpdateOperationsInput | string
   cupo_total?: Prisma.IntFieldUpdateOperationsInput | number
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type horario_productoCreateManyHorarioInput = {
   id_producto: string
   cupo_total: number
+  activo?: boolean
 }
 
 export type horario_productoUpdateWithoutHorarioInput = {
   cupo_total?: Prisma.IntFieldUpdateOperationsInput | number
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   producto?: Prisma.productoUpdateOneRequiredWithoutHorariosNestedInput
 }
 
 export type horario_productoUncheckedUpdateWithoutHorarioInput = {
   id_producto?: Prisma.StringFieldUpdateOperationsInput | string
   cupo_total?: Prisma.IntFieldUpdateOperationsInput | number
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type horario_productoUncheckedUpdateManyWithoutHorarioInput = {
   id_producto?: Prisma.StringFieldUpdateOperationsInput | string
   cupo_total?: Prisma.IntFieldUpdateOperationsInput | number
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -544,6 +579,7 @@ export type horario_productoSelect<ExtArgs extends runtime.Types.Extensions.Inte
   id_horario?: boolean
   id_producto?: boolean
   cupo_total?: boolean
+  activo?: boolean
   horario?: boolean | Prisma.horarioDefaultArgs<ExtArgs>
   producto?: boolean | Prisma.productoDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["horario_producto"]>
@@ -552,6 +588,7 @@ export type horario_productoSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   id_horario?: boolean
   id_producto?: boolean
   cupo_total?: boolean
+  activo?: boolean
   horario?: boolean | Prisma.horarioDefaultArgs<ExtArgs>
   producto?: boolean | Prisma.productoDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["horario_producto"]>
@@ -560,6 +597,7 @@ export type horario_productoSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   id_horario?: boolean
   id_producto?: boolean
   cupo_total?: boolean
+  activo?: boolean
   horario?: boolean | Prisma.horarioDefaultArgs<ExtArgs>
   producto?: boolean | Prisma.productoDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["horario_producto"]>
@@ -568,9 +606,10 @@ export type horario_productoSelectScalar = {
   id_horario?: boolean
   id_producto?: boolean
   cupo_total?: boolean
+  activo?: boolean
 }
 
-export type horario_productoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_horario" | "id_producto" | "cupo_total", ExtArgs["result"]["horario_producto"]>
+export type horario_productoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_horario" | "id_producto" | "cupo_total" | "activo", ExtArgs["result"]["horario_producto"]>
 export type horario_productoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   horario?: boolean | Prisma.horarioDefaultArgs<ExtArgs>
   producto?: boolean | Prisma.productoDefaultArgs<ExtArgs>
@@ -594,6 +633,7 @@ export type $horario_productoPayload<ExtArgs extends runtime.Types.Extensions.In
     id_horario: string
     id_producto: string
     cupo_total: number
+    activo: boolean
   }, ExtArgs["result"]["horario_producto"]>
   composites: {}
 }
@@ -1022,6 +1062,7 @@ export interface horario_productoFieldRefs {
   readonly id_horario: Prisma.FieldRef<"horario_producto", 'String'>
   readonly id_producto: Prisma.FieldRef<"horario_producto", 'String'>
   readonly cupo_total: Prisma.FieldRef<"horario_producto", 'Int'>
+  readonly activo: Prisma.FieldRef<"horario_producto", 'Boolean'>
 }
     
 

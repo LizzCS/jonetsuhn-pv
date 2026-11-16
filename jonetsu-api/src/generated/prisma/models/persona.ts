@@ -33,6 +33,7 @@ export type PersonaMinAggregateOutputType = {
   password_hash: string | null
   rol: $Enums.rol_persona | null
   created_at: Date | null
+  activo: boolean | null
 }
 
 export type PersonaMaxAggregateOutputType = {
@@ -44,6 +45,7 @@ export type PersonaMaxAggregateOutputType = {
   password_hash: string | null
   rol: $Enums.rol_persona | null
   created_at: Date | null
+  activo: boolean | null
 }
 
 export type PersonaCountAggregateOutputType = {
@@ -55,6 +57,7 @@ export type PersonaCountAggregateOutputType = {
   password_hash: number
   rol: number
   created_at: number
+  activo: number
   _all: number
 }
 
@@ -68,6 +71,7 @@ export type PersonaMinAggregateInputType = {
   password_hash?: true
   rol?: true
   created_at?: true
+  activo?: true
 }
 
 export type PersonaMaxAggregateInputType = {
@@ -79,6 +83,7 @@ export type PersonaMaxAggregateInputType = {
   password_hash?: true
   rol?: true
   created_at?: true
+  activo?: true
 }
 
 export type PersonaCountAggregateInputType = {
@@ -90,6 +95,7 @@ export type PersonaCountAggregateInputType = {
   password_hash?: true
   rol?: true
   created_at?: true
+  activo?: true
   _all?: true
 }
 
@@ -174,6 +180,7 @@ export type PersonaGroupByOutputType = {
   password_hash: string | null
   rol: $Enums.rol_persona
   created_at: Date
+  activo: boolean
   _count: PersonaCountAggregateOutputType | null
   _min: PersonaMinAggregateOutputType | null
   _max: PersonaMaxAggregateOutputType | null
@@ -206,6 +213,7 @@ export type personaWhereInput = {
   password_hash?: Prisma.StringNullableFilter<"persona"> | string | null
   rol?: Prisma.Enumrol_personaFilter<"persona"> | $Enums.rol_persona
   created_at?: Prisma.DateTimeFilter<"persona"> | Date | string
+  activo?: Prisma.BoolFilter<"persona"> | boolean
   tickets?: Prisma.TicketListRelationFilter
   pagos_verificados?: Prisma.PagoListRelationFilter
 }
@@ -219,6 +227,7 @@ export type personaOrderByWithRelationInput = {
   password_hash?: Prisma.SortOrderInput | Prisma.SortOrder
   rol?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
   tickets?: Prisma.ticketOrderByRelationAggregateInput
   pagos_verificados?: Prisma.pagoOrderByRelationAggregateInput
 }
@@ -235,6 +244,7 @@ export type personaWhereUniqueInput = Prisma.AtLeast<{
   password_hash?: Prisma.StringNullableFilter<"persona"> | string | null
   rol?: Prisma.Enumrol_personaFilter<"persona"> | $Enums.rol_persona
   created_at?: Prisma.DateTimeFilter<"persona"> | Date | string
+  activo?: Prisma.BoolFilter<"persona"> | boolean
   tickets?: Prisma.TicketListRelationFilter
   pagos_verificados?: Prisma.PagoListRelationFilter
 }, "id_persona" | "email">
@@ -248,6 +258,7 @@ export type personaOrderByWithAggregationInput = {
   password_hash?: Prisma.SortOrderInput | Prisma.SortOrder
   rol?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
   _count?: Prisma.personaCountOrderByAggregateInput
   _max?: Prisma.personaMaxOrderByAggregateInput
   _min?: Prisma.personaMinOrderByAggregateInput
@@ -265,6 +276,7 @@ export type personaScalarWhereWithAggregatesInput = {
   password_hash?: Prisma.StringNullableWithAggregatesFilter<"persona"> | string | null
   rol?: Prisma.Enumrol_personaWithAggregatesFilter<"persona"> | $Enums.rol_persona
   created_at?: Prisma.DateTimeWithAggregatesFilter<"persona"> | Date | string
+  activo?: Prisma.BoolWithAggregatesFilter<"persona"> | boolean
 }
 
 export type personaCreateInput = {
@@ -276,6 +288,7 @@ export type personaCreateInput = {
   password_hash?: string | null
   rol?: $Enums.rol_persona
   created_at?: Date | string
+  activo?: boolean
   tickets?: Prisma.ticketCreateNestedManyWithoutPersonaInput
   pagos_verificados?: Prisma.pagoCreateNestedManyWithoutVerificadorInput
 }
@@ -289,6 +302,7 @@ export type personaUncheckedCreateInput = {
   password_hash?: string | null
   rol?: $Enums.rol_persona
   created_at?: Date | string
+  activo?: boolean
   tickets?: Prisma.ticketUncheckedCreateNestedManyWithoutPersonaInput
   pagos_verificados?: Prisma.pagoUncheckedCreateNestedManyWithoutVerificadorInput
 }
@@ -302,6 +316,7 @@ export type personaUpdateInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rol?: Prisma.Enumrol_personaFieldUpdateOperationsInput | $Enums.rol_persona
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   tickets?: Prisma.ticketUpdateManyWithoutPersonaNestedInput
   pagos_verificados?: Prisma.pagoUpdateManyWithoutVerificadorNestedInput
 }
@@ -315,6 +330,7 @@ export type personaUncheckedUpdateInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rol?: Prisma.Enumrol_personaFieldUpdateOperationsInput | $Enums.rol_persona
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   tickets?: Prisma.ticketUncheckedUpdateManyWithoutPersonaNestedInput
   pagos_verificados?: Prisma.pagoUncheckedUpdateManyWithoutVerificadorNestedInput
 }
@@ -328,6 +344,7 @@ export type personaCreateManyInput = {
   password_hash?: string | null
   rol?: $Enums.rol_persona
   created_at?: Date | string
+  activo?: boolean
 }
 
 export type personaUpdateManyMutationInput = {
@@ -339,6 +356,7 @@ export type personaUpdateManyMutationInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rol?: Prisma.Enumrol_personaFieldUpdateOperationsInput | $Enums.rol_persona
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type personaUncheckedUpdateManyInput = {
@@ -350,6 +368,7 @@ export type personaUncheckedUpdateManyInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rol?: Prisma.Enumrol_personaFieldUpdateOperationsInput | $Enums.rol_persona
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type personaCountOrderByAggregateInput = {
@@ -361,6 +380,7 @@ export type personaCountOrderByAggregateInput = {
   password_hash?: Prisma.SortOrder
   rol?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
 }
 
 export type personaMaxOrderByAggregateInput = {
@@ -372,6 +392,7 @@ export type personaMaxOrderByAggregateInput = {
   password_hash?: Prisma.SortOrder
   rol?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
 }
 
 export type personaMinOrderByAggregateInput = {
@@ -383,6 +404,7 @@ export type personaMinOrderByAggregateInput = {
   password_hash?: Prisma.SortOrder
   rol?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
 }
 
 export type PersonaScalarRelationFilter = {
@@ -409,6 +431,10 @@ export type Enumrol_personaFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type personaCreateNestedOneWithoutTicketsInput = {
@@ -450,6 +476,7 @@ export type personaCreateWithoutTicketsInput = {
   password_hash?: string | null
   rol?: $Enums.rol_persona
   created_at?: Date | string
+  activo?: boolean
   pagos_verificados?: Prisma.pagoCreateNestedManyWithoutVerificadorInput
 }
 
@@ -462,6 +489,7 @@ export type personaUncheckedCreateWithoutTicketsInput = {
   password_hash?: string | null
   rol?: $Enums.rol_persona
   created_at?: Date | string
+  activo?: boolean
   pagos_verificados?: Prisma.pagoUncheckedCreateNestedManyWithoutVerificadorInput
 }
 
@@ -490,6 +518,7 @@ export type personaUpdateWithoutTicketsInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rol?: Prisma.Enumrol_personaFieldUpdateOperationsInput | $Enums.rol_persona
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pagos_verificados?: Prisma.pagoUpdateManyWithoutVerificadorNestedInput
 }
 
@@ -502,6 +531,7 @@ export type personaUncheckedUpdateWithoutTicketsInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rol?: Prisma.Enumrol_personaFieldUpdateOperationsInput | $Enums.rol_persona
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pagos_verificados?: Prisma.pagoUncheckedUpdateManyWithoutVerificadorNestedInput
 }
 
@@ -514,6 +544,7 @@ export type personaCreateWithoutPagos_verificadosInput = {
   password_hash?: string | null
   rol?: $Enums.rol_persona
   created_at?: Date | string
+  activo?: boolean
   tickets?: Prisma.ticketCreateNestedManyWithoutPersonaInput
 }
 
@@ -526,6 +557,7 @@ export type personaUncheckedCreateWithoutPagos_verificadosInput = {
   password_hash?: string | null
   rol?: $Enums.rol_persona
   created_at?: Date | string
+  activo?: boolean
   tickets?: Prisma.ticketUncheckedCreateNestedManyWithoutPersonaInput
 }
 
@@ -554,6 +586,7 @@ export type personaUpdateWithoutPagos_verificadosInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rol?: Prisma.Enumrol_personaFieldUpdateOperationsInput | $Enums.rol_persona
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   tickets?: Prisma.ticketUpdateManyWithoutPersonaNestedInput
 }
 
@@ -566,6 +599,7 @@ export type personaUncheckedUpdateWithoutPagos_verificadosInput = {
   password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rol?: Prisma.Enumrol_personaFieldUpdateOperationsInput | $Enums.rol_persona
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   tickets?: Prisma.ticketUncheckedUpdateManyWithoutPersonaNestedInput
 }
 
@@ -618,6 +652,7 @@ export type personaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   password_hash?: boolean
   rol?: boolean
   created_at?: boolean
+  activo?: boolean
   tickets?: boolean | Prisma.persona$ticketsArgs<ExtArgs>
   pagos_verificados?: boolean | Prisma.persona$pagos_verificadosArgs<ExtArgs>
   _count?: boolean | Prisma.PersonaCountOutputTypeDefaultArgs<ExtArgs>
@@ -632,6 +667,7 @@ export type personaSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   password_hash?: boolean
   rol?: boolean
   created_at?: boolean
+  activo?: boolean
 }, ExtArgs["result"]["persona"]>
 
 export type personaSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -643,6 +679,7 @@ export type personaSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   password_hash?: boolean
   rol?: boolean
   created_at?: boolean
+  activo?: boolean
 }, ExtArgs["result"]["persona"]>
 
 export type personaSelectScalar = {
@@ -654,9 +691,10 @@ export type personaSelectScalar = {
   password_hash?: boolean
   rol?: boolean
   created_at?: boolean
+  activo?: boolean
 }
 
-export type personaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_persona" | "nombre" | "apellido" | "telefono" | "email" | "password_hash" | "rol" | "created_at", ExtArgs["result"]["persona"]>
+export type personaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_persona" | "nombre" | "apellido" | "telefono" | "email" | "password_hash" | "rol" | "created_at" | "activo", ExtArgs["result"]["persona"]>
 export type personaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tickets?: boolean | Prisma.persona$ticketsArgs<ExtArgs>
   pagos_verificados?: boolean | Prisma.persona$pagos_verificadosArgs<ExtArgs>
@@ -680,6 +718,7 @@ export type $personaPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     password_hash: string | null
     rol: $Enums.rol_persona
     created_at: Date
+    activo: boolean
   }, ExtArgs["result"]["persona"]>
   composites: {}
 }
@@ -1113,6 +1152,7 @@ export interface personaFieldRefs {
   readonly password_hash: Prisma.FieldRef<"persona", 'String'>
   readonly rol: Prisma.FieldRef<"persona", 'rol_persona'>
   readonly created_at: Prisma.FieldRef<"persona", 'DateTime'>
+  readonly activo: Prisma.FieldRef<"persona", 'Boolean'>
 }
     
 

@@ -45,6 +45,7 @@ export type TicketMinAggregateOutputType = {
   notas: string | null
   total: runtime.Decimal | null
   created_at: Date | null
+  activo: boolean | null
 }
 
 export type TicketMaxAggregateOutputType = {
@@ -58,6 +59,7 @@ export type TicketMaxAggregateOutputType = {
   notas: string | null
   total: runtime.Decimal | null
   created_at: Date | null
+  activo: boolean | null
 }
 
 export type TicketCountAggregateOutputType = {
@@ -71,6 +73,7 @@ export type TicketCountAggregateOutputType = {
   notas: number
   total: number
   created_at: number
+  activo: number
   _all: number
 }
 
@@ -94,6 +97,7 @@ export type TicketMinAggregateInputType = {
   notas?: true
   total?: true
   created_at?: true
+  activo?: true
 }
 
 export type TicketMaxAggregateInputType = {
@@ -107,6 +111,7 @@ export type TicketMaxAggregateInputType = {
   notas?: true
   total?: true
   created_at?: true
+  activo?: true
 }
 
 export type TicketCountAggregateInputType = {
@@ -120,6 +125,7 @@ export type TicketCountAggregateInputType = {
   notas?: true
   total?: true
   created_at?: true
+  activo?: true
   _all?: true
 }
 
@@ -220,6 +226,7 @@ export type TicketGroupByOutputType = {
   notas: string | null
   total: runtime.Decimal
   created_at: Date
+  activo: boolean
   _count: TicketCountAggregateOutputType | null
   _avg: TicketAvgAggregateOutputType | null
   _sum: TicketSumAggregateOutputType | null
@@ -256,6 +263,7 @@ export type ticketWhereInput = {
   notas?: Prisma.StringNullableFilter<"ticket"> | string | null
   total?: Prisma.DecimalFilter<"ticket"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFilter<"ticket"> | Date | string
+  activo?: Prisma.BoolFilter<"ticket"> | boolean
   persona?: Prisma.XOR<Prisma.PersonaScalarRelationFilter, Prisma.personaWhereInput>
   horario?: Prisma.XOR<Prisma.HorarioScalarRelationFilter, Prisma.horarioWhereInput>
   items?: Prisma.Ticket_itemListRelationFilter
@@ -273,6 +281,7 @@ export type ticketOrderByWithRelationInput = {
   notas?: Prisma.SortOrderInput | Prisma.SortOrder
   total?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
   persona?: Prisma.personaOrderByWithRelationInput
   horario?: Prisma.horarioOrderByWithRelationInput
   items?: Prisma.ticket_itemOrderByRelationAggregateInput
@@ -293,6 +302,7 @@ export type ticketWhereUniqueInput = Prisma.AtLeast<{
   notas?: Prisma.StringNullableFilter<"ticket"> | string | null
   total?: Prisma.DecimalFilter<"ticket"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFilter<"ticket"> | Date | string
+  activo?: Prisma.BoolFilter<"ticket"> | boolean
   persona?: Prisma.XOR<Prisma.PersonaScalarRelationFilter, Prisma.personaWhereInput>
   horario?: Prisma.XOR<Prisma.HorarioScalarRelationFilter, Prisma.horarioWhereInput>
   items?: Prisma.Ticket_itemListRelationFilter
@@ -310,6 +320,7 @@ export type ticketOrderByWithAggregationInput = {
   notas?: Prisma.SortOrderInput | Prisma.SortOrder
   total?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
   _count?: Prisma.ticketCountOrderByAggregateInput
   _avg?: Prisma.ticketAvgOrderByAggregateInput
   _max?: Prisma.ticketMaxOrderByAggregateInput
@@ -331,6 +342,7 @@ export type ticketScalarWhereWithAggregatesInput = {
   notas?: Prisma.StringNullableWithAggregatesFilter<"ticket"> | string | null
   total?: Prisma.DecimalWithAggregatesFilter<"ticket"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"ticket"> | Date | string
+  activo?: Prisma.BoolWithAggregatesFilter<"ticket"> | boolean
 }
 
 export type ticketCreateInput = {
@@ -342,6 +354,7 @@ export type ticketCreateInput = {
   notas?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  activo?: boolean
   persona: Prisma.personaCreateNestedOneWithoutTicketsInput
   horario: Prisma.horarioCreateNestedOneWithoutTicketsInput
   items?: Prisma.ticket_itemCreateNestedManyWithoutTicketInput
@@ -359,6 +372,7 @@ export type ticketUncheckedCreateInput = {
   notas?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  activo?: boolean
   items?: Prisma.ticket_itemUncheckedCreateNestedManyWithoutTicketInput
   pagos?: Prisma.pagoUncheckedCreateNestedManyWithoutTicketInput
 }
@@ -372,6 +386,7 @@ export type ticketUpdateInput = {
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   persona?: Prisma.personaUpdateOneRequiredWithoutTicketsNestedInput
   horario?: Prisma.horarioUpdateOneRequiredWithoutTicketsNestedInput
   items?: Prisma.ticket_itemUpdateManyWithoutTicketNestedInput
@@ -389,6 +404,7 @@ export type ticketUncheckedUpdateInput = {
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   items?: Prisma.ticket_itemUncheckedUpdateManyWithoutTicketNestedInput
   pagos?: Prisma.pagoUncheckedUpdateManyWithoutTicketNestedInput
 }
@@ -404,6 +420,7 @@ export type ticketCreateManyInput = {
   notas?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  activo?: boolean
 }
 
 export type ticketUpdateManyMutationInput = {
@@ -415,6 +432,7 @@ export type ticketUpdateManyMutationInput = {
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ticketUncheckedUpdateManyInput = {
@@ -428,6 +446,7 @@ export type ticketUncheckedUpdateManyInput = {
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type TicketListRelationFilter = {
@@ -451,6 +470,7 @@ export type ticketCountOrderByAggregateInput = {
   notas?: Prisma.SortOrder
   total?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
 }
 
 export type ticketAvgOrderByAggregateInput = {
@@ -468,6 +488,7 @@ export type ticketMaxOrderByAggregateInput = {
   notas?: Prisma.SortOrder
   total?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
 }
 
 export type ticketMinOrderByAggregateInput = {
@@ -481,6 +502,7 @@ export type ticketMinOrderByAggregateInput = {
   notas?: Prisma.SortOrder
   total?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
 }
 
 export type ticketSumOrderByAggregateInput = {
@@ -621,6 +643,7 @@ export type ticketCreateWithoutPersonaInput = {
   notas?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  activo?: boolean
   horario: Prisma.horarioCreateNestedOneWithoutTicketsInput
   items?: Prisma.ticket_itemCreateNestedManyWithoutTicketInput
   pagos?: Prisma.pagoCreateNestedManyWithoutTicketInput
@@ -636,6 +659,7 @@ export type ticketUncheckedCreateWithoutPersonaInput = {
   notas?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  activo?: boolean
   items?: Prisma.ticket_itemUncheckedCreateNestedManyWithoutTicketInput
   pagos?: Prisma.pagoUncheckedCreateNestedManyWithoutTicketInput
 }
@@ -680,6 +704,7 @@ export type ticketScalarWhereInput = {
   notas?: Prisma.StringNullableFilter<"ticket"> | string | null
   total?: Prisma.DecimalFilter<"ticket"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFilter<"ticket"> | Date | string
+  activo?: Prisma.BoolFilter<"ticket"> | boolean
 }
 
 export type ticketCreateWithoutHorarioInput = {
@@ -691,6 +716,7 @@ export type ticketCreateWithoutHorarioInput = {
   notas?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  activo?: boolean
   persona: Prisma.personaCreateNestedOneWithoutTicketsInput
   items?: Prisma.ticket_itemCreateNestedManyWithoutTicketInput
   pagos?: Prisma.pagoCreateNestedManyWithoutTicketInput
@@ -706,6 +732,7 @@ export type ticketUncheckedCreateWithoutHorarioInput = {
   notas?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  activo?: boolean
   items?: Prisma.ticket_itemUncheckedCreateNestedManyWithoutTicketInput
   pagos?: Prisma.pagoUncheckedCreateNestedManyWithoutTicketInput
 }
@@ -745,6 +772,7 @@ export type ticketCreateWithoutItemsInput = {
   notas?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  activo?: boolean
   persona: Prisma.personaCreateNestedOneWithoutTicketsInput
   horario: Prisma.horarioCreateNestedOneWithoutTicketsInput
   pagos?: Prisma.pagoCreateNestedManyWithoutTicketInput
@@ -761,6 +789,7 @@ export type ticketUncheckedCreateWithoutItemsInput = {
   notas?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  activo?: boolean
   pagos?: Prisma.pagoUncheckedCreateNestedManyWithoutTicketInput
 }
 
@@ -789,6 +818,7 @@ export type ticketUpdateWithoutItemsInput = {
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   persona?: Prisma.personaUpdateOneRequiredWithoutTicketsNestedInput
   horario?: Prisma.horarioUpdateOneRequiredWithoutTicketsNestedInput
   pagos?: Prisma.pagoUpdateManyWithoutTicketNestedInput
@@ -805,6 +835,7 @@ export type ticketUncheckedUpdateWithoutItemsInput = {
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pagos?: Prisma.pagoUncheckedUpdateManyWithoutTicketNestedInput
 }
 
@@ -817,6 +848,7 @@ export type ticketCreateWithoutPagosInput = {
   notas?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  activo?: boolean
   persona: Prisma.personaCreateNestedOneWithoutTicketsInput
   horario: Prisma.horarioCreateNestedOneWithoutTicketsInput
   items?: Prisma.ticket_itemCreateNestedManyWithoutTicketInput
@@ -833,6 +865,7 @@ export type ticketUncheckedCreateWithoutPagosInput = {
   notas?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  activo?: boolean
   items?: Prisma.ticket_itemUncheckedCreateNestedManyWithoutTicketInput
 }
 
@@ -861,6 +894,7 @@ export type ticketUpdateWithoutPagosInput = {
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   persona?: Prisma.personaUpdateOneRequiredWithoutTicketsNestedInput
   horario?: Prisma.horarioUpdateOneRequiredWithoutTicketsNestedInput
   items?: Prisma.ticket_itemUpdateManyWithoutTicketNestedInput
@@ -877,6 +911,7 @@ export type ticketUncheckedUpdateWithoutPagosInput = {
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   items?: Prisma.ticket_itemUncheckedUpdateManyWithoutTicketNestedInput
 }
 
@@ -890,6 +925,7 @@ export type ticketCreateManyPersonaInput = {
   notas?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  activo?: boolean
 }
 
 export type ticketUpdateWithoutPersonaInput = {
@@ -901,6 +937,7 @@ export type ticketUpdateWithoutPersonaInput = {
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   horario?: Prisma.horarioUpdateOneRequiredWithoutTicketsNestedInput
   items?: Prisma.ticket_itemUpdateManyWithoutTicketNestedInput
   pagos?: Prisma.pagoUpdateManyWithoutTicketNestedInput
@@ -916,6 +953,7 @@ export type ticketUncheckedUpdateWithoutPersonaInput = {
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   items?: Prisma.ticket_itemUncheckedUpdateManyWithoutTicketNestedInput
   pagos?: Prisma.pagoUncheckedUpdateManyWithoutTicketNestedInput
 }
@@ -930,6 +968,7 @@ export type ticketUncheckedUpdateManyWithoutPersonaInput = {
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ticketCreateManyHorarioInput = {
@@ -942,6 +981,7 @@ export type ticketCreateManyHorarioInput = {
   notas?: string | null
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
+  activo?: boolean
 }
 
 export type ticketUpdateWithoutHorarioInput = {
@@ -953,6 +993,7 @@ export type ticketUpdateWithoutHorarioInput = {
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   persona?: Prisma.personaUpdateOneRequiredWithoutTicketsNestedInput
   items?: Prisma.ticket_itemUpdateManyWithoutTicketNestedInput
   pagos?: Prisma.pagoUpdateManyWithoutTicketNestedInput
@@ -968,6 +1009,7 @@ export type ticketUncheckedUpdateWithoutHorarioInput = {
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   items?: Prisma.ticket_itemUncheckedUpdateManyWithoutTicketNestedInput
   pagos?: Prisma.pagoUncheckedUpdateManyWithoutTicketNestedInput
 }
@@ -982,6 +1024,7 @@ export type ticketUncheckedUpdateManyWithoutHorarioInput = {
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -1035,6 +1078,7 @@ export type ticketSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   notas?: boolean
   total?: boolean
   created_at?: boolean
+  activo?: boolean
   persona?: boolean | Prisma.personaDefaultArgs<ExtArgs>
   horario?: boolean | Prisma.horarioDefaultArgs<ExtArgs>
   items?: boolean | Prisma.ticket$itemsArgs<ExtArgs>
@@ -1053,6 +1097,7 @@ export type ticketSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   notas?: boolean
   total?: boolean
   created_at?: boolean
+  activo?: boolean
   persona?: boolean | Prisma.personaDefaultArgs<ExtArgs>
   horario?: boolean | Prisma.horarioDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ticket"]>
@@ -1068,6 +1113,7 @@ export type ticketSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   notas?: boolean
   total?: boolean
   created_at?: boolean
+  activo?: boolean
   persona?: boolean | Prisma.personaDefaultArgs<ExtArgs>
   horario?: boolean | Prisma.horarioDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ticket"]>
@@ -1083,9 +1129,10 @@ export type ticketSelectScalar = {
   notas?: boolean
   total?: boolean
   created_at?: boolean
+  activo?: boolean
 }
 
-export type ticketOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_ticket" | "id_persona" | "id_horario" | "codigo_acceso" | "estado" | "expira_en" | "asistio" | "notas" | "total" | "created_at", ExtArgs["result"]["ticket"]>
+export type ticketOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_ticket" | "id_persona" | "id_horario" | "codigo_acceso" | "estado" | "expira_en" | "asistio" | "notas" | "total" | "created_at" | "activo", ExtArgs["result"]["ticket"]>
 export type ticketInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   persona?: boolean | Prisma.personaDefaultArgs<ExtArgs>
   horario?: boolean | Prisma.horarioDefaultArgs<ExtArgs>
@@ -1121,6 +1168,7 @@ export type $ticketPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     notas: string | null
     total: runtime.Decimal
     created_at: Date
+    activo: boolean
   }, ExtArgs["result"]["ticket"]>
   composites: {}
 }
@@ -1558,6 +1606,7 @@ export interface ticketFieldRefs {
   readonly notas: Prisma.FieldRef<"ticket", 'String'>
   readonly total: Prisma.FieldRef<"ticket", 'Decimal'>
   readonly created_at: Prisma.FieldRef<"ticket", 'DateTime'>
+  readonly activo: Prisma.FieldRef<"ticket", 'Boolean'>
 }
     
 

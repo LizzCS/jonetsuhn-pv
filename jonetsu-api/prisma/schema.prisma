@@ -47,6 +47,8 @@ model persona {
   password_hash String?
   rol           rol_persona @default(cliente)
   created_at    DateTime   @default(now())
+    activo       Boolean @default(true)
+
 
   tickets       ticket[]
   pagos_verificados pago[] @relation("PagoVerificadoPor")
@@ -55,6 +57,7 @@ model persona {
 model categoria {
   id_categoria String     @id @default(uuid()) @db.Uuid
   nombre       String     @unique
+  activo       Boolean @default(true)
 
   productos    producto[]
 }
@@ -88,6 +91,8 @@ model horario {
   id_evento  String   @db.Uuid
   hora       DateTime @db.Time(6)
   abierto    Boolean  @default(true)
+    activo       Boolean @default(true)
+
 
   evento     evento @relation(fields: [id_evento], references: [id_evento])
   productos  horario_producto[]
@@ -100,6 +105,8 @@ model horario_producto {
   id_horario  String @db.Uuid
   id_producto String @db.Uuid
   cupo_total  Int
+    activo       Boolean @default(true)
+
 
   horario  horario  @relation(fields: [id_horario], references: [id_horario])
   producto producto @relation(fields: [id_producto], references: [id_producto])
@@ -118,6 +125,8 @@ model ticket {
   notas         String?
   total         Decimal       @default(0)
   created_at    DateTime      @default(now())
+    activo       Boolean @default(true)
+
 
   persona       persona       @relation(fields: [id_persona], references: [id_persona])
   horario       horario       @relation(fields: [id_horario], references: [id_horario])
@@ -134,6 +143,8 @@ model ticket_item {
   id_producto     String  @db.Uuid
   cantidad        Int     @default(1)
   precio_unitario Decimal
+  activo       Boolean @default(true)
+
 
   ticket   ticket   @relation(fields: [id_ticket], references: [id_ticket], onDelete: Cascade)
   producto producto @relation(fields: [id_producto], references: [id_producto])
@@ -151,7 +162,8 @@ model pago {
   estado          estado_pago @default(pendiente)
   verificado_por  String?     @db.Uuid
   created_at      DateTime    @default(now())
-
+  activo       Boolean @default(true)
+  
   ticket          ticket   @relation(fields: [id_ticket], references: [id_ticket], onDelete: Cascade)
   verificador     persona? @relation("PagoVerificadoPor", fields: [verificado_por], references: [id_persona])
 }

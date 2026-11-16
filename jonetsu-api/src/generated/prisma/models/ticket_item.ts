@@ -42,6 +42,7 @@ export type Ticket_itemMinAggregateOutputType = {
   id_producto: string | null
   cantidad: number | null
   precio_unitario: runtime.Decimal | null
+  activo: boolean | null
 }
 
 export type Ticket_itemMaxAggregateOutputType = {
@@ -50,6 +51,7 @@ export type Ticket_itemMaxAggregateOutputType = {
   id_producto: string | null
   cantidad: number | null
   precio_unitario: runtime.Decimal | null
+  activo: boolean | null
 }
 
 export type Ticket_itemCountAggregateOutputType = {
@@ -58,6 +60,7 @@ export type Ticket_itemCountAggregateOutputType = {
   id_producto: number
   cantidad: number
   precio_unitario: number
+  activo: number
   _all: number
 }
 
@@ -78,6 +81,7 @@ export type Ticket_itemMinAggregateInputType = {
   id_producto?: true
   cantidad?: true
   precio_unitario?: true
+  activo?: true
 }
 
 export type Ticket_itemMaxAggregateInputType = {
@@ -86,6 +90,7 @@ export type Ticket_itemMaxAggregateInputType = {
   id_producto?: true
   cantidad?: true
   precio_unitario?: true
+  activo?: true
 }
 
 export type Ticket_itemCountAggregateInputType = {
@@ -94,6 +99,7 @@ export type Ticket_itemCountAggregateInputType = {
   id_producto?: true
   cantidad?: true
   precio_unitario?: true
+  activo?: true
   _all?: true
 }
 
@@ -189,6 +195,7 @@ export type Ticket_itemGroupByOutputType = {
   id_producto: string
   cantidad: number
   precio_unitario: runtime.Decimal
+  activo: boolean
   _count: Ticket_itemCountAggregateOutputType | null
   _avg: Ticket_itemAvgAggregateOutputType | null
   _sum: Ticket_itemSumAggregateOutputType | null
@@ -220,6 +227,7 @@ export type ticket_itemWhereInput = {
   id_producto?: Prisma.UuidFilter<"ticket_item"> | string
   cantidad?: Prisma.IntFilter<"ticket_item"> | number
   precio_unitario?: Prisma.DecimalFilter<"ticket_item"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: Prisma.BoolFilter<"ticket_item"> | boolean
   ticket?: Prisma.XOR<Prisma.TicketScalarRelationFilter, Prisma.ticketWhereInput>
   producto?: Prisma.XOR<Prisma.ProductoScalarRelationFilter, Prisma.productoWhereInput>
 }
@@ -230,6 +238,7 @@ export type ticket_itemOrderByWithRelationInput = {
   id_producto?: Prisma.SortOrder
   cantidad?: Prisma.SortOrder
   precio_unitario?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
   ticket?: Prisma.ticketOrderByWithRelationInput
   producto?: Prisma.productoOrderByWithRelationInput
 }
@@ -243,6 +252,7 @@ export type ticket_itemWhereUniqueInput = Prisma.AtLeast<{
   id_producto?: Prisma.UuidFilter<"ticket_item"> | string
   cantidad?: Prisma.IntFilter<"ticket_item"> | number
   precio_unitario?: Prisma.DecimalFilter<"ticket_item"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: Prisma.BoolFilter<"ticket_item"> | boolean
   ticket?: Prisma.XOR<Prisma.TicketScalarRelationFilter, Prisma.ticketWhereInput>
   producto?: Prisma.XOR<Prisma.ProductoScalarRelationFilter, Prisma.productoWhereInput>
 }, "id_item">
@@ -253,6 +263,7 @@ export type ticket_itemOrderByWithAggregationInput = {
   id_producto?: Prisma.SortOrder
   cantidad?: Prisma.SortOrder
   precio_unitario?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
   _count?: Prisma.ticket_itemCountOrderByAggregateInput
   _avg?: Prisma.ticket_itemAvgOrderByAggregateInput
   _max?: Prisma.ticket_itemMaxOrderByAggregateInput
@@ -269,12 +280,14 @@ export type ticket_itemScalarWhereWithAggregatesInput = {
   id_producto?: Prisma.UuidWithAggregatesFilter<"ticket_item"> | string
   cantidad?: Prisma.IntWithAggregatesFilter<"ticket_item"> | number
   precio_unitario?: Prisma.DecimalWithAggregatesFilter<"ticket_item"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: Prisma.BoolWithAggregatesFilter<"ticket_item"> | boolean
 }
 
 export type ticket_itemCreateInput = {
   id_item?: string
   cantidad?: number
   precio_unitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: boolean
   ticket: Prisma.ticketCreateNestedOneWithoutItemsInput
   producto: Prisma.productoCreateNestedOneWithoutTicket_itemsInput
 }
@@ -285,12 +298,14 @@ export type ticket_itemUncheckedCreateInput = {
   id_producto: string
   cantidad?: number
   precio_unitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: boolean
 }
 
 export type ticket_itemUpdateInput = {
   id_item?: Prisma.StringFieldUpdateOperationsInput | string
   cantidad?: Prisma.IntFieldUpdateOperationsInput | number
   precio_unitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ticket?: Prisma.ticketUpdateOneRequiredWithoutItemsNestedInput
   producto?: Prisma.productoUpdateOneRequiredWithoutTicket_itemsNestedInput
 }
@@ -301,6 +316,7 @@ export type ticket_itemUncheckedUpdateInput = {
   id_producto?: Prisma.StringFieldUpdateOperationsInput | string
   cantidad?: Prisma.IntFieldUpdateOperationsInput | number
   precio_unitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ticket_itemCreateManyInput = {
@@ -309,12 +325,14 @@ export type ticket_itemCreateManyInput = {
   id_producto: string
   cantidad?: number
   precio_unitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: boolean
 }
 
 export type ticket_itemUpdateManyMutationInput = {
   id_item?: Prisma.StringFieldUpdateOperationsInput | string
   cantidad?: Prisma.IntFieldUpdateOperationsInput | number
   precio_unitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ticket_itemUncheckedUpdateManyInput = {
@@ -323,6 +341,7 @@ export type ticket_itemUncheckedUpdateManyInput = {
   id_producto?: Prisma.StringFieldUpdateOperationsInput | string
   cantidad?: Prisma.IntFieldUpdateOperationsInput | number
   precio_unitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type Ticket_itemListRelationFilter = {
@@ -341,6 +360,7 @@ export type ticket_itemCountOrderByAggregateInput = {
   id_producto?: Prisma.SortOrder
   cantidad?: Prisma.SortOrder
   precio_unitario?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
 }
 
 export type ticket_itemAvgOrderByAggregateInput = {
@@ -354,6 +374,7 @@ export type ticket_itemMaxOrderByAggregateInput = {
   id_producto?: Prisma.SortOrder
   cantidad?: Prisma.SortOrder
   precio_unitario?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
 }
 
 export type ticket_itemMinOrderByAggregateInput = {
@@ -362,6 +383,7 @@ export type ticket_itemMinOrderByAggregateInput = {
   id_producto?: Prisma.SortOrder
   cantidad?: Prisma.SortOrder
   precio_unitario?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
 }
 
 export type ticket_itemSumOrderByAggregateInput = {
@@ -457,6 +479,7 @@ export type ticket_itemCreateWithoutProductoInput = {
   id_item?: string
   cantidad?: number
   precio_unitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: boolean
   ticket: Prisma.ticketCreateNestedOneWithoutItemsInput
 }
 
@@ -465,6 +488,7 @@ export type ticket_itemUncheckedCreateWithoutProductoInput = {
   id_ticket: string
   cantidad?: number
   precio_unitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: boolean
 }
 
 export type ticket_itemCreateOrConnectWithoutProductoInput = {
@@ -502,12 +526,14 @@ export type ticket_itemScalarWhereInput = {
   id_producto?: Prisma.UuidFilter<"ticket_item"> | string
   cantidad?: Prisma.IntFilter<"ticket_item"> | number
   precio_unitario?: Prisma.DecimalFilter<"ticket_item"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: Prisma.BoolFilter<"ticket_item"> | boolean
 }
 
 export type ticket_itemCreateWithoutTicketInput = {
   id_item?: string
   cantidad?: number
   precio_unitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: boolean
   producto: Prisma.productoCreateNestedOneWithoutTicket_itemsInput
 }
 
@@ -516,6 +542,7 @@ export type ticket_itemUncheckedCreateWithoutTicketInput = {
   id_producto: string
   cantidad?: number
   precio_unitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: boolean
 }
 
 export type ticket_itemCreateOrConnectWithoutTicketInput = {
@@ -549,12 +576,14 @@ export type ticket_itemCreateManyProductoInput = {
   id_ticket: string
   cantidad?: number
   precio_unitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: boolean
 }
 
 export type ticket_itemUpdateWithoutProductoInput = {
   id_item?: Prisma.StringFieldUpdateOperationsInput | string
   cantidad?: Prisma.IntFieldUpdateOperationsInput | number
   precio_unitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ticket?: Prisma.ticketUpdateOneRequiredWithoutItemsNestedInput
 }
 
@@ -563,6 +592,7 @@ export type ticket_itemUncheckedUpdateWithoutProductoInput = {
   id_ticket?: Prisma.StringFieldUpdateOperationsInput | string
   cantidad?: Prisma.IntFieldUpdateOperationsInput | number
   precio_unitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ticket_itemUncheckedUpdateManyWithoutProductoInput = {
@@ -570,6 +600,7 @@ export type ticket_itemUncheckedUpdateManyWithoutProductoInput = {
   id_ticket?: Prisma.StringFieldUpdateOperationsInput | string
   cantidad?: Prisma.IntFieldUpdateOperationsInput | number
   precio_unitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ticket_itemCreateManyTicketInput = {
@@ -577,12 +608,14 @@ export type ticket_itemCreateManyTicketInput = {
   id_producto: string
   cantidad?: number
   precio_unitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: boolean
 }
 
 export type ticket_itemUpdateWithoutTicketInput = {
   id_item?: Prisma.StringFieldUpdateOperationsInput | string
   cantidad?: Prisma.IntFieldUpdateOperationsInput | number
   precio_unitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   producto?: Prisma.productoUpdateOneRequiredWithoutTicket_itemsNestedInput
 }
 
@@ -591,6 +624,7 @@ export type ticket_itemUncheckedUpdateWithoutTicketInput = {
   id_producto?: Prisma.StringFieldUpdateOperationsInput | string
   cantidad?: Prisma.IntFieldUpdateOperationsInput | number
   precio_unitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ticket_itemUncheckedUpdateManyWithoutTicketInput = {
@@ -598,6 +632,7 @@ export type ticket_itemUncheckedUpdateManyWithoutTicketInput = {
   id_producto?: Prisma.StringFieldUpdateOperationsInput | string
   cantidad?: Prisma.IntFieldUpdateOperationsInput | number
   precio_unitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -608,6 +643,7 @@ export type ticket_itemSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   id_producto?: boolean
   cantidad?: boolean
   precio_unitario?: boolean
+  activo?: boolean
   ticket?: boolean | Prisma.ticketDefaultArgs<ExtArgs>
   producto?: boolean | Prisma.productoDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ticket_item"]>
@@ -618,6 +654,7 @@ export type ticket_itemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   id_producto?: boolean
   cantidad?: boolean
   precio_unitario?: boolean
+  activo?: boolean
   ticket?: boolean | Prisma.ticketDefaultArgs<ExtArgs>
   producto?: boolean | Prisma.productoDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ticket_item"]>
@@ -628,6 +665,7 @@ export type ticket_itemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   id_producto?: boolean
   cantidad?: boolean
   precio_unitario?: boolean
+  activo?: boolean
   ticket?: boolean | Prisma.ticketDefaultArgs<ExtArgs>
   producto?: boolean | Prisma.productoDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ticket_item"]>
@@ -638,9 +676,10 @@ export type ticket_itemSelectScalar = {
   id_producto?: boolean
   cantidad?: boolean
   precio_unitario?: boolean
+  activo?: boolean
 }
 
-export type ticket_itemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_item" | "id_ticket" | "id_producto" | "cantidad" | "precio_unitario", ExtArgs["result"]["ticket_item"]>
+export type ticket_itemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_item" | "id_ticket" | "id_producto" | "cantidad" | "precio_unitario" | "activo", ExtArgs["result"]["ticket_item"]>
 export type ticket_itemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ticket?: boolean | Prisma.ticketDefaultArgs<ExtArgs>
   producto?: boolean | Prisma.productoDefaultArgs<ExtArgs>
@@ -666,6 +705,7 @@ export type $ticket_itemPayload<ExtArgs extends runtime.Types.Extensions.Interna
     id_producto: string
     cantidad: number
     precio_unitario: runtime.Decimal
+    activo: boolean
   }, ExtArgs["result"]["ticket_item"]>
   composites: {}
 }
@@ -1096,6 +1136,7 @@ export interface ticket_itemFieldRefs {
   readonly id_producto: Prisma.FieldRef<"ticket_item", 'String'>
   readonly cantidad: Prisma.FieldRef<"ticket_item", 'Int'>
   readonly precio_unitario: Prisma.FieldRef<"ticket_item", 'Decimal'>
+  readonly activo: Prisma.FieldRef<"ticket_item", 'Boolean'>
 }
     
 

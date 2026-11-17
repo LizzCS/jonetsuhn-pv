@@ -1,15 +1,33 @@
-import { IsNotEmpty, IsString, IsOptional, IsBoolean } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Matches,
+  MaxLength,
+} from 'class-validator';
+import { Transform } from 'class-transformer';
 
+import { FORMATO_FECHA } from '../../common/fechas.js';
+
+const recortar = ({ value }: { value: unknown }) =>
+  typeof value === 'string' ? value.trim() : value;
+
+// Un evento es un día de servicio. La imagen se sube aparte:
+// PATCH /eventos/:id/imagen
 export class CreateEventoDto {
-  @IsNotEmpty()
-  @IsString()
+  @Transform(recortar)
+  @IsString({ message: 'nombre debe ser texto' })
+  @IsNotEmpty({ message: 'nombre es obligatorio' })
+  @MaxLength(150, { message: 'nombre admite máximo 150 caracteres' })
   nombre!: string;
 
+  // Lugar y platos del servicio, breve
   @IsOptional()
-  @IsString()
+  @Transform(recortar)
+  @IsString({ message: 'descripcion debe ser texto' })
+  @MaxLength(1000, { message: 'descripcion admite máximo 1000 caracteres' })
   descripcion?: string | null;
 
-  @IsNotEmpty()
-  @IsString()
+  @Matches(FORMATO_FECHA, { message: 'fecha debe tener formato AAAA-MM-DD' })
   fecha!: string;
 }

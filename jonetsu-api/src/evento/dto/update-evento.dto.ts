@@ -1,6 +1,5 @@
-export class UpdateEventoDto {
-  nombre?: string;
-  descripcion?: string | null;
-  fecha?: string;
-  activo?: boolean;
-}
+import { PartialType } from '@nestjs/mapped-types';
+
+import { CreateEventoDto } from './create-evento.dto.js';
+
+export class UpdateEventoDto extends PartialType(CreateEventoDto) {}

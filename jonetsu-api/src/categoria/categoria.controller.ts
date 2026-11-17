@@ -6,8 +6,8 @@ import {
   Delete,
   Body,
   Param,
-  ParseUUIDPipe,
 } from '@nestjs/common';
+import { idValido } from '../common/id-valido.pipe.js';
 
 import { CategoriaService } from './categoria.service.js';
 import { CreateCategoriaDto } from './dto/create-categoria.dto.js';
@@ -31,14 +31,14 @@ export class CategoriaController {
 
   // GET /categorias/:id
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
+  findOne(@Param('id', idValido) id: string) {
     return this.categoriaService.findOne(id);
   }
 
   // PATCH /categorias/:id
   @Patch(':id')
   update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', idValido) id: string,
     @Body() dto: UpdateCategoriaDto,
   ) {
     return this.categoriaService.update(id, dto);
@@ -46,7 +46,7 @@ export class CategoriaController {
 
   // DELETE /categorias/:id
   @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  remove(@Param('id', idValido) id: string) {
     return this.categoriaService.remove(id);
   }
 }

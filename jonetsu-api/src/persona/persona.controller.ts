@@ -6,8 +6,8 @@ import {
   Delete,
   Body,
   Param,
-  ParseUUIDPipe,
 } from '@nestjs/common';
+import { idValido } from '../common/id-valido.pipe.js';
 
 import { PersonaService } from './persona.service.js';
 import { CreatePersonaDto } from './dto/create-persona.dto.js';
@@ -34,7 +34,7 @@ export class PersonaController {
   // GET /personas/:id
   @Get(':id')
   findOne(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', idValido) id: string,
   ) {
     return this.personaService.findOne(id);
   }
@@ -42,7 +42,7 @@ export class PersonaController {
   // PATCH /personas/:id
   @Patch(':id')
   update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', idValido) id: string,
     @Body() dto: UpdatePersonaDto,
   ) {
     return this.personaService.update(id, dto);
@@ -51,7 +51,7 @@ export class PersonaController {
   // DELETE /personas/:id
   @Delete(':id')
   remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', idValido) id: string,
   ) {
     return this.personaService.remove(id);
   }

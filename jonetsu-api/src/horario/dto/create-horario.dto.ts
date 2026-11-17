@@ -1,55 +1,16 @@
-import {
-  IsString,
-  IsBoolean,
-  IsOptional,
-  IsUUID,
-  IsInt,
-} from 'class-validator';
+import { IsBoolean, IsOptional, IsUUID, Matches } from 'class-validator';
 
-/**
- * Table horario {
-  id_horario uuid [primary key]
-  id_evento uuid [not null, ref: > evento.id_evento]
-  hora time [not null]
-  abierto boolean [default: true]
-
-  indexes {
-    (id_evento, hora) [unique]
-  }
-}
-
-Table horario_producto {
-  id_horario uuid [not null, ref: > horario.id_horario]
-  id_producto uuid [not null, ref: > inventario.id_producto]
-  cupo_total int [not null]
-
-  indexes {
-    (id_horario, id_producto) [pk]
-  }
-}
- * 
- */
+import { FORMATO_HORA } from '../../common/fechas.js';
 
 export class CreateHorarioDto {
-  @IsUUID()
-  @IsString()
-  id_evento: string;
+  @IsUUID('all', { message: 'id_evento debe ser un UUID válido' })
+  id_evento!: string;
 
-  @IsString()
-  hora: string;
+  @Matches(FORMATO_HORA, { message: 'hora debe tener formato HH:MM (24 horas)' })
+  hora!: string;
 
+  // false = la venta de esa hora está cerrada (llena o pausada por el admin)
   @IsOptional()
-  @IsBoolean()
+  @IsBoolean({ message: 'abierto debe ser true o false' })
   abierto?: boolean;
-}
-
-export class CreateHorarioProductoDto {
-  @IsUUID()
-  id_horario: string;
-
-  @IsUUID()
-  id_producto: string;
-
-  @IsInt()
-  cupo_total: number;
 }

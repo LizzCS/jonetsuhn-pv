@@ -6,11 +6,16 @@ import {
   Delete,
   Body,
   Param,
-  ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
+import { idValido } from '../common/id-valido.pipe.js';
 
+import { AccionAdminDto } from '../common/dto/accion-admin.dto.js';
 import { TicketService } from './ticket.service.js';
 import { CreateTicketDto } from './dto/create-ticket.dto.js';
+import { EntregarTicketDto } from './dto/entregar-ticket.dto.js';
+import { FiltroTicketsDto } from './dto/filtro-tickets.dto.js';
+import { ReagendarTicketDto } from './dto/reagendar-ticket.dto.js';
 import { UpdateTicketDto } from './dto/update-ticket.dto.js';
 
 @Controller('tickets')
@@ -25,33 +30,57 @@ export class TicketController {
     return this.ticketService.create(dto);
   }
 
-  // GET /tickets
+  // GET /tickets?id_persona=&estado=
   @Get()
-  findAll() {
-    return this.ticketService.findAll();
+  findAll(@Query() filtros: FiltroTicketsDto) {
+    return this.ticketService.findAll(filtros);
   }
 
   // GET /tickets/:id
   @Get(':id')
   findOne(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', idValido) id: string,
   ) {
     return this.ticketService.findOne(id);
   }
 
-  // PATCH /tickets/:id
+  // PATCH /tickets/entregar (admin) — va antes de :id
+  @Patch('entregar')
+  entregar(@Body() dto: EntregarTicketDto) {
+    return this.ticketService.entregar(dto);
+  }
+
+  // PATCH /tickets/:id/reactivar  (admin)
+  @Patch(':id/reactivar')
+  reactivar(
+    @Param('id', idValido) id: string,
+    @Body() dto: AccionAdminDto,
+  ) {
+    return this.ticketService.reactivar(id, dto);
+  }
+
+  // PATCH /tickets/:id/reagendar  (admin, solo confirmados)
+  @Patch(':id/reagendar')
+  reagendar(
+    @Param('id', idValido) id: string,
+    @Body() dto: ReagendarTicketDto,
+  ) {
+    return this.ticketService.reagendar(id, dto);
+  }
+
+  // PATCH /tickets/:id  (admin: notas o cancelar)
   @Patch(':id')
   update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', idValido) id: string,
     @Body() dto: UpdateTicketDto,
   ) {
     return this.ticketService.update(id, dto);
   }
 
-  // DELETE /tickets/:id
+  // DELETE /tickets/:id  ("Volver" desde la ventana de pago)
   @Delete(':id')
   remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', idValido) id: string,
   ) {
     return this.ticketService.remove(id);
   }

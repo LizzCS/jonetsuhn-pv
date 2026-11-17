@@ -119,6 +119,7 @@ export const EventoScalarFieldEnum = {
   id_evento: 'id_evento',
   nombre: 'nombre',
   descripcion: 'descripcion',
+  imagen_url: 'imagen_url',
   fecha: 'fecha',
   activo: 'activo'
 } as const
@@ -184,6 +185,8 @@ export const PagoScalarFieldEnum = {
   comprobante_url: 'comprobante_url',
   estado: 'estado',
   verificado_por: 'verificado_por',
+  verificado_en: 'verificado_en',
+  motivo_rechazo: 'motivo_rechazo',
   created_at: 'created_at',
   activo: 'activo'
 } as const

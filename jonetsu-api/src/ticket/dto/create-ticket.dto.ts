@@ -22,9 +22,9 @@ export class CreateTicketItemDto {
 }
 
 export class CreateTicketDto {
-  // TODO(auth): tomar id_persona del token cuando exista el login
-  @IsUUID('all', { message: 'id_persona debe ser un UUID válido' })
-  id_persona!: string;
+  // TODO(auth): tomar id_user del token cuando exista el login
+  @IsUUID('all', { message: 'id_user debe ser un UUID válido' })
+  id_user!: string;
 
   @IsUUID('all', { message: 'id_horario debe ser un UUID válido' })
   id_horario!: string;

@@ -33,19 +33,19 @@ enum metodo_pago {
   tarjeta
 }
 
-enum rol_persona {
+enum rol_user {
   cliente
   admin
 }
 
-model persona {
-  id_persona    String     @id @default(uuid()) @db.Uuid
+model user {
+  id_user    String     @id @default(uuid()) @db.Uuid
   nombre        String
   apellido      String
   telefono      String
   email         String     @unique
   password_hash String?
-  rol           rol_persona @default(cliente)
+  rol           rol_user @default(cliente)
   created_at    DateTime   @default(now())
     activo       Boolean @default(true)
 
@@ -117,7 +117,7 @@ model horario_producto {
 
 model ticket {
   id_ticket     String        @id @default(uuid()) @db.Uuid
-  id_persona    String        @db.Uuid
+  id_user    String        @db.Uuid
   id_horario    String        @db.Uuid
   codigo_acceso String        @unique
   estado        estado_ticket @default(reservado)
@@ -129,7 +129,7 @@ model ticket {
     activo       Boolean @default(true)
 
 
-  persona       persona       @relation(fields: [id_persona], references: [id_persona])
+  user       user       @relation(fields: [id_user], references: [id_user])
   horario       horario       @relation(fields: [id_horario], references: [id_horario])
   items         ticket_item[]
   pagos         pago[]
@@ -168,5 +168,5 @@ model pago {
   activo       Boolean @default(true)
   
   ticket          ticket   @relation(fields: [id_ticket], references: [id_ticket], onDelete: Cascade)
-  verificador     persona? @relation("PagoVerificadoPor", fields: [verificado_por], references: [id_persona])
+  verificador     user? @relation("PagoVerificadoPor", fields: [verificado_por], references: [id_user])
 }

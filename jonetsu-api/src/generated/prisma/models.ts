@@ -8,7 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/persona.js'
+export type * from './models/user.js'
 export type * from './models/categoria.js'
 export type * from './models/producto.js'
 export type * from './models/evento.js'

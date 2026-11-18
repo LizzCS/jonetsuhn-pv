@@ -36,7 +36,7 @@ export type TicketSumAggregateOutputType = {
 
 export type TicketMinAggregateOutputType = {
   id_ticket: string | null
-  id_persona: string | null
+  id_user: string | null
   id_horario: string | null
   codigo_acceso: string | null
   estado: $Enums.estado_ticket | null
@@ -50,7 +50,7 @@ export type TicketMinAggregateOutputType = {
 
 export type TicketMaxAggregateOutputType = {
   id_ticket: string | null
-  id_persona: string | null
+  id_user: string | null
   id_horario: string | null
   codigo_acceso: string | null
   estado: $Enums.estado_ticket | null
@@ -64,7 +64,7 @@ export type TicketMaxAggregateOutputType = {
 
 export type TicketCountAggregateOutputType = {
   id_ticket: number
-  id_persona: number
+  id_user: number
   id_horario: number
   codigo_acceso: number
   estado: number
@@ -88,7 +88,7 @@ export type TicketSumAggregateInputType = {
 
 export type TicketMinAggregateInputType = {
   id_ticket?: true
-  id_persona?: true
+  id_user?: true
   id_horario?: true
   codigo_acceso?: true
   estado?: true
@@ -102,7 +102,7 @@ export type TicketMinAggregateInputType = {
 
 export type TicketMaxAggregateInputType = {
   id_ticket?: true
-  id_persona?: true
+  id_user?: true
   id_horario?: true
   codigo_acceso?: true
   estado?: true
@@ -116,7 +116,7 @@ export type TicketMaxAggregateInputType = {
 
 export type TicketCountAggregateInputType = {
   id_ticket?: true
-  id_persona?: true
+  id_user?: true
   id_horario?: true
   codigo_acceso?: true
   estado?: true
@@ -217,7 +217,7 @@ export type ticketGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 
 export type TicketGroupByOutputType = {
   id_ticket: string
-  id_persona: string
+  id_user: string
   id_horario: string
   codigo_acceso: string
   estado: $Enums.estado_ticket
@@ -254,7 +254,7 @@ export type ticketWhereInput = {
   OR?: Prisma.ticketWhereInput[]
   NOT?: Prisma.ticketWhereInput | Prisma.ticketWhereInput[]
   id_ticket?: Prisma.UuidFilter<"ticket"> | string
-  id_persona?: Prisma.UuidFilter<"ticket"> | string
+  id_user?: Prisma.UuidFilter<"ticket"> | string
   id_horario?: Prisma.UuidFilter<"ticket"> | string
   codigo_acceso?: Prisma.StringFilter<"ticket"> | string
   estado?: Prisma.Enumestado_ticketFilter<"ticket"> | $Enums.estado_ticket
@@ -264,7 +264,7 @@ export type ticketWhereInput = {
   total?: Prisma.DecimalFilter<"ticket"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFilter<"ticket"> | Date | string
   activo?: Prisma.BoolFilter<"ticket"> | boolean
-  persona?: Prisma.XOR<Prisma.PersonaScalarRelationFilter, Prisma.personaWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.userWhereInput>
   horario?: Prisma.XOR<Prisma.HorarioScalarRelationFilter, Prisma.horarioWhereInput>
   items?: Prisma.Ticket_itemListRelationFilter
   pagos?: Prisma.PagoListRelationFilter
@@ -272,7 +272,7 @@ export type ticketWhereInput = {
 
 export type ticketOrderByWithRelationInput = {
   id_ticket?: Prisma.SortOrder
-  id_persona?: Prisma.SortOrder
+  id_user?: Prisma.SortOrder
   id_horario?: Prisma.SortOrder
   codigo_acceso?: Prisma.SortOrder
   estado?: Prisma.SortOrder
@@ -282,7 +282,7 @@ export type ticketOrderByWithRelationInput = {
   total?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   activo?: Prisma.SortOrder
-  persona?: Prisma.personaOrderByWithRelationInput
+  user?: Prisma.userOrderByWithRelationInput
   horario?: Prisma.horarioOrderByWithRelationInput
   items?: Prisma.ticket_itemOrderByRelationAggregateInput
   pagos?: Prisma.pagoOrderByRelationAggregateInput
@@ -294,7 +294,7 @@ export type ticketWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ticketWhereInput | Prisma.ticketWhereInput[]
   OR?: Prisma.ticketWhereInput[]
   NOT?: Prisma.ticketWhereInput | Prisma.ticketWhereInput[]
-  id_persona?: Prisma.UuidFilter<"ticket"> | string
+  id_user?: Prisma.UuidFilter<"ticket"> | string
   id_horario?: Prisma.UuidFilter<"ticket"> | string
   estado?: Prisma.Enumestado_ticketFilter<"ticket"> | $Enums.estado_ticket
   expira_en?: Prisma.DateTimeFilter<"ticket"> | Date | string
@@ -303,7 +303,7 @@ export type ticketWhereUniqueInput = Prisma.AtLeast<{
   total?: Prisma.DecimalFilter<"ticket"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFilter<"ticket"> | Date | string
   activo?: Prisma.BoolFilter<"ticket"> | boolean
-  persona?: Prisma.XOR<Prisma.PersonaScalarRelationFilter, Prisma.personaWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.userWhereInput>
   horario?: Prisma.XOR<Prisma.HorarioScalarRelationFilter, Prisma.horarioWhereInput>
   items?: Prisma.Ticket_itemListRelationFilter
   pagos?: Prisma.PagoListRelationFilter
@@ -311,7 +311,7 @@ export type ticketWhereUniqueInput = Prisma.AtLeast<{
 
 export type ticketOrderByWithAggregationInput = {
   id_ticket?: Prisma.SortOrder
-  id_persona?: Prisma.SortOrder
+  id_user?: Prisma.SortOrder
   id_horario?: Prisma.SortOrder
   codigo_acceso?: Prisma.SortOrder
   estado?: Prisma.SortOrder
@@ -333,7 +333,7 @@ export type ticketScalarWhereWithAggregatesInput = {
   OR?: Prisma.ticketScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ticketScalarWhereWithAggregatesInput | Prisma.ticketScalarWhereWithAggregatesInput[]
   id_ticket?: Prisma.UuidWithAggregatesFilter<"ticket"> | string
-  id_persona?: Prisma.UuidWithAggregatesFilter<"ticket"> | string
+  id_user?: Prisma.UuidWithAggregatesFilter<"ticket"> | string
   id_horario?: Prisma.UuidWithAggregatesFilter<"ticket"> | string
   codigo_acceso?: Prisma.StringWithAggregatesFilter<"ticket"> | string
   estado?: Prisma.Enumestado_ticketWithAggregatesFilter<"ticket"> | $Enums.estado_ticket
@@ -355,7 +355,7 @@ export type ticketCreateInput = {
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
   activo?: boolean
-  persona: Prisma.personaCreateNestedOneWithoutTicketsInput
+  user: Prisma.userCreateNestedOneWithoutTicketsInput
   horario: Prisma.horarioCreateNestedOneWithoutTicketsInput
   items?: Prisma.ticket_itemCreateNestedManyWithoutTicketInput
   pagos?: Prisma.pagoCreateNestedManyWithoutTicketInput
@@ -363,7 +363,7 @@ export type ticketCreateInput = {
 
 export type ticketUncheckedCreateInput = {
   id_ticket?: string
-  id_persona: string
+  id_user: string
   id_horario: string
   codigo_acceso: string
   estado?: $Enums.estado_ticket
@@ -387,7 +387,7 @@ export type ticketUpdateInput = {
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  persona?: Prisma.personaUpdateOneRequiredWithoutTicketsNestedInput
+  user?: Prisma.userUpdateOneRequiredWithoutTicketsNestedInput
   horario?: Prisma.horarioUpdateOneRequiredWithoutTicketsNestedInput
   items?: Prisma.ticket_itemUpdateManyWithoutTicketNestedInput
   pagos?: Prisma.pagoUpdateManyWithoutTicketNestedInput
@@ -395,7 +395,7 @@ export type ticketUpdateInput = {
 
 export type ticketUncheckedUpdateInput = {
   id_ticket?: Prisma.StringFieldUpdateOperationsInput | string
-  id_persona?: Prisma.StringFieldUpdateOperationsInput | string
+  id_user?: Prisma.StringFieldUpdateOperationsInput | string
   id_horario?: Prisma.StringFieldUpdateOperationsInput | string
   codigo_acceso?: Prisma.StringFieldUpdateOperationsInput | string
   estado?: Prisma.Enumestado_ticketFieldUpdateOperationsInput | $Enums.estado_ticket
@@ -411,7 +411,7 @@ export type ticketUncheckedUpdateInput = {
 
 export type ticketCreateManyInput = {
   id_ticket?: string
-  id_persona: string
+  id_user: string
   id_horario: string
   codigo_acceso: string
   estado?: $Enums.estado_ticket
@@ -437,7 +437,7 @@ export type ticketUpdateManyMutationInput = {
 
 export type ticketUncheckedUpdateManyInput = {
   id_ticket?: Prisma.StringFieldUpdateOperationsInput | string
-  id_persona?: Prisma.StringFieldUpdateOperationsInput | string
+  id_user?: Prisma.StringFieldUpdateOperationsInput | string
   id_horario?: Prisma.StringFieldUpdateOperationsInput | string
   codigo_acceso?: Prisma.StringFieldUpdateOperationsInput | string
   estado?: Prisma.Enumestado_ticketFieldUpdateOperationsInput | $Enums.estado_ticket
@@ -461,7 +461,7 @@ export type ticketOrderByRelationAggregateInput = {
 
 export type ticketCountOrderByAggregateInput = {
   id_ticket?: Prisma.SortOrder
-  id_persona?: Prisma.SortOrder
+  id_user?: Prisma.SortOrder
   id_horario?: Prisma.SortOrder
   codigo_acceso?: Prisma.SortOrder
   estado?: Prisma.SortOrder
@@ -479,7 +479,7 @@ export type ticketAvgOrderByAggregateInput = {
 
 export type ticketMaxOrderByAggregateInput = {
   id_ticket?: Prisma.SortOrder
-  id_persona?: Prisma.SortOrder
+  id_user?: Prisma.SortOrder
   id_horario?: Prisma.SortOrder
   codigo_acceso?: Prisma.SortOrder
   estado?: Prisma.SortOrder
@@ -493,7 +493,7 @@ export type ticketMaxOrderByAggregateInput = {
 
 export type ticketMinOrderByAggregateInput = {
   id_ticket?: Prisma.SortOrder
-  id_persona?: Prisma.SortOrder
+  id_user?: Prisma.SortOrder
   id_horario?: Prisma.SortOrder
   codigo_acceso?: Prisma.SortOrder
   estado?: Prisma.SortOrder
@@ -514,45 +514,45 @@ export type TicketScalarRelationFilter = {
   isNot?: Prisma.ticketWhereInput
 }
 
-export type ticketCreateNestedManyWithoutPersonaInput = {
-  create?: Prisma.XOR<Prisma.ticketCreateWithoutPersonaInput, Prisma.ticketUncheckedCreateWithoutPersonaInput> | Prisma.ticketCreateWithoutPersonaInput[] | Prisma.ticketUncheckedCreateWithoutPersonaInput[]
-  connectOrCreate?: Prisma.ticketCreateOrConnectWithoutPersonaInput | Prisma.ticketCreateOrConnectWithoutPersonaInput[]
-  createMany?: Prisma.ticketCreateManyPersonaInputEnvelope
+export type ticketCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.ticketCreateWithoutUserInput, Prisma.ticketUncheckedCreateWithoutUserInput> | Prisma.ticketCreateWithoutUserInput[] | Prisma.ticketUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ticketCreateOrConnectWithoutUserInput | Prisma.ticketCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.ticketCreateManyUserInputEnvelope
   connect?: Prisma.ticketWhereUniqueInput | Prisma.ticketWhereUniqueInput[]
 }
 
-export type ticketUncheckedCreateNestedManyWithoutPersonaInput = {
-  create?: Prisma.XOR<Prisma.ticketCreateWithoutPersonaInput, Prisma.ticketUncheckedCreateWithoutPersonaInput> | Prisma.ticketCreateWithoutPersonaInput[] | Prisma.ticketUncheckedCreateWithoutPersonaInput[]
-  connectOrCreate?: Prisma.ticketCreateOrConnectWithoutPersonaInput | Prisma.ticketCreateOrConnectWithoutPersonaInput[]
-  createMany?: Prisma.ticketCreateManyPersonaInputEnvelope
+export type ticketUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.ticketCreateWithoutUserInput, Prisma.ticketUncheckedCreateWithoutUserInput> | Prisma.ticketCreateWithoutUserInput[] | Prisma.ticketUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ticketCreateOrConnectWithoutUserInput | Prisma.ticketCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.ticketCreateManyUserInputEnvelope
   connect?: Prisma.ticketWhereUniqueInput | Prisma.ticketWhereUniqueInput[]
 }
 
-export type ticketUpdateManyWithoutPersonaNestedInput = {
-  create?: Prisma.XOR<Prisma.ticketCreateWithoutPersonaInput, Prisma.ticketUncheckedCreateWithoutPersonaInput> | Prisma.ticketCreateWithoutPersonaInput[] | Prisma.ticketUncheckedCreateWithoutPersonaInput[]
-  connectOrCreate?: Prisma.ticketCreateOrConnectWithoutPersonaInput | Prisma.ticketCreateOrConnectWithoutPersonaInput[]
-  upsert?: Prisma.ticketUpsertWithWhereUniqueWithoutPersonaInput | Prisma.ticketUpsertWithWhereUniqueWithoutPersonaInput[]
-  createMany?: Prisma.ticketCreateManyPersonaInputEnvelope
+export type ticketUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.ticketCreateWithoutUserInput, Prisma.ticketUncheckedCreateWithoutUserInput> | Prisma.ticketCreateWithoutUserInput[] | Prisma.ticketUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ticketCreateOrConnectWithoutUserInput | Prisma.ticketCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.ticketUpsertWithWhereUniqueWithoutUserInput | Prisma.ticketUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.ticketCreateManyUserInputEnvelope
   set?: Prisma.ticketWhereUniqueInput | Prisma.ticketWhereUniqueInput[]
   disconnect?: Prisma.ticketWhereUniqueInput | Prisma.ticketWhereUniqueInput[]
   delete?: Prisma.ticketWhereUniqueInput | Prisma.ticketWhereUniqueInput[]
   connect?: Prisma.ticketWhereUniqueInput | Prisma.ticketWhereUniqueInput[]
-  update?: Prisma.ticketUpdateWithWhereUniqueWithoutPersonaInput | Prisma.ticketUpdateWithWhereUniqueWithoutPersonaInput[]
-  updateMany?: Prisma.ticketUpdateManyWithWhereWithoutPersonaInput | Prisma.ticketUpdateManyWithWhereWithoutPersonaInput[]
+  update?: Prisma.ticketUpdateWithWhereUniqueWithoutUserInput | Prisma.ticketUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.ticketUpdateManyWithWhereWithoutUserInput | Prisma.ticketUpdateManyWithWhereWithoutUserInput[]
   deleteMany?: Prisma.ticketScalarWhereInput | Prisma.ticketScalarWhereInput[]
 }
 
-export type ticketUncheckedUpdateManyWithoutPersonaNestedInput = {
-  create?: Prisma.XOR<Prisma.ticketCreateWithoutPersonaInput, Prisma.ticketUncheckedCreateWithoutPersonaInput> | Prisma.ticketCreateWithoutPersonaInput[] | Prisma.ticketUncheckedCreateWithoutPersonaInput[]
-  connectOrCreate?: Prisma.ticketCreateOrConnectWithoutPersonaInput | Prisma.ticketCreateOrConnectWithoutPersonaInput[]
-  upsert?: Prisma.ticketUpsertWithWhereUniqueWithoutPersonaInput | Prisma.ticketUpsertWithWhereUniqueWithoutPersonaInput[]
-  createMany?: Prisma.ticketCreateManyPersonaInputEnvelope
+export type ticketUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.ticketCreateWithoutUserInput, Prisma.ticketUncheckedCreateWithoutUserInput> | Prisma.ticketCreateWithoutUserInput[] | Prisma.ticketUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ticketCreateOrConnectWithoutUserInput | Prisma.ticketCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.ticketUpsertWithWhereUniqueWithoutUserInput | Prisma.ticketUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.ticketCreateManyUserInputEnvelope
   set?: Prisma.ticketWhereUniqueInput | Prisma.ticketWhereUniqueInput[]
   disconnect?: Prisma.ticketWhereUniqueInput | Prisma.ticketWhereUniqueInput[]
   delete?: Prisma.ticketWhereUniqueInput | Prisma.ticketWhereUniqueInput[]
   connect?: Prisma.ticketWhereUniqueInput | Prisma.ticketWhereUniqueInput[]
-  update?: Prisma.ticketUpdateWithWhereUniqueWithoutPersonaInput | Prisma.ticketUpdateWithWhereUniqueWithoutPersonaInput[]
-  updateMany?: Prisma.ticketUpdateManyWithWhereWithoutPersonaInput | Prisma.ticketUpdateManyWithWhereWithoutPersonaInput[]
+  update?: Prisma.ticketUpdateWithWhereUniqueWithoutUserInput | Prisma.ticketUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.ticketUpdateManyWithWhereWithoutUserInput | Prisma.ticketUpdateManyWithWhereWithoutUserInput[]
   deleteMany?: Prisma.ticketScalarWhereInput | Prisma.ticketScalarWhereInput[]
 }
 
@@ -634,7 +634,7 @@ export type ticketUpdateOneRequiredWithoutPagosNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ticketUpdateToOneWithWhereWithoutPagosInput, Prisma.ticketUpdateWithoutPagosInput>, Prisma.ticketUncheckedUpdateWithoutPagosInput>
 }
 
-export type ticketCreateWithoutPersonaInput = {
+export type ticketCreateWithoutUserInput = {
   id_ticket?: string
   codigo_acceso: string
   estado?: $Enums.estado_ticket
@@ -649,7 +649,7 @@ export type ticketCreateWithoutPersonaInput = {
   pagos?: Prisma.pagoCreateNestedManyWithoutTicketInput
 }
 
-export type ticketUncheckedCreateWithoutPersonaInput = {
+export type ticketUncheckedCreateWithoutUserInput = {
   id_ticket?: string
   id_horario: string
   codigo_acceso: string
@@ -664,30 +664,30 @@ export type ticketUncheckedCreateWithoutPersonaInput = {
   pagos?: Prisma.pagoUncheckedCreateNestedManyWithoutTicketInput
 }
 
-export type ticketCreateOrConnectWithoutPersonaInput = {
+export type ticketCreateOrConnectWithoutUserInput = {
   where: Prisma.ticketWhereUniqueInput
-  create: Prisma.XOR<Prisma.ticketCreateWithoutPersonaInput, Prisma.ticketUncheckedCreateWithoutPersonaInput>
+  create: Prisma.XOR<Prisma.ticketCreateWithoutUserInput, Prisma.ticketUncheckedCreateWithoutUserInput>
 }
 
-export type ticketCreateManyPersonaInputEnvelope = {
-  data: Prisma.ticketCreateManyPersonaInput | Prisma.ticketCreateManyPersonaInput[]
+export type ticketCreateManyUserInputEnvelope = {
+  data: Prisma.ticketCreateManyUserInput | Prisma.ticketCreateManyUserInput[]
   skipDuplicates?: boolean
 }
 
-export type ticketUpsertWithWhereUniqueWithoutPersonaInput = {
+export type ticketUpsertWithWhereUniqueWithoutUserInput = {
   where: Prisma.ticketWhereUniqueInput
-  update: Prisma.XOR<Prisma.ticketUpdateWithoutPersonaInput, Prisma.ticketUncheckedUpdateWithoutPersonaInput>
-  create: Prisma.XOR<Prisma.ticketCreateWithoutPersonaInput, Prisma.ticketUncheckedCreateWithoutPersonaInput>
+  update: Prisma.XOR<Prisma.ticketUpdateWithoutUserInput, Prisma.ticketUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.ticketCreateWithoutUserInput, Prisma.ticketUncheckedCreateWithoutUserInput>
 }
 
-export type ticketUpdateWithWhereUniqueWithoutPersonaInput = {
+export type ticketUpdateWithWhereUniqueWithoutUserInput = {
   where: Prisma.ticketWhereUniqueInput
-  data: Prisma.XOR<Prisma.ticketUpdateWithoutPersonaInput, Prisma.ticketUncheckedUpdateWithoutPersonaInput>
+  data: Prisma.XOR<Prisma.ticketUpdateWithoutUserInput, Prisma.ticketUncheckedUpdateWithoutUserInput>
 }
 
-export type ticketUpdateManyWithWhereWithoutPersonaInput = {
+export type ticketUpdateManyWithWhereWithoutUserInput = {
   where: Prisma.ticketScalarWhereInput
-  data: Prisma.XOR<Prisma.ticketUpdateManyMutationInput, Prisma.ticketUncheckedUpdateManyWithoutPersonaInput>
+  data: Prisma.XOR<Prisma.ticketUpdateManyMutationInput, Prisma.ticketUncheckedUpdateManyWithoutUserInput>
 }
 
 export type ticketScalarWhereInput = {
@@ -695,7 +695,7 @@ export type ticketScalarWhereInput = {
   OR?: Prisma.ticketScalarWhereInput[]
   NOT?: Prisma.ticketScalarWhereInput | Prisma.ticketScalarWhereInput[]
   id_ticket?: Prisma.UuidFilter<"ticket"> | string
-  id_persona?: Prisma.UuidFilter<"ticket"> | string
+  id_user?: Prisma.UuidFilter<"ticket"> | string
   id_horario?: Prisma.UuidFilter<"ticket"> | string
   codigo_acceso?: Prisma.StringFilter<"ticket"> | string
   estado?: Prisma.Enumestado_ticketFilter<"ticket"> | $Enums.estado_ticket
@@ -717,14 +717,14 @@ export type ticketCreateWithoutHorarioInput = {
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
   activo?: boolean
-  persona: Prisma.personaCreateNestedOneWithoutTicketsInput
+  user: Prisma.userCreateNestedOneWithoutTicketsInput
   items?: Prisma.ticket_itemCreateNestedManyWithoutTicketInput
   pagos?: Prisma.pagoCreateNestedManyWithoutTicketInput
 }
 
 export type ticketUncheckedCreateWithoutHorarioInput = {
   id_ticket?: string
-  id_persona: string
+  id_user: string
   codigo_acceso: string
   estado?: $Enums.estado_ticket
   expira_en: Date | string
@@ -773,14 +773,14 @@ export type ticketCreateWithoutItemsInput = {
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
   activo?: boolean
-  persona: Prisma.personaCreateNestedOneWithoutTicketsInput
+  user: Prisma.userCreateNestedOneWithoutTicketsInput
   horario: Prisma.horarioCreateNestedOneWithoutTicketsInput
   pagos?: Prisma.pagoCreateNestedManyWithoutTicketInput
 }
 
 export type ticketUncheckedCreateWithoutItemsInput = {
   id_ticket?: string
-  id_persona: string
+  id_user: string
   id_horario: string
   codigo_acceso: string
   estado?: $Enums.estado_ticket
@@ -819,14 +819,14 @@ export type ticketUpdateWithoutItemsInput = {
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  persona?: Prisma.personaUpdateOneRequiredWithoutTicketsNestedInput
+  user?: Prisma.userUpdateOneRequiredWithoutTicketsNestedInput
   horario?: Prisma.horarioUpdateOneRequiredWithoutTicketsNestedInput
   pagos?: Prisma.pagoUpdateManyWithoutTicketNestedInput
 }
 
 export type ticketUncheckedUpdateWithoutItemsInput = {
   id_ticket?: Prisma.StringFieldUpdateOperationsInput | string
-  id_persona?: Prisma.StringFieldUpdateOperationsInput | string
+  id_user?: Prisma.StringFieldUpdateOperationsInput | string
   id_horario?: Prisma.StringFieldUpdateOperationsInput | string
   codigo_acceso?: Prisma.StringFieldUpdateOperationsInput | string
   estado?: Prisma.Enumestado_ticketFieldUpdateOperationsInput | $Enums.estado_ticket
@@ -849,14 +849,14 @@ export type ticketCreateWithoutPagosInput = {
   total?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
   activo?: boolean
-  persona: Prisma.personaCreateNestedOneWithoutTicketsInput
+  user: Prisma.userCreateNestedOneWithoutTicketsInput
   horario: Prisma.horarioCreateNestedOneWithoutTicketsInput
   items?: Prisma.ticket_itemCreateNestedManyWithoutTicketInput
 }
 
 export type ticketUncheckedCreateWithoutPagosInput = {
   id_ticket?: string
-  id_persona: string
+  id_user: string
   id_horario: string
   codigo_acceso: string
   estado?: $Enums.estado_ticket
@@ -895,14 +895,14 @@ export type ticketUpdateWithoutPagosInput = {
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  persona?: Prisma.personaUpdateOneRequiredWithoutTicketsNestedInput
+  user?: Prisma.userUpdateOneRequiredWithoutTicketsNestedInput
   horario?: Prisma.horarioUpdateOneRequiredWithoutTicketsNestedInput
   items?: Prisma.ticket_itemUpdateManyWithoutTicketNestedInput
 }
 
 export type ticketUncheckedUpdateWithoutPagosInput = {
   id_ticket?: Prisma.StringFieldUpdateOperationsInput | string
-  id_persona?: Prisma.StringFieldUpdateOperationsInput | string
+  id_user?: Prisma.StringFieldUpdateOperationsInput | string
   id_horario?: Prisma.StringFieldUpdateOperationsInput | string
   codigo_acceso?: Prisma.StringFieldUpdateOperationsInput | string
   estado?: Prisma.Enumestado_ticketFieldUpdateOperationsInput | $Enums.estado_ticket
@@ -915,7 +915,7 @@ export type ticketUncheckedUpdateWithoutPagosInput = {
   items?: Prisma.ticket_itemUncheckedUpdateManyWithoutTicketNestedInput
 }
 
-export type ticketCreateManyPersonaInput = {
+export type ticketCreateManyUserInput = {
   id_ticket?: string
   id_horario: string
   codigo_acceso: string
@@ -928,7 +928,7 @@ export type ticketCreateManyPersonaInput = {
   activo?: boolean
 }
 
-export type ticketUpdateWithoutPersonaInput = {
+export type ticketUpdateWithoutUserInput = {
   id_ticket?: Prisma.StringFieldUpdateOperationsInput | string
   codigo_acceso?: Prisma.StringFieldUpdateOperationsInput | string
   estado?: Prisma.Enumestado_ticketFieldUpdateOperationsInput | $Enums.estado_ticket
@@ -943,7 +943,7 @@ export type ticketUpdateWithoutPersonaInput = {
   pagos?: Prisma.pagoUpdateManyWithoutTicketNestedInput
 }
 
-export type ticketUncheckedUpdateWithoutPersonaInput = {
+export type ticketUncheckedUpdateWithoutUserInput = {
   id_ticket?: Prisma.StringFieldUpdateOperationsInput | string
   id_horario?: Prisma.StringFieldUpdateOperationsInput | string
   codigo_acceso?: Prisma.StringFieldUpdateOperationsInput | string
@@ -958,7 +958,7 @@ export type ticketUncheckedUpdateWithoutPersonaInput = {
   pagos?: Prisma.pagoUncheckedUpdateManyWithoutTicketNestedInput
 }
 
-export type ticketUncheckedUpdateManyWithoutPersonaInput = {
+export type ticketUncheckedUpdateManyWithoutUserInput = {
   id_ticket?: Prisma.StringFieldUpdateOperationsInput | string
   id_horario?: Prisma.StringFieldUpdateOperationsInput | string
   codigo_acceso?: Prisma.StringFieldUpdateOperationsInput | string
@@ -973,7 +973,7 @@ export type ticketUncheckedUpdateManyWithoutPersonaInput = {
 
 export type ticketCreateManyHorarioInput = {
   id_ticket?: string
-  id_persona: string
+  id_user: string
   codigo_acceso: string
   estado?: $Enums.estado_ticket
   expira_en: Date | string
@@ -994,14 +994,14 @@ export type ticketUpdateWithoutHorarioInput = {
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  persona?: Prisma.personaUpdateOneRequiredWithoutTicketsNestedInput
+  user?: Prisma.userUpdateOneRequiredWithoutTicketsNestedInput
   items?: Prisma.ticket_itemUpdateManyWithoutTicketNestedInput
   pagos?: Prisma.pagoUpdateManyWithoutTicketNestedInput
 }
 
 export type ticketUncheckedUpdateWithoutHorarioInput = {
   id_ticket?: Prisma.StringFieldUpdateOperationsInput | string
-  id_persona?: Prisma.StringFieldUpdateOperationsInput | string
+  id_user?: Prisma.StringFieldUpdateOperationsInput | string
   codigo_acceso?: Prisma.StringFieldUpdateOperationsInput | string
   estado?: Prisma.Enumestado_ticketFieldUpdateOperationsInput | $Enums.estado_ticket
   expira_en?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1016,7 +1016,7 @@ export type ticketUncheckedUpdateWithoutHorarioInput = {
 
 export type ticketUncheckedUpdateManyWithoutHorarioInput = {
   id_ticket?: Prisma.StringFieldUpdateOperationsInput | string
-  id_persona?: Prisma.StringFieldUpdateOperationsInput | string
+  id_user?: Prisma.StringFieldUpdateOperationsInput | string
   codigo_acceso?: Prisma.StringFieldUpdateOperationsInput | string
   estado?: Prisma.Enumestado_ticketFieldUpdateOperationsInput | $Enums.estado_ticket
   expira_en?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1069,7 +1069,7 @@ export type TicketCountOutputTypeCountPagosArgs<ExtArgs extends runtime.Types.Ex
 
 export type ticketSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id_ticket?: boolean
-  id_persona?: boolean
+  id_user?: boolean
   id_horario?: boolean
   codigo_acceso?: boolean
   estado?: boolean
@@ -1079,7 +1079,7 @@ export type ticketSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   total?: boolean
   created_at?: boolean
   activo?: boolean
-  persona?: boolean | Prisma.personaDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.userDefaultArgs<ExtArgs>
   horario?: boolean | Prisma.horarioDefaultArgs<ExtArgs>
   items?: boolean | Prisma.ticket$itemsArgs<ExtArgs>
   pagos?: boolean | Prisma.ticket$pagosArgs<ExtArgs>
@@ -1088,7 +1088,7 @@ export type ticketSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 
 export type ticketSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id_ticket?: boolean
-  id_persona?: boolean
+  id_user?: boolean
   id_horario?: boolean
   codigo_acceso?: boolean
   estado?: boolean
@@ -1098,13 +1098,13 @@ export type ticketSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   total?: boolean
   created_at?: boolean
   activo?: boolean
-  persona?: boolean | Prisma.personaDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.userDefaultArgs<ExtArgs>
   horario?: boolean | Prisma.horarioDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ticket"]>
 
 export type ticketSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id_ticket?: boolean
-  id_persona?: boolean
+  id_user?: boolean
   id_horario?: boolean
   codigo_acceso?: boolean
   estado?: boolean
@@ -1114,13 +1114,13 @@ export type ticketSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   total?: boolean
   created_at?: boolean
   activo?: boolean
-  persona?: boolean | Prisma.personaDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.userDefaultArgs<ExtArgs>
   horario?: boolean | Prisma.horarioDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ticket"]>
 
 export type ticketSelectScalar = {
   id_ticket?: boolean
-  id_persona?: boolean
+  id_user?: boolean
   id_horario?: boolean
   codigo_acceso?: boolean
   estado?: boolean
@@ -1132,34 +1132,34 @@ export type ticketSelectScalar = {
   activo?: boolean
 }
 
-export type ticketOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_ticket" | "id_persona" | "id_horario" | "codigo_acceso" | "estado" | "expira_en" | "asistio" | "notas" | "total" | "created_at" | "activo", ExtArgs["result"]["ticket"]>
+export type ticketOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_ticket" | "id_user" | "id_horario" | "codigo_acceso" | "estado" | "expira_en" | "asistio" | "notas" | "total" | "created_at" | "activo", ExtArgs["result"]["ticket"]>
 export type ticketInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  persona?: boolean | Prisma.personaDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.userDefaultArgs<ExtArgs>
   horario?: boolean | Prisma.horarioDefaultArgs<ExtArgs>
   items?: boolean | Prisma.ticket$itemsArgs<ExtArgs>
   pagos?: boolean | Prisma.ticket$pagosArgs<ExtArgs>
   _count?: boolean | Prisma.TicketCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ticketIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  persona?: boolean | Prisma.personaDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.userDefaultArgs<ExtArgs>
   horario?: boolean | Prisma.horarioDefaultArgs<ExtArgs>
 }
 export type ticketIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  persona?: boolean | Prisma.personaDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.userDefaultArgs<ExtArgs>
   horario?: boolean | Prisma.horarioDefaultArgs<ExtArgs>
 }
 
 export type $ticketPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ticket"
   objects: {
-    persona: Prisma.$personaPayload<ExtArgs>
+    user: Prisma.$userPayload<ExtArgs>
     horario: Prisma.$horarioPayload<ExtArgs>
     items: Prisma.$ticket_itemPayload<ExtArgs>[]
     pagos: Prisma.$pagoPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id_ticket: string
-    id_persona: string
+    id_user: string
     id_horario: string
     codigo_acceso: string
     estado: $Enums.estado_ticket
@@ -1563,7 +1563,7 @@ readonly fields: ticketFieldRefs;
  */
 export interface Prisma__ticketClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  persona<T extends Prisma.personaDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.personaDefaultArgs<ExtArgs>>): Prisma.Prisma__personaClient<runtime.Types.Result.GetResult<Prisma.$personaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.userDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.userDefaultArgs<ExtArgs>>): Prisma.Prisma__userClient<runtime.Types.Result.GetResult<Prisma.$userPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   horario<T extends Prisma.horarioDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.horarioDefaultArgs<ExtArgs>>): Prisma.Prisma__horarioClient<runtime.Types.Result.GetResult<Prisma.$horarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   items<T extends Prisma.ticket$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ticket$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ticket_itemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pagos<T extends Prisma.ticket$pagosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ticket$pagosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$pagoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1597,7 +1597,7 @@ export interface Prisma__ticketClient<T, Null = never, ExtArgs extends runtime.T
  */
 export interface ticketFieldRefs {
   readonly id_ticket: Prisma.FieldRef<"ticket", 'String'>
-  readonly id_persona: Prisma.FieldRef<"ticket", 'String'>
+  readonly id_user: Prisma.FieldRef<"ticket", 'String'>
   readonly id_horario: Prisma.FieldRef<"ticket", 'String'>
   readonly codigo_acceso: Prisma.FieldRef<"ticket", 'String'>
   readonly estado: Prisma.FieldRef<"ticket", 'estado_ticket'>

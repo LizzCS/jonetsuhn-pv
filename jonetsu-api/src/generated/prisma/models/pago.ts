@@ -265,7 +265,7 @@ export type pagoWhereInput = {
   created_at?: Prisma.DateTimeFilter<"pago"> | Date | string
   activo?: Prisma.BoolFilter<"pago"> | boolean
   ticket?: Prisma.XOR<Prisma.TicketScalarRelationFilter, Prisma.ticketWhereInput>
-  verificador?: Prisma.XOR<Prisma.PersonaNullableScalarRelationFilter, Prisma.personaWhereInput> | null
+  verificador?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.userWhereInput> | null
 }
 
 export type pagoOrderByWithRelationInput = {
@@ -281,7 +281,7 @@ export type pagoOrderByWithRelationInput = {
   created_at?: Prisma.SortOrder
   activo?: Prisma.SortOrder
   ticket?: Prisma.ticketOrderByWithRelationInput
-  verificador?: Prisma.personaOrderByWithRelationInput
+  verificador?: Prisma.userOrderByWithRelationInput
 }
 
 export type pagoWhereUniqueInput = Prisma.AtLeast<{
@@ -300,7 +300,7 @@ export type pagoWhereUniqueInput = Prisma.AtLeast<{
   created_at?: Prisma.DateTimeFilter<"pago"> | Date | string
   activo?: Prisma.BoolFilter<"pago"> | boolean
   ticket?: Prisma.XOR<Prisma.TicketScalarRelationFilter, Prisma.ticketWhereInput>
-  verificador?: Prisma.XOR<Prisma.PersonaNullableScalarRelationFilter, Prisma.personaWhereInput> | null
+  verificador?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.userWhereInput> | null
 }, "id_pago">
 
 export type pagoOrderByWithAggregationInput = {
@@ -350,7 +350,7 @@ export type pagoCreateInput = {
   created_at?: Date | string
   activo?: boolean
   ticket: Prisma.ticketCreateNestedOneWithoutPagosInput
-  verificador?: Prisma.personaCreateNestedOneWithoutPagos_verificadosInput
+  verificador?: Prisma.userCreateNestedOneWithoutPagos_verificadosInput
 }
 
 export type pagoUncheckedCreateInput = {
@@ -378,7 +378,7 @@ export type pagoUpdateInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ticket?: Prisma.ticketUpdateOneRequiredWithoutPagosNestedInput
-  verificador?: Prisma.personaUpdateOneWithoutPagos_verificadosNestedInput
+  verificador?: Prisma.userUpdateOneWithoutPagos_verificadosNestedInput
 }
 
 export type pagoUncheckedUpdateInput = {
@@ -670,7 +670,7 @@ export type pagoCreateWithoutTicketInput = {
   motivo_rechazo?: string | null
   created_at?: Date | string
   activo?: boolean
-  verificador?: Prisma.personaCreateNestedOneWithoutPagos_verificadosInput
+  verificador?: Prisma.userCreateNestedOneWithoutPagos_verificadosInput
 }
 
 export type pagoUncheckedCreateWithoutTicketInput = {
@@ -787,7 +787,7 @@ export type pagoUpdateWithoutTicketInput = {
   motivo_rechazo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  verificador?: Prisma.personaUpdateOneWithoutPagos_verificadosNestedInput
+  verificador?: Prisma.userUpdateOneWithoutPagos_verificadosNestedInput
 }
 
 export type pagoUncheckedUpdateWithoutTicketInput = {
@@ -898,7 +898,7 @@ export type $pagoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "pago"
   objects: {
     ticket: Prisma.$ticketPayload<ExtArgs>
-    verificador: Prisma.$personaPayload<ExtArgs> | null
+    verificador: Prisma.$userPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id_pago: string
@@ -1307,7 +1307,7 @@ readonly fields: pagoFieldRefs;
 export interface Prisma__pagoClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   ticket<T extends Prisma.ticketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ticketDefaultArgs<ExtArgs>>): Prisma.Prisma__ticketClient<runtime.Types.Result.GetResult<Prisma.$ticketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  verificador<T extends Prisma.pago$verificadorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.pago$verificadorArgs<ExtArgs>>): Prisma.Prisma__personaClient<runtime.Types.Result.GetResult<Prisma.$personaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  verificador<T extends Prisma.pago$verificadorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.pago$verificadorArgs<ExtArgs>>): Prisma.Prisma__userClient<runtime.Types.Result.GetResult<Prisma.$userPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1753,18 +1753,18 @@ export type pagoDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
  */
 export type pago$verificadorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the persona
+   * Select specific fields to fetch from the user
    */
-  select?: Prisma.personaSelect<ExtArgs> | null
+  select?: Prisma.userSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the persona
+   * Omit specific fields from the user
    */
-  omit?: Prisma.personaOmit<ExtArgs> | null
+  omit?: Prisma.userOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.personaInclude<ExtArgs> | null
-  where?: Prisma.personaWhereInput
+  include?: Prisma.userInclude<ExtArgs> | null
+  where?: Prisma.userWhereInput
 }
 
 /**

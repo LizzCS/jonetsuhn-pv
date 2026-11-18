@@ -25,7 +25,7 @@ const normalizarTelefono = ({ value }: { value: unknown }) => {
 
 // Sin password = invitado (se le avisa del pedido por correo y teléfono).
 // Con password = cuenta de cliente. Nadie se registra como admin.
-export class CreatePersonaDto {
+export class CreateUserDto {
   @Transform(recortar)
   @IsString({ message: 'nombre debe ser texto' })
   @IsNotEmpty({ message: 'nombre es obligatorio' })

@@ -1,10 +1,27 @@
 import ImageSlot from "@/components/ImageSlot";
 import Reveal from "@/components/Reveal";
-import { platos } from "@/lib/data";
+import { Suspense } from "react";
+import { getPlatos } from "@/lib/api";
 
 export const metadata = { title: "Menú - Jonetsu" };
 
 export default function MenuPage() {
+  return (
+    <Suspense fallback={<p className="py-20 text-center text-lg text-ink/60">Cargando menú…</p>}>
+      <Menu />
+    </Suspense>
+  );
+}
+
+// Se pide al API en cada visita
+async function Menu() {
+  let platos;
+  try {
+    platos = await getPlatos();
+  } catch (e) {
+    return <p className="mx-auto max-w-6xl px-6 py-20 text-center text-lg text-ink/70">{(e as Error).message}</p>;
+  }
+
   return (
     <section
       aria-labelledby="menu-titulo"
@@ -13,6 +30,10 @@ export default function MenuPage() {
       <h1 id="menu-titulo" className="sr-only">
         Menú
       </h1>
+
+      {platos.length === 0 && (
+        <p className="text-center text-lg text-ink/70">Aún no hay platos en el menú.</p>
+      )}
 
       <ul className="grid gap-20 sm:gap-28">
         {platos.map((p, i) => (

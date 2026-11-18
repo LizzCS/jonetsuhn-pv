@@ -45,7 +45,7 @@ const incluirRelaciones = {
   },
   verificador: {
     select: {
-      id_persona: true,
+      id_user: true,
       nombre: true,
       apellido: true,
     },

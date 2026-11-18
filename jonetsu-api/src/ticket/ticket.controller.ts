@@ -30,7 +30,7 @@ export class TicketController {
     return this.ticketService.create(dto);
   }
 
-  // GET /tickets?id_persona=&estado=
+  // GET /tickets?id_user=&estado=
   @Get()
   findAll(@Query() filtros: FiltroTicketsDto) {
     return this.ticketService.findAll(filtros);

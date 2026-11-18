@@ -79,19 +79,19 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
 
   // CREATE - Reservar
   async create(dto: CreateTicketDto) {
-    const { id_persona, id_horario, items, notas } = dto;
+    const { id_user, id_horario, items, notas } = dto;
 
     // P2002 = código de acceso repetido (muy improbable): se reintenta
     return conReintento(
       () =>
         this.prisma.$transaction(async (tx) => {
-          const persona = await tx.persona.findFirst({
-            where: { id_persona, activo: true },
-            select: { id_persona: true },
+          const user = await tx.user.findFirst({
+            where: { id_user, activo: true },
+            select: { id_user: true },
           });
 
-          if (!persona) {
-            throw new NotFoundException('La persona no existe');
+          if (!user) {
+            throw new NotFoundException('El usuario no existe');
           }
 
           await this.validarHorarioDisponible(tx, id_horario);
@@ -123,8 +123,8 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
 
           return tx.ticket.create({
             data: {
-              persona: {
-                connect: { id_persona },
+              user: {
+                connect: { id_user },
               },
               horario: {
                 connect: { id_horario },
@@ -161,14 +161,14 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
 
     return this.prisma.ticket.findMany({
       where: {
-        ...(filtros.id_persona !== undefined && {
-          id_persona: filtros.id_persona,
+        ...(filtros.id_user !== undefined && {
+          id_user: filtros.id_user,
         }),
         ...(filtros.estado !== undefined && { estado: filtros.estado }),
       },
       select: {
         id_ticket: true,
-        id_persona: true,
+        id_user: true,
         id_horario: true,
         codigo_acceso: true,
         estado: true,
@@ -177,9 +177,9 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
         notas: true,
         total: true,
         created_at: true,
-        persona: {
+        user: {
           select: {
-            id_persona: true,
+            id_user: true,
             nombre: true,
             apellido: true,
           },
@@ -221,9 +221,9 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
         id_ticket: id,
       },
       include: {
-        persona: {
+        user: {
           select: {
-            id_persona: true,
+            id_user: true,
             nombre: true,
             apellido: true,
           },

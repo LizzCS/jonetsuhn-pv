@@ -51,7 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  persona: 'persona',
+  user: 'user',
   categoria: 'categoria',
   producto: 'producto',
   evento: 'evento',
@@ -78,8 +78,8 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const PersonaScalarFieldEnum = {
-  id_persona: 'id_persona',
+export const UserScalarFieldEnum = {
+  id_user: 'id_user',
   nombre: 'nombre',
   apellido: 'apellido',
   telefono: 'telefono',
@@ -90,7 +90,7 @@ export const PersonaScalarFieldEnum = {
   activo: 'activo'
 } as const
 
-export type PersonaScalarFieldEnum = (typeof PersonaScalarFieldEnum)[keyof typeof PersonaScalarFieldEnum]
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
 export const CategoriaScalarFieldEnum = {
@@ -150,7 +150,7 @@ export type Horario_productoScalarFieldEnum = (typeof Horario_productoScalarFiel
 
 export const TicketScalarFieldEnum = {
   id_ticket: 'id_ticket',
-  id_persona: 'id_persona',
+  id_user: 'id_user',
   id_horario: 'id_horario',
   codigo_acceso: 'codigo_acceso',
   estado: 'estado',

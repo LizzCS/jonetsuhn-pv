@@ -39,9 +39,9 @@ export const metodo_pago = {
 export type metodo_pago = (typeof metodo_pago)[keyof typeof metodo_pago]
 
 
-export const rol_persona = {
+export const rol_user = {
   cliente: 'cliente',
   admin: 'admin'
 } as const
 
-export type rol_persona = (typeof rol_persona)[keyof typeof rol_persona]
+export type rol_user = (typeof rol_user)[keyof typeof rol_user]

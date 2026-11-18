@@ -5,7 +5,7 @@ import { useSyncExternalStore } from "react";
 // (cookie o token) y estas funciones se conectan al API.
 
 export type Sesion = {
-  tipo: "cliente" | "invitado"; // invitado = persona sin password_hash
+  tipo: "cliente" | "invitado"; // invitado = user sin password_hash
   nombre: string;
   apellido: string;
   email: string;

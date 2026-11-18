@@ -397,7 +397,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
-  persona: 'persona',
+  user: 'user',
   categoria: 'categoria',
   producto: 'producto',
   evento: 'evento',
@@ -421,81 +421,81 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "persona" | "categoria" | "producto" | "evento" | "horario" | "horario_producto" | "ticket" | "ticket_item" | "pago"
+    modelProps: "user" | "categoria" | "producto" | "evento" | "horario" | "horario_producto" | "ticket" | "ticket_item" | "pago"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
-    persona: {
-      payload: Prisma.$personaPayload<ExtArgs>
-      fields: Prisma.personaFieldRefs
+    user: {
+      payload: Prisma.$userPayload<ExtArgs>
+      fields: Prisma.userFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.personaFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$personaPayload> | null
+          args: Prisma.userFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$userPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.personaFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$personaPayload>
+          args: Prisma.userFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$userPayload>
         }
         findFirst: {
-          args: Prisma.personaFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$personaPayload> | null
+          args: Prisma.userFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$userPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.personaFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$personaPayload>
+          args: Prisma.userFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$userPayload>
         }
         findMany: {
-          args: Prisma.personaFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$personaPayload>[]
+          args: Prisma.userFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$userPayload>[]
         }
         create: {
-          args: Prisma.personaCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$personaPayload>
+          args: Prisma.userCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$userPayload>
         }
         createMany: {
-          args: Prisma.personaCreateManyArgs<ExtArgs>
+          args: Prisma.userCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.personaCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$personaPayload>[]
+          args: Prisma.userCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$userPayload>[]
         }
         delete: {
-          args: Prisma.personaDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$personaPayload>
+          args: Prisma.userDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$userPayload>
         }
         update: {
-          args: Prisma.personaUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$personaPayload>
+          args: Prisma.userUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$userPayload>
         }
         deleteMany: {
-          args: Prisma.personaDeleteManyArgs<ExtArgs>
+          args: Prisma.userDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.personaUpdateManyArgs<ExtArgs>
+          args: Prisma.userUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.personaUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$personaPayload>[]
+          args: Prisma.userUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$userPayload>[]
         }
         upsert: {
-          args: Prisma.personaUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$personaPayload>
+          args: Prisma.userUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$userPayload>
         }
         aggregate: {
-          args: Prisma.PersonaAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregatePersona>
+          args: Prisma.UserAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUser>
         }
         groupBy: {
-          args: Prisma.personaGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PersonaGroupByOutputType>[]
+          args: Prisma.userGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserGroupByOutputType>[]
         }
         count: {
-          args: Prisma.personaCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PersonaCountAggregateOutputType> | number
+          args: Prisma.userCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
         }
       }
     }
@@ -1130,8 +1130,8 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const PersonaScalarFieldEnum = {
-  id_persona: 'id_persona',
+export const UserScalarFieldEnum = {
+  id_user: 'id_user',
   nombre: 'nombre',
   apellido: 'apellido',
   telefono: 'telefono',
@@ -1142,7 +1142,7 @@ export const PersonaScalarFieldEnum = {
   activo: 'activo'
 } as const
 
-export type PersonaScalarFieldEnum = (typeof PersonaScalarFieldEnum)[keyof typeof PersonaScalarFieldEnum]
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
 export const CategoriaScalarFieldEnum = {
@@ -1202,7 +1202,7 @@ export type Horario_productoScalarFieldEnum = (typeof Horario_productoScalarFiel
 
 export const TicketScalarFieldEnum = {
   id_ticket: 'id_ticket',
-  id_persona: 'id_persona',
+  id_user: 'id_user',
   id_horario: 'id_horario',
   codigo_acceso: 'codigo_acceso',
   estado: 'estado',
@@ -1291,16 +1291,16 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
- * Reference to a field of type 'rol_persona'
+ * Reference to a field of type 'rol_user'
  */
-export type Enumrol_personaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'rol_persona'>
+export type Enumrol_userFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'rol_user'>
     
 
 
 /**
- * Reference to a field of type 'rol_persona[]'
+ * Reference to a field of type 'rol_user[]'
  */
-export type ListEnumrol_personaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'rol_persona[]'>
+export type ListEnumrol_userFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'rol_user[]'>
     
 
 
@@ -1559,7 +1559,7 @@ export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions 
  */
 export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter
 export type GlobalOmitConfig = {
-  persona?: Prisma.personaOmit
+  user?: Prisma.userOmit
   categoria?: Prisma.categoriaOmit
   producto?: Prisma.productoOmit
   evento?: Prisma.eventoOmit

@@ -11,14 +11,14 @@ import { promisify } from 'node:util';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { ticketsPendientes } from '../common/cupos.js';
 import { esErrorPrisma } from '../common/prisma-utils.js';
-import { CreatePersonaDto } from './dto/create-persona.dto.js';
-import { UpdatePersonaDto } from './dto/update-persona.dto.js';
+import { CreateUserDto } from './dto/create-user.dto.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
 
 const scrypt = promisify(scryptCallback);
 
 // Campos que se pueden devolver en las respuestas (nunca password_hash)
 const camposPublicos = {
-  id_persona: true,
+  id_user: true,
   nombre: true,
   apellido: true,
   telefono: true,
@@ -28,7 +28,7 @@ const camposPublicos = {
 } as const;
 
 @Injectable()
-export class PersonaService {
+export class UserService {
   constructor(
     private readonly prisma: PrismaService,
   ) {}
@@ -42,15 +42,15 @@ export class PersonaService {
   }
 
   // CREATE - Registro de cliente o datos de invitado.
-  // - Correo nuevo: se crea la persona (rol siempre cliente).
+  // - Correo nuevo: se crea el user (rol siempre cliente).
   // - Correo de un invitado: se reutiliza y se actualizan sus datos; si
   //   viene password, el invitado pasa a ser cuenta y conserva sus pedidos.
   // - Correo de una cuenta activa con contraseña: 409, debe iniciar sesión.
   // - Correo de una cuenta desactivada: se reactiva.
-  async create(dto: CreatePersonaDto) {
-    const existente = await this.prisma.persona.findUnique({
+  async create(dto: CreateUserDto) {
+    const existente = await this.prisma.user.findUnique({
       where: { email: dto.email },
-      select: { id_persona: true, password_hash: true, activo: true },
+      select: { id_user: true, password_hash: true, activo: true },
     });
 
     if (existente?.activo && existente.password_hash !== null) {
@@ -72,15 +72,15 @@ export class PersonaService {
     };
 
     if (existente) {
-      return this.prisma.persona.update({
-        where: { id_persona: existente.id_persona },
+      return this.prisma.user.update({
+        where: { id_user: existente.id_user },
         data: { ...datos, activo: true },
         select: camposPublicos,
       });
     }
 
     try {
-      return await this.prisma.persona.create({
+      return await this.prisma.user.create({
         data: { ...datos, email: dto.email, rol: 'cliente' },
         select: camposPublicos,
       });
@@ -88,7 +88,7 @@ export class PersonaService {
       // Dos registros simultáneos con el mismo correo
       if (esErrorPrisma(error, 'P2002')) {
         throw new ConflictException(
-          'Ya existe una persona con ese correo electrónico',
+          'Ya existe un usuario con ese correo electrónico',
         );
       }
 
@@ -96,9 +96,9 @@ export class PersonaService {
     }
   }
 
-  // READ - Obtener todas las personas activas
+  // READ - Obtener todos los users activos
   async findAll() {
-    return this.prisma.persona.findMany({
+    return this.prisma.user.findMany({
       where: { activo: true },
       select: camposPublicos,
       orderBy: {
@@ -107,26 +107,26 @@ export class PersonaService {
     });
   }
 
-  // READ - Obtener una persona por ID
+  // READ - Obtener un user por ID
   async findOne(id: string) {
-    const persona = await this.prisma.persona.findFirst({
+    const user = await this.prisma.user.findFirst({
       where: {
-        id_persona: id,
+        id_user: id,
         activo: true,
       },
       select: camposPublicos,
     });
 
-    if (!persona) {
-      throw new NotFoundException('La persona no existe');
+    if (!user) {
+      throw new NotFoundException('El usuario no existe');
     }
 
-    return persona;
+    return user;
   }
 
   // UPDATE - Actualizar datos (nunca el rol)
   // TODO(auth): para cambiar la contraseña pedir la actual
-  async update(id: string, dto: UpdatePersonaDto) {
+  async update(id: string, dto: UpdateUserDto) {
     await this.findOne(id);
 
     if (Object.keys(dto).length === 0) {
@@ -134,9 +134,9 @@ export class PersonaService {
     }
 
     try {
-      return await this.prisma.persona.update({
+      return await this.prisma.user.update({
         where: {
-          id_persona: id,
+          id_user: id,
         },
         data: {
           ...(dto.nombre !== undefined && { nombre: dto.nombre }),
@@ -152,7 +152,7 @@ export class PersonaService {
     } catch (error) {
       if (esErrorPrisma(error, 'P2002')) {
         throw new ConflictException(
-          'Ya existe una persona con ese correo electrónico',
+          'Ya existe un usuario con ese correo electrónico',
         );
       }
 
@@ -166,22 +166,22 @@ export class PersonaService {
     await this.findOne(id);
 
     const pendientes = await this.prisma.ticket.count({
-      where: { id_persona: id, ...ticketsPendientes() },
+      where: { id_user: id, ...ticketsPendientes() },
     });
 
     if (pendientes > 0) {
       throw new ConflictException(
-        'La persona tiene pedidos en curso; no se puede desactivar',
+        'El usuario tiene pedidos en curso; no se puede desactivar',
       );
     }
 
-    await this.prisma.persona.update({
-      where: { id_persona: id },
+    await this.prisma.user.update({
+      where: { id_user: id },
       data: { activo: false },
     });
 
     return {
-      mensaje: 'Persona eliminada correctamente',
+      mensaje: 'Usuario eliminado correctamente',
     };
   }
 }

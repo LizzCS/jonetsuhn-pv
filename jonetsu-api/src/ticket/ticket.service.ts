@@ -6,6 +6,7 @@ import {
   NotFoundException,
   OnModuleDestroy,
   OnModuleInit,
+  ServiceUnavailableException,
 } from '@nestjs/common';
 
 import { Prisma } from '../generated/prisma/client.js';
@@ -27,6 +28,7 @@ import {
   SEGUNDOS_REVISION_VENCIDOS,
 } from '../common/reglas-negocio.js';
 import { cancelarReservasVencidas } from '../common/vencimientos.js';
+import { CorreoService } from '../correo/correo.service.js';
 
 import {
   generarCodigoAcceso,
@@ -59,7 +61,10 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(TicketService.name);
   private revisionVencidos?: NodeJS.Timeout;
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly correo: CorreoService,
+  ) {}
 
   // Revisión periódica de reservas vencidas (además de la que se hace
   // al leer tickets, para que el historial siempre salga al día)
@@ -391,7 +396,7 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
   // cantidades; se respetan el total pagado y el código de acceso.
   // El cupo del horario anterior se libera solo al mover el ticket.
   async reagendar(id: string, dto: ReagendarTicketDto, id_admin: string) {
-    return conReintento(
+    const ticket = await conReintento(
       () =>
         this.prisma.$transaction(async (tx) => {
           await exigirAdmin(tx, id_admin);
@@ -438,6 +443,35 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
         }, SERIALIZABLE),
       'Conflicto al reagendar el ticket. Intenta nuevamente',
     );
+
+    // Avisar al cliente del nuevo horario (sin esperar el envío)
+    void this.correo.enviarTicket(id, 'reagendado');
+
+    return ticket;
+  }
+
+  // REENVIAR CORREO - El admin vuelve a mandar el código al cliente
+  // (no le llegó, lo borró, o el SMTP falló al confirmar)
+  async reenviarCorreo(id: string, id_admin: string) {
+    await exigirAdmin(this.prisma, id_admin);
+
+    const ticket = await this.findOne(id);
+
+    if (ticket.estado !== estado_ticket.confirmado) {
+      throw new ConflictException(
+        'Solo se reenvía el código de tickets confirmados',
+      );
+    }
+
+    const enviado = await this.correo.enviarTicket(id, 'confirmado');
+
+    if (!enviado) {
+      throw new ServiceUnavailableException(
+        'No se pudo enviar el correo. Revisa la configuración SMTP',
+      );
+    }
+
+    return { mensaje: 'Correo reenviado correctamente' };
   }
 
   // ENTREGAR - El admin valida el código el día del servicio

@@ -19,6 +19,7 @@ import { MINUTOS_REINTENTO_PAGO } from '../common/reglas-negocio.js';
 
 import type { ArchivoSubido } from '../common/archivos/imagen.pipe.js';
 import { ArchivosService } from '../common/archivos/archivos.service.js';
+import { CorreoService } from '../correo/correo.service.js';
 import { CreatePagoDto } from './dto/create-pago.dto.js';
 import { FiltroPagosDto } from './dto/filtro-pagos.dto.js';
 import { VerificarPagoDto } from './dto/verificar-pago.dto.js';
@@ -56,6 +57,7 @@ export class PagoService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly archivos: ArchivosService,
+    private readonly correo: CorreoService,
   ) {}
 
   // CREATE - El cliente sube el comprobante de su transferencia.
@@ -219,9 +221,13 @@ export class PagoService {
 
   // VERIFICAR - El admin aprueba o rechaza el comprobante
   async verificar(id: string, dto: VerificarPagoDto, id_admin: string) {
-    return conReintento(
+    let ticketConfirmado: string | null = null;
+
+    const resultado = await conReintento(
       () =>
         this.prisma.$transaction(async (tx) => {
+          ticketConfirmado = null;
+
           await exigirAdmin(tx, id_admin);
 
           const pago = await tx.pago.findUnique({
@@ -262,13 +268,17 @@ export class PagoService {
             const pagado = verificado._sum.monto ?? new Prisma.Decimal(0);
 
             if (pagado.gte(pago.ticket.total)) {
-              await tx.ticket.updateMany({
+              const { count } = await tx.ticket.updateMany({
                 where: {
                   id_ticket: pago.id_ticket,
                   estado: estado_ticket.pago_en_revision,
                 },
                 data: { estado: estado_ticket.confirmado },
               });
+
+              if (count > 0) {
+                ticketConfirmado = pago.id_ticket;
+              }
             }
           } else {
             await this.devolverAReservado(tx, pago.id_ticket);
@@ -281,6 +291,14 @@ export class PagoService {
         }, SERIALIZABLE),
       'Conflicto al revisar el pago. Intenta nuevamente',
     );
+
+    // Se envía después del commit y sin esperar: si el correo falla,
+    // el pago igual queda verificado (el admin puede reenviarlo)
+    if (ticketConfirmado) {
+      void this.correo.enviarTicket(ticketConfirmado, 'confirmado');
+    }
+
+    return resultado;
   }
 
   // REEMBOLSAR - El admin devuelve un pago verificado y se cancela el ticket

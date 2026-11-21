@@ -14,6 +14,7 @@ import { PagoModule } from './pago/pago.module.js';
 import { ProductoModule } from './producto/producto.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { ConfigModule } from '@nestjs/config';
+import { CorreoModule } from './correo/correo.module.js';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ConfigModule } from '@nestjs/config';
       envFilePath: '.env',
     }),
     PrismaModule,
+    CorreoModule,
     ArchivosModule,
     CategoriaModule,
     UserModule,

@@ -60,6 +60,16 @@ export class TicketController {
     return this.ticketService.reactivar(id, id_admin);
   }
 
+  // POST /tickets/:id/reenviar-correo  (admin, solo confirmados)
+  @Post(':id/reenviar-correo')
+  @SoloAdmin()
+  reenviarCorreo(
+    @Param('id', idValido) id: string,
+    @Usuario('sub') id_admin: string,
+  ) {
+    return this.ticketService.reenviarCorreo(id, id_admin);
+  }
+
   // PATCH /tickets/:id/reagendar  (admin, solo confirmados)
   @Patch(':id/reagendar')
   @SoloAdmin()

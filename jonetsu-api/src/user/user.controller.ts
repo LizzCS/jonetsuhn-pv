@@ -12,17 +12,24 @@ import { idValido } from '../common/id-valido.pipe.js';
 import { UserService } from './user.service.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
-
+import { UseGuards, Req } from '@nestjs/common';
+import type { Request } from 'express';
+import { AuthGuard } from '@nestjs/passport';
 @Controller('users')
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   // POST /users
   @Post()
   create(@Body() dto: CreateUserDto) {
     return this.userService.create(dto);
+  }
+
+  //tester to test if jwt thing works
+  @Get('profile')
+  @UseGuards(AuthGuard('jwt'))
+  getProfile(@Req() req: Request) {
+    return req.user;
   }
 
   // GET /users
@@ -33,26 +40,19 @@ export class UserController {
 
   // GET /users/:id
   @Get(':id')
-  findOne(
-    @Param('id', idValido) id: string,
-  ) {
+  findOne(@Param('id', idValido) id: string) {
     return this.userService.findOne(id);
   }
 
   // PATCH /users/:id
   @Patch(':id')
-  update(
-    @Param('id', idValido) id: string,
-    @Body() dto: UpdateUserDto,
-  ) {
+  update(@Param('id', idValido) id: string, @Body() dto: UpdateUserDto) {
     return this.userService.update(id, dto);
   }
 
   // DELETE /users/:id
   @Delete(':id')
-  remove(
-    @Param('id', idValido) id: string,
-  ) {
+  remove(@Param('id', idValido) id: string) {
     return this.userService.remove(id);
   }
 }

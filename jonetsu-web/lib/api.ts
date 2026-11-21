@@ -1,47 +1,68 @@
-// Cliente del API (jonetsu-api). La URL sale de NEXT_PUBLIC_API_URL en .env.local
+// Cliente del API (jonetsu-api)
+// La URL sale de NEXT_PUBLIC_API_URL en .env.local
+
 import type { Plato, Servicio } from "./data";
 
-export const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000").replace(/\/$/, "");
+const API_URL = "http://localhost:3000";
 
-// Error con el mensaje que manda el backend (los DTO ya traen mensajes en español)
+// Error con el mensaje que manda el backend
 export class ApiError extends Error {
   constructor(
     public status: number,
     message: string,
   ) {
     super(message);
+    this.name = "ApiError";
   }
 }
 
-export async function api<T>(ruta: string, init: RequestInit = {}): Promise<T> {
-  const esFormData = init.body instanceof FormData;
-  let res: Response;
+// ---- Cliente HTTP genérico ----
 
-  try {
-    res = await fetch(`${API_URL}${ruta}`, {
-      cache: "no-store",
-      ...init,
-      headers: {
-        ...(init.body && !esFormData && { "Content-Type": "application/json" }),
-        ...init.headers,
-      },
-    });
-  } catch {
-    throw new ApiError(0, "No se pudo conectar con el servidor. Intenta de nuevo.");
+export async function apiFetch<T>(
+  endpoint: string,
+  options: RequestInit = {},
+): Promise<T> {
+  const headers = new Headers(options.headers);
+
+  // Agregar Content-Type solamente si hay body
+  if (options.body && !headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
   }
 
-  const texto = await res.text();
-  const datos = texto ? JSON.parse(texto) : null;
+  const response = await fetch(`${API_URL}${endpoint}`, {
+    ...options,
+    credentials: "include",
+    headers,
+  });
 
-  if (!res.ok) {
-    const msg = Array.isArray(datos?.message) ? datos.message.join(". ") : datos?.message;
-    throw new ApiError(res.status, msg ?? `Error ${res.status}`);
+  if (!response.ok) {
+    let message = "Error en la solicitud";
+
+    try {
+      const error = await response.json();
+
+      message = Array.isArray(error.message)
+        ? error.message.join(", ")
+        : (error.message ?? message);
+    } catch {
+      // Si el backend no devuelve JSON, usamos el mensaje genérico
+    }
+
+    throw new ApiError(response.status, message);
   }
 
-  return datos as T;
+  // Respuestas sin contenido (por ejemplo, DELETE con 204)
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
+  return response.json() as Promise<T>;
 }
 
-// ---- Respuestas del backend (campos como en Prisma; Decimal llega como string)
+// Alias para hacer las llamadas más cortas
+export const api = apiFetch;
+
+// ---- Respuestas del backend (campos como en Prisma; Decimal llega como string) ----
 
 type ProductoApi = {
   id_producto: string;
@@ -61,7 +82,7 @@ export type DisponibilidadApi = {
 
 export type HorarioApi = {
   id_horario: string;
-  hora: string; // "1970-01-01T19:00:00.000Z"
+  hora: string;
   abierto: boolean;
   productos: DisponibilidadApi[];
 };
@@ -71,14 +92,14 @@ export type EventoApi = {
   nombre: string;
   descripcion: string | null;
   imagen_url: string | null;
-  fecha: string; // "2026-11-20T00:00:00.000Z"
+  fecha: string;
   horarios: HorarioApi[];
 };
 
-// ---- Adaptadores a los tipos que ya usan los componentes
+// ---- Adaptadores a los tipos que ya usan los componentes ----
 
-export const soloFecha = (iso: string) => iso.slice(0, 10); // "YYYY-MM-DD"
-export const soloHora = (iso: string) => iso.slice(11, 16); // "HH:MM"
+export const soloFecha = (iso: string) => iso.slice(0, 10);
+export const soloHora = (iso: string) => iso.slice(11, 16);
 
 function aServicio(e: EventoApi): Servicio {
   return {
@@ -96,14 +117,17 @@ function aPlato(p: ProductoApi): Plato {
     nombre: p.nombre,
     descripcion: p.descripcion ?? "",
     precio: Number(p.precio),
-    imagenUrl: p.imagen_url ? `${API_URL}/productos/${p.id_producto}/imagen` : null,
+    imagenUrl: p.imagen_url
+      ? `${API_URL}/productos/${p.id_producto}/imagen`
+      : null,
   };
 }
 
-// ---- Lecturas públicas
+// ---- Lecturas públicas ----
 
 export async function getServicios(): Promise<Servicio[]> {
-  return (await api<EventoApi[]>("/eventos")).map(aServicio);
+  const eventos = await api<EventoApi[]>("/eventos");
+  return eventos.map(aServicio);
 }
 
 export async function getEvento(id: string): Promise<EventoApi> {
@@ -111,5 +135,6 @@ export async function getEvento(id: string): Promise<EventoApi> {
 }
 
 export async function getPlatos(): Promise<Plato[]> {
-  return (await api<ProductoApi[]>("/productos")).map(aPlato);
+  const productos = await api<ProductoApi[]>("/productos");
+  return productos.map(aPlato);
 }

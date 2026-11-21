@@ -15,7 +15,11 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import { exigirAdmin } from '../common/admin.js';
 import { unidadesOcupadas } from '../common/cupos.js';
 import { AccionAdminDto } from '../common/dto/accion-admin.dto.js';
-import { ahoraLocal, fechaHoraEvento, minutosDesdeAhora } from '../common/fechas.js';
+import {
+  ahoraLocal,
+  fechaHoraEvento,
+  minutosDesdeAhora,
+} from '../common/fechas.js';
 import { conReintento } from '../common/prisma-utils.js';
 import {
   CODIGO_FORMATO,
@@ -25,7 +29,10 @@ import {
 } from '../common/reglas-negocio.js';
 import { cancelarReservasVencidas } from '../common/vencimientos.js';
 
-import { generarCodigoAcceso, normalizarCodigoAcceso } from './codigo-acceso.js';
+import {
+  generarCodigoAcceso,
+  normalizarCodigoAcceso,
+} from './codigo-acceso.js';
 import { CreateTicketDto } from './dto/create-ticket.dto.js';
 import { EntregarTicketDto } from './dto/entregar-ticket.dto.js';
 import { FiltroTicketsDto } from './dto/filtro-tickets.dto.js';
@@ -66,7 +73,10 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
           }
         })
         .catch((error: unknown) =>
-          this.logger.error('No se pudieron cancelar las reservas vencidas', error),
+          this.logger.error(
+            'No se pudieron cancelar las reservas vencidas',
+            error,
+          ),
         );
     }, SEGUNDOS_REVISION_VENCIDOS * 1000);
 
@@ -79,6 +89,7 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
 
   // CREATE - Reservar
   async create(dto: CreateTicketDto) {
+    /* 
     const { id_user, id_horario, items, notas } = dto;
 
     // P2002 = código de acceso repetido (muy improbable): se reintenta
@@ -152,13 +163,13 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
         }, SERIALIZABLE),
       'Conflicto al reservar. Intenta nuevamente',
       ['P2034', 'P2002'],
-    );
+    ); */
   }
 
   // READ - Obtener tickets (historial), con filtros opcionales
   async findAll(filtros: FiltroTicketsDto = {}) {
     await cancelarReservasVencidas(this.prisma);
-
+    /* 
     return this.prisma.ticket.findMany({
       where: {
         ...(filtros.id_user !== undefined && {
@@ -209,12 +220,12 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
       orderBy: {
         created_at: 'desc',
       },
-    });
+    }); */
   }
 
   // READ - Obtener ticket por ID
   async findOne(id: string) {
-    await cancelarReservasVencidas(this.prisma, { id_ticket: id });
+    /* await cancelarReservasVencidas(this.prisma, { id_ticket: id });
 
     const ticket = await this.prisma.ticket.findUnique({
       where: {
@@ -255,12 +266,12 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
       throw new NotFoundException('El ticket no existe');
     }
 
-    return ticket;
+    return ticket; */
   }
 
   // UPDATE - Solo admin: editar notas o cancelar a pedido del cliente
   async update(id: string, dto: UpdateTicketDto) {
-    await exigirAdmin(this.prisma, dto.id_admin);
+    /* await exigirAdmin(this.prisma, dto.id_admin);
 
     const ticket = await this.findOne(id);
 
@@ -313,14 +324,14 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
         id_ticket: id,
       },
       data,
-    });
+    }); */
   }
 
   // REACTIVAR - El admin le da un nuevo plazo a un ticket cancelado
   // (por ejemplo, el cliente pagó pero no subió el comprobante a tiempo).
   // Se vuelve a revisar el cupo porque al cancelarse lo soltó.
   async reactivar(id: string, dto: AccionAdminDto) {
-    await cancelarReservasVencidas(this.prisma, { id_ticket: id });
+    /* await cancelarReservasVencidas(this.prisma, { id_ticket: id });
 
     return conReintento(
       () =>
@@ -374,7 +385,7 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
           });
         }, SERIALIZABLE),
       'Conflicto al reactivar el ticket. Intenta nuevamente',
-    );
+    ); */
   }
 
   // REAGENDAR - El admin mueve un ticket confirmado a otro horario cuando
@@ -382,7 +393,7 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
   // cantidades; se respetan el total pagado y el código de acceso.
   // El cupo del horario anterior se libera solo al mover el ticket.
   async reagendar(id: string, dto: ReagendarTicketDto) {
-    return conReintento(
+    /*  return conReintento(
       () =>
         this.prisma.$transaction(async (tx) => {
           await exigirAdmin(tx, dto.id_admin);
@@ -403,9 +414,7 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
           }
 
           if (ticket.id_horario === dto.id_horario) {
-            throw new BadRequestException(
-              'El ticket ya está en ese horario',
-            );
+            throw new BadRequestException('El ticket ya está en ese horario');
           }
 
           await this.validarHorarioDisponible(tx, dto.id_horario);
@@ -430,12 +439,12 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
           });
         }, SERIALIZABLE),
       'Conflicto al reagendar el ticket. Intenta nuevamente',
-    );
+    ); */
   }
 
   // ENTREGAR - El admin valida el código el día del servicio
   async entregar(dto: EntregarTicketDto) {
-    const codigo_acceso = normalizarCodigoAcceso(dto.codigo_acceso);
+    /*  const codigo_acceso = normalizarCodigoAcceso(dto.codigo_acceso);
 
     if (!CODIGO_FORMATO.test(codigo_acceso)) {
       throw new BadRequestException('codigo_acceso no es válido');
@@ -463,7 +472,9 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
         );
       }
 
-      const diaServicio = ticket.horario.evento.fecha.toISOString().slice(0, 10);
+      const diaServicio = ticket.horario.evento.fecha
+        .toISOString()
+        .slice(0, 10);
 
       if (diaServicio !== ahoraLocal().slice(0, 10)) {
         throw new ConflictException(
@@ -492,13 +503,14 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
         where: { id_ticket: ticket.id_ticket },
         include: { items: true },
       });
-    });
+    }); */
   }
 
   // DELETE - "Volver" desde la ventana de pago: libera los platos al
   // instante y el cliente arma un pedido nuevo desde su carrito.
   // Solo tickets reservados sin ningún pago; los cancelados se conservan.
   async remove(id: string) {
+    /* 
     // findOne ya marca como cancelado el ticket si venció
     const ticket = await this.findOne(id);
 
@@ -522,7 +534,7 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
 
     return {
       mensaje: 'Ticket eliminado correctamente',
-    };
+    }; */
   }
 
   // El horario debe existir, estar abierto, su evento activo y no haber pasado
@@ -530,7 +542,7 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
     tx: Prisma.TransactionClient,
     id_horario: string,
   ) {
-    const horario = await tx.horario.findFirst({
+    /* const horario = await tx.horario.findFirst({
       where: { id_horario, activo: true },
       include: { evento: true },
     });
@@ -547,7 +559,7 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
       throw new ConflictException('Este horario ya pasó');
     }
 
-    return horario;
+    return horario; */
   }
 
   // Comprueba que queden unidades del producto en ese horario y lo devuelve.
@@ -560,7 +572,7 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
     cantidad: number,
     nombreProducto?: string,
   ) {
-    const disponibilidad = await tx.horario_producto.findUnique({
+    /* const disponibilidad = await tx.horario_producto.findUnique({
       where: {
         id_horario_id_producto: { id_horario, id_producto },
       },
@@ -589,5 +601,6 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
     }
 
     return disponibilidad.producto;
+   */
   }
 }

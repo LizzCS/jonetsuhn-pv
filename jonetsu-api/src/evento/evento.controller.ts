@@ -13,6 +13,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { idValido } from '../common/id-valido.pipe.js';
+import { SoloAdmin } from '../auth/decorators/solo-admin.decorator.js';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { ApiArchivo } from '../common/archivos/api-archivo.decorator.js';
@@ -33,12 +34,11 @@ const imagenPipe = crearPipeImagen(IMAGEN_CAMPO, 'La imagen');
 @ApiTags('eventos')
 @Controller('eventos')
 export class EventoController {
-  constructor(
-    private readonly eventoService: EventoService,
-  ) {}
+  constructor(private readonly eventoService: EventoService) {}
 
   // POST /eventos
   @Post()
+  @SoloAdmin()
   create(@Body() dto: CreateEventoDto) {
     return this.eventoService.create(dto);
   }
@@ -51,9 +51,7 @@ export class EventoController {
 
   // GET /eventos/:id
   @Get(':id')
-  findOne(
-    @Param('id', idValido) id: string,
-  ) {
+  findOne(@Param('id', idValido) id: string) {
     return this.eventoService.findOne(id);
   }
 
@@ -66,6 +64,7 @@ export class EventoController {
 
   // PATCH /eventos/:id/imagen  (multipart: imagen)
   @Patch(':id/imagen')
+  @SoloAdmin()
   @ApiArchivo(IMAGEN_CAMPO)
   @UseInterceptors(FileInterceptor(IMAGEN_CAMPO, opcionesMulterImagen))
   subirImagen(
@@ -77,18 +76,15 @@ export class EventoController {
 
   // PATCH /eventos/:id
   @Patch(':id')
-  update(
-    @Param('id', idValido) id: string,
-    @Body() dto: UpdateEventoDto,
-  ) {
+  @SoloAdmin()
+  update(@Param('id', idValido) id: string, @Body() dto: UpdateEventoDto) {
     return this.eventoService.update(id, dto);
   }
 
   // DELETE /eventos/:id
   @Delete(':id')
-  remove(
-    @Param('id', idValido) id: string,
-  ) {
+  @SoloAdmin()
+  remove(@Param('id', idValido) id: string) {
     return this.eventoService.remove(id);
   }
 }

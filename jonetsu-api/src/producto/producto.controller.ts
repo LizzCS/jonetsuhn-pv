@@ -12,6 +12,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { idValido } from '../common/id-valido.pipe.js';
+import { SoloAdmin } from '../auth/decorators/solo-admin.decorator.js';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { ApiArchivo } from '../common/archivos/api-archivo.decorator.js';
@@ -35,6 +36,7 @@ export class ProductoController {
 
   // POST /productos
   @Post()
+  @SoloAdmin()
   create(@Body() dto: CreateProductoDto) {
     return this.productoService.create(dto);
   }
@@ -60,6 +62,7 @@ export class ProductoController {
 
   // PATCH /productos/:id/imagen  (multipart: imagen)
   @Patch(':id/imagen')
+  @SoloAdmin()
   @ApiArchivo(IMAGEN_CAMPO)
   @UseInterceptors(FileInterceptor(IMAGEN_CAMPO, opcionesMulterImagen))
   subirImagen(
@@ -71,15 +74,14 @@ export class ProductoController {
 
   // PATCH /productos/:id
   @Patch(':id')
-  update(
-    @Param('id', idValido) id: string,
-    @Body() dto: UpdateProductoDto,
-  ) {
+  @SoloAdmin()
+  update(@Param('id', idValido) id: string, @Body() dto: UpdateProductoDto) {
     return this.productoService.update(id, dto);
   }
 
   // DELETE /productos/:id
   @Delete(':id')
+  @SoloAdmin()
   remove(@Param('id', idValido) id: string) {
     return this.productoService.remove(id);
   }

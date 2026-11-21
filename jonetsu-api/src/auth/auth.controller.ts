@@ -5,6 +5,7 @@ import type { Response } from 'express';
 import { AuthService } from './auth.service.js';
 import { LoginDto } from './dto/login-dto.js';
 import { RegisterDto } from './dto/register-dto.js';
+import { COOKIE_SESION, opcionesCookie } from './acceso.js';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -23,13 +24,11 @@ export class AuthController {
   ) {
     const result = await this.authService.login(loginDto);
 
-    res.cookie('access_token', result.accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000,
-      path: '/',
-    });
+    res.cookie(
+      COOKIE_SESION,
+      result.accessToken,
+      opcionesCookie(24 * 60 * 60 * 1000),
+    );
 
     return {
       message: 'Inicio de sesión exitoso',
@@ -39,12 +38,8 @@ export class AuthController {
 
   @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('access_token', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      path: '/',
-    });
+    const { maxAge: _, ...opciones } = opcionesCookie(0);
+    res.clearCookie(COOKIE_SESION, opciones);
 
     return {
       message: 'Sesión cerrada correctamente',

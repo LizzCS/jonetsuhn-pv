@@ -22,6 +22,9 @@ import {
 } from '../common/archivos/imagen.pipe.js';
 import { SoloAdmin } from '../auth/decorators/solo-admin.decorator.js';
 import { Usuario } from '../auth/decorators/usuario.decorator.js';
+import { ConAcceso } from '../auth/decorators/con-acceso.decorator.js';
+import { AccesoActual } from '../auth/acceso.js';
+import type { Acceso } from '../auth/acceso.js';
 import { ApiArchivo } from '../common/archivos/api-archivo.decorator.js';
 import {
   COMPROBANTE_CAMPO,
@@ -49,42 +52,54 @@ export class PagoController {
     },
     ['id_ticket'],
   )
+  @ConAcceso()
   @UseInterceptors(FileInterceptor(COMPROBANTE_CAMPO, opcionesMulterImagen))
   create(
     @Body() dto: CreatePagoDto,
     @UploadedFile(comprobantePipe) archivo: ArchivoSubido,
+    @AccesoActual() acceso: Acceso,
   ) {
-    return this.pagoService.create(dto, archivo);
+    return this.pagoService.create(dto, archivo, acceso);
   }
 
-  // GET /pagos?estado=&id_ticket=
+  // GET /pagos?estado=&id_ticket=  (admin; el cliente ve sus pagos en
+  // GET /tickets/:id)
   @Get()
+  @SoloAdmin()
   findAll(@Query() filtros: FiltroPagosDto) {
     return this.pagoService.findAll(filtros);
   }
 
-  // GET /pagos/:id
+  // GET /pagos/:id  (admin o dueño)
   @Get(':id')
-  findOne(@Param('id', idValido) id: string) {
-    return this.pagoService.findOne(id);
+  @ConAcceso()
+  findOne(@Param('id', idValido) id: string, @AccesoActual() acceso: Acceso) {
+    return this.pagoService.findOne(id, acceso);
   }
 
-  // GET /pagos/:id/comprobante  → devuelve la imagen
+  // GET /pagos/:id/comprobante  → devuelve la imagen (admin o dueño)
   @Get(':id/comprobante')
-  async comprobante(@Param('id', idValido) id: string) {
-    const { stream, tipo } = await this.pagoService.comprobante(id);
+  @ConAcceso()
+  async comprobante(
+    @Param('id', idValido) id: string,
+    @AccesoActual() acceso: Acceso,
+  ) {
+    const { stream, tipo } = await this.pagoService.comprobante(id, acceso);
     return new StreamableFile(stream, { type: tipo });
   }
 
   // PATCH /pagos/:id/comprobante  (multipart: comprobante)
+  // Solo mientras el pago esté pendiente y no venza el plazo de la reserva
   @Patch(':id/comprobante')
   @ApiArchivo(COMPROBANTE_CAMPO)
+  @ConAcceso()
   @UseInterceptors(FileInterceptor(COMPROBANTE_CAMPO, opcionesMulterImagen))
   reemplazarComprobante(
     @Param('id', idValido) id: string,
     @UploadedFile(comprobantePipe) archivo: ArchivoSubido,
+    @AccesoActual() acceso: Acceso,
   ) {
-    return this.pagoService.reemplazarComprobante(id, archivo);
+    return this.pagoService.reemplazarComprobante(id, archivo, acceso);
   }
 
   // PATCH /pagos/:id/verificar  (admin)
@@ -108,9 +123,10 @@ export class PagoController {
     return this.pagoService.reembolsar(id, id_admin);
   }
 
-  // DELETE /pagos/:id
+  // DELETE /pagos/:id  (admin, solo pagos pendientes)
   @Delete(':id')
-  remove(@Param('id', idValido) id: string) {
-    return this.pagoService.remove(id);
+  @SoloAdmin()
+  remove(@Param('id', idValido) id: string, @Usuario('sub') id_admin: string) {
+    return this.pagoService.remove(id, id_admin);
   }
 }

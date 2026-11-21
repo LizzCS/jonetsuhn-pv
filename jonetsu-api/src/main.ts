@@ -14,8 +14,13 @@ async function bootstrap() {
   app.use(cookieParser());
 
   // Orígenes del frontend separados por coma (FRONTEND_URL en .env)
+  const origenes = (process.env.FRONTEND_URL ?? 'http://localhost:3001')
+    .split(',')
+    .map((origen) => origen.trim())
+    .filter(Boolean);
+
   app.enableCors({
-    origin: 'http://localhost:3001', // URL de tu frontend
+    origin: origenes,
     credentials: true,
   });
 
@@ -33,6 +38,11 @@ async function bootstrap() {
       .setDescription('Endpoints del backend de Jonetsu')
       .setVersion('1.0')
       .addCookieAuth('access_token')
+      .addCookieAuth(
+        'ticket_token',
+        { type: 'apiKey', in: 'cookie' },
+        'invitado',
+      )
       .build();
 
     SwaggerModule.setup('api', app, () =>

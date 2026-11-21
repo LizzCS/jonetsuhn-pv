@@ -7,6 +7,7 @@ import {
   OnModuleDestroy,
   OnModuleInit,
   ServiceUnavailableException,
+  UnauthorizedException,
 } from '@nestjs/common';
 
 import { Prisma } from '../generated/prisma/client.js';
@@ -29,6 +30,9 @@ import {
 } from '../common/reglas-negocio.js';
 import { cancelarReservasVencidas } from '../common/vencimientos.js';
 import { CorreoService } from '../correo/correo.service.js';
+import { UserService } from '../user/user.service.js';
+import { esAdmin, exigirAccesoTicket } from '../auth/acceso.js';
+import type { Acceso } from '../auth/acceso.js';
 
 import {
   generarCodigoAcceso,
@@ -64,6 +68,7 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
   constructor(
     private readonly prisma: PrismaService,
     private readonly correo: CorreoService,
+    private readonly users: UserService,
   ) {}
 
   // Revisión periódica de reservas vencidas (además de la que se hace
@@ -91,9 +96,12 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
     clearInterval(this.revisionVencidos);
   }
 
-  // CREATE - Reservar
-  async create(dto: CreateTicketDto) {
-    const { id_user, id_horario, items, notas } = dto;
+  // CREATE - Reservar. El dueño es el usuario de la sesión; sin sesión,
+  // el invitado de dto.invitado (si el correo ya tiene cuenta, 409:
+  // debe iniciar sesión).
+  async create(dto: CreateTicketDto, acceso: Acceso) {
+    const { id_horario, items, notas } = dto;
+    const id_user = await this.duenoDelPedido(dto, acceso);
 
     // P2002 = código de acceso repetido (muy improbable): se reintenta
     return conReintento(
@@ -169,15 +177,16 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
     );
   }
 
-  // READ - Obtener tickets (historial), con filtros opcionales
-  async findAll(filtros: FiltroTicketsDto = {}) {
+  // READ - Obtener tickets (historial), con filtros opcionales.
+  // Admin: todos. Cliente: los de su cuenta. Invitado: los de su cookie.
+  async findAll(filtros: FiltroTicketsDto, acceso: Acceso) {
+    const alcance = this.alcanceTickets(filtros, acceso);
+
     await cancelarReservasVencidas(this.prisma);
 
     return this.prisma.ticket.findMany({
       where: {
-        ...(filtros.id_user !== undefined && {
-          id_user: filtros.id_user,
-        }),
+        ...alcance,
         ...(filtros.estado !== undefined && { estado: filtros.estado }),
       },
       select: {
@@ -226,8 +235,9 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
     });
   }
 
-  // READ - Obtener ticket por ID
-  async findOne(id: string) {
+  // READ - Obtener ticket por ID. Con "acceso" se exige ser admin o dueño
+  // (los usos internos, ya validados como admin, no lo pasan).
+  async findOne(id: string, acceso?: Acceso) {
     await cancelarReservasVencidas(this.prisma, { id_ticket: id });
 
     const ticket = await this.prisma.ticket.findUnique({
@@ -267,6 +277,10 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
 
     if (!ticket) {
       throw new NotFoundException('El ticket no existe');
+    }
+
+    if (acceso) {
+      exigirAccesoTicket(acceso, ticket);
     }
 
     return ticket;
@@ -541,9 +555,9 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
   // DELETE - "Volver" desde la ventana de pago: libera los platos al
   // instante y el cliente arma un pedido nuevo desde su carrito.
   // Solo tickets reservados sin ningún pago; los cancelados se conservan.
-  async remove(id: string) {
+  async remove(id: string, acceso: Acceso) {
     // findOne ya marca como cancelado el ticket si venció
-    const ticket = await this.findOne(id);
+    const ticket = await this.findOne(id, acceso);
 
     if (ticket.estado !== estado_ticket.reservado) {
       throw new ConflictException(
@@ -566,6 +580,53 @@ export class TicketService implements OnModuleInit, OnModuleDestroy {
     return {
       mensaje: 'Ticket eliminado correctamente',
     };
+  }
+
+  // Con sesión: el usuario del token. Sin sesión: el invitado del body
+  private async duenoDelPedido(
+    dto: CreateTicketDto,
+    acceso: Acceso,
+  ): Promise<string> {
+    if (acceso.usuario) {
+      return acceso.usuario.sub;
+    }
+
+    if (!dto.invitado) {
+      throw new UnauthorizedException(
+        'Inicia sesión o envía tus datos de invitado para hacer el pedido',
+      );
+    }
+
+    // Misma regla que el registro: reutiliza al invitado con ese correo
+    // y rechaza (409) si el correo ya es de una cuenta con contraseña
+    const invitado = await this.users.create(dto.invitado);
+    return invitado.id_user;
+  }
+
+  // Qué tickets puede listar quien hace la petición
+  private alcanceTickets(
+    filtros: FiltroTicketsDto,
+    acceso: Acceso,
+  ): Prisma.ticketWhereInput {
+    if (esAdmin(acceso)) {
+      return filtros.id_user !== undefined ? { id_user: filtros.id_user } : {};
+    }
+
+    const propios: Prisma.ticketWhereInput[] = [];
+
+    if (acceso.usuario) {
+      propios.push({ id_user: acceso.usuario.sub });
+    }
+
+    if (acceso.ticketsInvitado.length > 0) {
+      propios.push({ id_ticket: { in: acceso.ticketsInvitado } });
+    }
+
+    if (propios.length === 0) {
+      throw new UnauthorizedException('Inicia sesión para ver tus pedidos');
+    }
+
+    return { OR: propios };
   }
 
   // El horario debe existir, estar abierto, su evento activo y no haber pasado

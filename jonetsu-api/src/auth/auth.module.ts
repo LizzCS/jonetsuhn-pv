@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
@@ -6,7 +6,15 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
 import { JwtStrategy } from './strategies/jwt.strategy.js';
+<<<<<<< HEAD
+=======
+import { AccesoService } from './acceso.service.js';
+import { AccesoGuard } from './guards/acceso.guard.js';
+import { UserModule } from '../user/user.module.js';
+>>>>>>> aa7d131 (Acceso por dueño, invitados con cookie y endpoints de admin protegidos)
 
+// Global: tickets y pagos usan AccesoGuard (necesita JwtService)
+@Global()
 @Module({
   imports: [
     ConfigModule,
@@ -25,6 +33,7 @@ import { JwtStrategy } from './strategies/jwt.strategy.js';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, AccesoService, AccesoGuard],
+  exports: [JwtModule, AccesoService, AccesoGuard],
 })
 export class AuthModule {}

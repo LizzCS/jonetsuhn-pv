@@ -8,6 +8,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { idValido } from '../common/id-valido.pipe.js';
+import { SoloAdmin } from '../auth/decorators/solo-admin.decorator.js';
 
 import { CategoriaService } from './categoria.service.js';
 import { CreateCategoriaDto } from './dto/create-categoria.dto.js';
@@ -19,6 +20,7 @@ export class CategoriaController {
 
   // POST /categorias
   @Post()
+  @SoloAdmin()
   create(@Body() dto: CreateCategoriaDto) {
     return this.categoriaService.create(dto);
   }
@@ -37,15 +39,14 @@ export class CategoriaController {
 
   // PATCH /categorias/:id
   @Patch(':id')
-  update(
-    @Param('id', idValido) id: string,
-    @Body() dto: UpdateCategoriaDto,
-  ) {
+  @SoloAdmin()
+  update(@Param('id', idValido) id: string, @Body() dto: UpdateCategoriaDto) {
     return this.categoriaService.update(id, dto);
   }
 
   // DELETE /categorias/:id
   @Delete(':id')
+  @SoloAdmin()
   remove(@Param('id', idValido) id: string) {
     return this.categoriaService.remove(id);
   }

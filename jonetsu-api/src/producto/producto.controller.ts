@@ -11,6 +11,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { idValido } from '../common/id-valido.pipe.js';
+import { SoloAdmin } from '../auth/decorators/solo-admin.decorator.js';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import type { ArchivoSubido } from '../common/archivos/imagen.pipe.js';
@@ -31,6 +32,7 @@ export class ProductoController {
 
   // POST /productos
   @Post()
+  @SoloAdmin()
   create(@Body() dto: CreateProductoDto) {
     return this.productoService.create(dto);
   }
@@ -56,6 +58,11 @@ export class ProductoController {
 
   // PATCH /productos/:id/imagen  (multipart: imagen)
   @Patch(':id/imagen')
+<<<<<<< HEAD
+=======
+  @SoloAdmin()
+  @ApiArchivo(IMAGEN_CAMPO)
+>>>>>>> aa7d131 (Acceso por dueño, invitados con cookie y endpoints de admin protegidos)
   @UseInterceptors(FileInterceptor(IMAGEN_CAMPO, opcionesMulterImagen))
   subirImagen(
     @Param('id', idValido) id: string,
@@ -66,15 +73,14 @@ export class ProductoController {
 
   // PATCH /productos/:id
   @Patch(':id')
-  update(
-    @Param('id', idValido) id: string,
-    @Body() dto: UpdateProductoDto,
-  ) {
+  @SoloAdmin()
+  update(@Param('id', idValido) id: string, @Body() dto: UpdateProductoDto) {
     return this.productoService.update(id, dto);
   }
 
   // DELETE /productos/:id
   @Delete(':id')
+  @SoloAdmin()
   remove(@Param('id', idValido) id: string) {
     return this.productoService.remove(id);
   }

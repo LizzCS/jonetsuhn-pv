@@ -21,7 +21,6 @@ import type { ArchivoSubido } from '../common/archivos/imagen.pipe.js';
 import { ArchivosService } from '../common/archivos/archivos.service.js';
 import { CreatePagoDto } from './dto/create-pago.dto.js';
 import { FiltroPagosDto } from './dto/filtro-pagos.dto.js';
-import { AccionAdminDto } from '../common/dto/accion-admin.dto.js';
 import { VerificarPagoDto } from './dto/verificar-pago.dto.js';
 
 // Pagos que ocupan el saldo del ticket (en revisión o aprobados)
@@ -219,11 +218,11 @@ export class PagoService {
   }
 
   // VERIFICAR - El admin aprueba o rechaza el comprobante
-  async verificar(id: string, dto: VerificarPagoDto) {
+  async verificar(id: string, dto: VerificarPagoDto, id_admin: string) {
     return conReintento(
       () =>
         this.prisma.$transaction(async (tx) => {
-          await exigirAdmin(tx, dto.id_admin);
+          await exigirAdmin(tx, id_admin);
 
           const pago = await tx.pago.findUnique({
             where: { id_pago: id },
@@ -244,7 +243,7 @@ export class PagoService {
             where: { id_pago: id },
             data: {
               estado: dto.estado,
-              verificado_por: dto.id_admin,
+              verificado_por: id_admin,
               verificado_en: new Date(),
               motivo_rechazo: aprobado ? null : dto.motivo_rechazo,
             },
@@ -285,11 +284,11 @@ export class PagoService {
   }
 
   // REEMBOLSAR - El admin devuelve un pago verificado y se cancela el ticket
-  async reembolsar(id: string, dto: AccionAdminDto) {
+  async reembolsar(id: string, id_admin: string) {
     return conReintento(
       () =>
         this.prisma.$transaction(async (tx) => {
-          await exigirAdmin(tx, dto.id_admin);
+          await exigirAdmin(tx, id_admin);
 
           const pago = await tx.pago.findUnique({
             where: { id_pago: id },
@@ -318,7 +317,7 @@ export class PagoService {
             where: { id_pago: id },
             data: {
               estado: estado_pago.reembolsado,
-              verificado_por: dto.id_admin,
+              verificado_por: id_admin,
               verificado_en: new Date(),
             },
           });

@@ -1,3 +1,4 @@
+import { ApiTags } from '@nestjs/swagger';
 import {
   Controller,
   Get,
@@ -14,6 +15,8 @@ import {
 import { idValido } from '../common/id-valido.pipe.js';
 import { FileInterceptor } from '@nestjs/platform-express';
 
+import { ApiArchivo } from '../common/archivos/api-archivo.decorator.js';
+
 import type { ArchivoSubido } from '../common/archivos/imagen.pipe.js';
 import {
   crearPipeImagen,
@@ -27,6 +30,7 @@ import { UpdateEventoDto } from './dto/update-evento.dto.js';
 
 const imagenPipe = crearPipeImagen(IMAGEN_CAMPO, 'La imagen');
 
+@ApiTags('eventos')
 @Controller('eventos')
 export class EventoController {
   constructor(
@@ -62,6 +66,7 @@ export class EventoController {
 
   // PATCH /eventos/:id/imagen  (multipart: imagen)
   @Patch(':id/imagen')
+  @ApiArchivo(IMAGEN_CAMPO)
   @UseInterceptors(FileInterceptor(IMAGEN_CAMPO, opcionesMulterImagen))
   subirImagen(
     @Param('id', idValido) id: string,

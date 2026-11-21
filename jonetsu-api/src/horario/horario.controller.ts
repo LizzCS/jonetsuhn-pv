@@ -1,3 +1,4 @@
+import { ApiTags } from '@nestjs/swagger';
 import {
   Controller,
   Get,
@@ -16,6 +17,7 @@ import { CreateHorarioDto } from './dto/create-horario.dto.js';
 import { FiltroHorariosDto } from './dto/filtro-horarios.dto.js';
 import { UpdateHorarioDto } from './dto/update-horario.dto.js';
 
+@ApiTags('horarios')
 @Controller('horarios')
 export class HorarioController {
   constructor(

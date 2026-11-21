@@ -5,8 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import { randomBytes, scrypt as scryptCallback } from 'node:crypto';
-import { promisify } from 'node:util';
+import * as bcrypt from 'bcrypt';
 
 import { PrismaService } from '../prisma/prisma.service.js';
 import { ticketsPendientes } from '../common/cupos.js';
@@ -14,7 +13,7 @@ import { esErrorPrisma } from '../common/prisma-utils.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
 
-const scrypt = promisify(scryptCallback);
+const BCRYPT_RONDAS = 10;
 
 // Campos que se pueden devolver en las respuestas (nunca password_hash)
 const camposPublicos = {
@@ -29,16 +28,12 @@ const camposPublicos = {
 
 @Injectable()
 export class UserService {
-  constructor(
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  // Hash seguro de la contraseña (el largo lo valida el DTO)
-  private async generarHash(password: string): Promise<string> {
-    const salt = randomBytes(16).toString('hex');
-    const hash = (await scrypt(password, salt, 64)) as Buffer;
-
-    return `scrypt$${salt}$${hash.toString('hex')}`;
+  // Hash de la contraseña con bcrypt (el salt va dentro del hash).
+  // AuthService.login lo compara con bcrypt.compare. El largo lo valida el DTO.
+  private generarHash(password: string): Promise<string> {
+    return bcrypt.hash(password, BCRYPT_RONDAS);
   }
 
   // CREATE - Registro de cliente o datos de invitado.

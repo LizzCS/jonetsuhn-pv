@@ -2,7 +2,6 @@ import {
   IsIn,
   IsNotEmpty,
   IsString,
-  IsUUID,
   MaxLength,
   ValidateIf,
 } from 'class-validator';
@@ -10,10 +9,6 @@ import {
 import { estado_pago } from '../../generated/prisma/enums.js';
 
 export class VerificarPagoDto {
-  // TODO(auth): quitar este campo y tomar el admin del token
-  @IsUUID('all', { message: 'id_admin debe ser un UUID válido' })
-  id_admin!: string;
-
   @IsIn([estado_pago.verificado, estado_pago.rechazado], {
     message: 'estado debe ser verificado o rechazado',
   })

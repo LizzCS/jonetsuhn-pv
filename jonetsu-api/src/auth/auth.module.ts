@@ -6,11 +6,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
 import { JwtStrategy } from './strategies/jwt.strategy.js';
+import { UserModule } from '../user/user.module.js';
 
 @Module({
   imports: [
     ConfigModule,
     PassportModule,
+    UserModule,
 
     // Loads the JWT secret from the .env file.
     JwtModule.registerAsync({

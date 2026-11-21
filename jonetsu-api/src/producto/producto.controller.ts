@@ -1,3 +1,4 @@
+import { ApiTags } from '@nestjs/swagger';
 import {
   Controller,
   Get,
@@ -13,6 +14,8 @@ import {
 import { idValido } from '../common/id-valido.pipe.js';
 import { FileInterceptor } from '@nestjs/platform-express';
 
+import { ApiArchivo } from '../common/archivos/api-archivo.decorator.js';
+
 import type { ArchivoSubido } from '../common/archivos/imagen.pipe.js';
 import {
   crearPipeImagen,
@@ -25,6 +28,7 @@ import { UpdateProductoDto } from './dto/update-producto.dto.js';
 
 const imagenPipe = crearPipeImagen(IMAGEN_CAMPO, 'La imagen');
 
+@ApiTags('productos')
 @Controller('productos')
 export class ProductoController {
   constructor(private readonly productoService: ProductoService) {}
@@ -56,6 +60,7 @@ export class ProductoController {
 
   // PATCH /productos/:id/imagen  (multipart: imagen)
   @Patch(':id/imagen')
+  @ApiArchivo(IMAGEN_CAMPO)
   @UseInterceptors(FileInterceptor(IMAGEN_CAMPO, opcionesMulterImagen))
   subirImagen(
     @Param('id', idValido) id: string,

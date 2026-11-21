@@ -3,8 +3,8 @@ import { ForbiddenException } from '@nestjs/common';
 import { Prisma } from '../generated/prisma/client.js';
 
 // Comprueba dentro de la transacción que el user sea un admin activo.
-// TODO(auth): cuando exista el login, el id sale del token y esta
-// comprobación pasa a un guard de rol; se puede mantener como respaldo.
+// El id sale del token (@Usuario('sub')) y @SoloAdmin() ya revisa el rol;
+// esto es el respaldo: confirma en la BD que siga siendo admin y activo.
 export async function exigirAdmin(
   tx: Prisma.TransactionClient,
   id_user: string,

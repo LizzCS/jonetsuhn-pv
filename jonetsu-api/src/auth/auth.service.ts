@@ -1,15 +1,11 @@
-import {
-  Injectable,
-  UnauthorizedException,
-  ConflictException,
-} from '@nestjs/common';
-
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 import { PrismaService } from '../prisma/prisma.service.js';
+import { UserService } from '../user/user.service.js';
+import type { UsuarioToken } from './decorators/usuario.decorator.js';
 import { LoginDto } from './dto/login-dto.js';
-import { Role } from './decorators/role.enums.js';
 import { RegisterDto } from './dto/register-dto.js';
 
 @Injectable()
@@ -17,6 +13,7 @@ export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
+    private readonly userService: UserService,
   ) {}
 
   async login(loginDto: LoginDto) {
@@ -24,9 +21,18 @@ export class AuthService {
       where: {
         email: loginDto.email,
       },
+      select: {
+        id_user: true,
+        nombre: true,
+        email: true,
+        rol: true,
+        activo: true,
+        password_hash: true,
+      },
     });
 
-    if (!user || !user.password_hash) {
+    // Invitados (sin contraseña) y cuentas desactivadas no inician sesión
+    if (!user || !user.activo || !user.password_hash) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
 
@@ -39,8 +45,7 @@ export class AuthService {
       throw new UnauthorizedException('Credenciales inválidas');
     }
 
-    // Generate JWT only for users with passwords
-    const payload = {
+    const payload: UsuarioToken = {
       sub: user.id_user,
       email: user.email,
       role: user.rol,
@@ -59,39 +64,15 @@ export class AuthService {
     };
   }
 
+  // Misma lógica que POST /users: siempre crea clientes (los admin se
+  // asignan aparte) y si el correo era de un invitado, lo convierte en
+  // cuenta y conserva sus pedidos. La contraseña se guarda con bcrypt.
   async register(dto: RegisterDto) {
-    const existingUser = await this.prisma.user.findUnique({
-      where: { email: dto.email },
-    });
-
-    if (existingUser) {
-      throw new ConflictException('El correo ya está registrado');
-    }
-
-    const hashedPassword = dto.password
-      ? await bcrypt.hash(dto.password, 10)
-      : null;
-
-    const user = await this.prisma.user.create({
-      data: {
-        nombre: dto.nombre,
-        apellido: dto.apellido,
-        telefono: dto.telefono,
-        email: dto.email,
-        password_hash: hashedPassword,
-      },
-    });
+    const user = await this.userService.create(dto);
 
     return {
       message: 'Usuario registrado correctamente',
-      user: {
-        id: user.id_user,
-        nombre: user.nombre,
-        apellido: user.apellido,
-        telefono: user.telefono,
-        email: user.email,
-        role: Role.CLIENTE,
-      },
+      user,
     };
   }
 }

@@ -1,3 +1,4 @@
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import {
   Controller,
   Get,
@@ -12,9 +13,12 @@ import { idValido } from '../common/id-valido.pipe.js';
 import { UserService } from './user.service.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
-import { UseGuards, Req } from '@nestjs/common';
-import type { Request } from 'express';
-import { AuthGuard } from '@nestjs/passport';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
+import { Usuario } from '../auth/decorators/usuario.decorator.js';
+import type { UsuarioToken } from '../auth/decorators/usuario.decorator.js';
+
+@ApiTags('users')
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -25,11 +29,12 @@ export class UserController {
     return this.userService.create(dto);
   }
 
-  //tester to test if jwt thing works
+  // GET /users/profile  → datos del token de la sesión actual
   @Get('profile')
-  @UseGuards(AuthGuard('jwt'))
-  getProfile(@Req() req: Request) {
-    return req.user;
+  @ApiCookieAuth()
+  @UseGuards(JwtAuthGuard)
+  getProfile(@Usuario() usuario: UsuarioToken) {
+    return usuario;
   }
 
   // GET /users

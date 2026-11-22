@@ -3,17 +3,14 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 import { PrismaService } from '../prisma/prisma.service.js';
-import { UserService } from '../user/user.service.js';
 import type { UsuarioToken } from './decorators/usuario.decorator.js';
 import { LoginDto } from './dto/login-dto.js';
-import { RegisterDto } from './dto/register-dto.js';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
-    private readonly userService: UserService,
   ) {}
 
   async login(loginDto: LoginDto) {
@@ -45,13 +42,7 @@ export class AuthService {
       throw new UnauthorizedException('Credenciales inválidas');
     }
 
-    const payload: UsuarioToken = {
-      sub: user.id_user,
-      email: user.email,
-      role: user.rol,
-    };
-
-    const accessToken = await this.jwtService.signAsync(payload);
+    const accessToken = await this.emitirToken(user);
 
     return {
       accessToken,
@@ -64,15 +55,19 @@ export class AuthService {
     };
   }
 
-  // Misma lógica que POST /users: siempre crea clientes (los admin se
-  // asignan aparte) y si el correo era de un invitado, lo convierte en
-  // cuenta y conserva sus pedidos. La contraseña se guarda con bcrypt.
-  async register(dto: RegisterDto) {
-    const user = await this.userService.create(dto);
-
-    return {
-      message: 'Usuario registrado correctamente',
-      user,
+  // Token de sesión (cookie access_token) para un user ya validado:
+  // al iniciar sesión o justo después de verificar el correo
+  emitirToken(user: {
+    id_user: string;
+    email: string;
+    rol: UsuarioToken['role'];
+  }): Promise<string> {
+    const payload: UsuarioToken = {
+      sub: user.id_user,
+      email: user.email,
+      role: user.rol,
     };
+
+    return this.jwtService.signAsync(payload);
   }
 }

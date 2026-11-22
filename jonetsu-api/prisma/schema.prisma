@@ -171,3 +171,17 @@ model pago {
   ticket          ticket   @relation(fields: [id_ticket], references: [id_ticket], onDelete: Cascade)
   verificador     user? @relation("PagoVerificadoPor", fields: [verificado_por], references: [id_user])
 }
+
+// Registro pendiente de verificar: la cuenta se crea (o el invitado se
+// convierte en cuenta) solo cuando el dueño del correo escribe el código
+model verificacion_correo {
+  email       String   @id
+  codigo_hash String
+  nombre      String
+  apellido    String
+  telefono    String
+  password_hash String
+  intentos    Int      @default(0)
+  expira_en   DateTime
+  enviado_en  DateTime @default(now())
+}

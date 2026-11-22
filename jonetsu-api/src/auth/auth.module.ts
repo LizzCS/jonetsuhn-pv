@@ -7,6 +7,7 @@ import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
 import { JwtStrategy } from './strategies/jwt.strategy.js';
 import { AccesoService } from './acceso.service.js';
+import { VerificacionService } from './verificacion.service.js';
 import { AccesoGuard } from './guards/acceso.guard.js';
 import { UserModule } from '../user/user.module.js';
 
@@ -31,7 +32,13 @@ import { UserModule } from '../user/user.module.js';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, AccesoService, AccesoGuard],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    AccesoService,
+    AccesoGuard,
+    VerificacionService,
+  ],
   exports: [JwtModule, AccesoService, AccesoGuard],
 })
 export class AuthModule {}

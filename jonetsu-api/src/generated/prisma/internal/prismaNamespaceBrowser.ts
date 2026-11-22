@@ -59,7 +59,8 @@ export const ModelName = {
   horario_producto: 'horario_producto',
   ticket: 'ticket',
   ticket_item: 'ticket_item',
-  pago: 'pago'
+  pago: 'pago',
+  verificacion_correo: 'verificacion_correo'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -192,6 +193,21 @@ export const PagoScalarFieldEnum = {
 } as const
 
 export type PagoScalarFieldEnum = (typeof PagoScalarFieldEnum)[keyof typeof PagoScalarFieldEnum]
+
+
+export const Verificacion_correoScalarFieldEnum = {
+  email: 'email',
+  codigo_hash: 'codigo_hash',
+  nombre: 'nombre',
+  apellido: 'apellido',
+  telefono: 'telefono',
+  password_hash: 'password_hash',
+  intentos: 'intentos',
+  expira_en: 'expira_en',
+  enviado_en: 'enviado_en'
+} as const
+
+export type Verificacion_correoScalarFieldEnum = (typeof Verificacion_correoScalarFieldEnum)[keyof typeof Verificacion_correoScalarFieldEnum]
 
 
 export const SortOrder = {

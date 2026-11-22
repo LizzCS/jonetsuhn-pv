@@ -405,7 +405,8 @@ export const ModelName = {
   horario_producto: 'horario_producto',
   ticket: 'ticket',
   ticket_item: 'ticket_item',
-  pago: 'pago'
+  pago: 'pago',
+  verificacion_correo: 'verificacion_correo'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -421,7 +422,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "categoria" | "producto" | "evento" | "horario" | "horario_producto" | "ticket" | "ticket_item" | "pago"
+    modelProps: "user" | "categoria" | "producto" | "evento" | "horario" | "horario_producto" | "ticket" | "ticket_item" | "pago" | "verificacion_correo"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1091,6 +1092,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    verificacion_correo: {
+      payload: Prisma.$verificacion_correoPayload<ExtArgs>
+      fields: Prisma.verificacion_correoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.verificacion_correoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$verificacion_correoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.verificacion_correoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$verificacion_correoPayload>
+        }
+        findFirst: {
+          args: Prisma.verificacion_correoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$verificacion_correoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.verificacion_correoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$verificacion_correoPayload>
+        }
+        findMany: {
+          args: Prisma.verificacion_correoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$verificacion_correoPayload>[]
+        }
+        create: {
+          args: Prisma.verificacion_correoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$verificacion_correoPayload>
+        }
+        createMany: {
+          args: Prisma.verificacion_correoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.verificacion_correoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$verificacion_correoPayload>[]
+        }
+        delete: {
+          args: Prisma.verificacion_correoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$verificacion_correoPayload>
+        }
+        update: {
+          args: Prisma.verificacion_correoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$verificacion_correoPayload>
+        }
+        deleteMany: {
+          args: Prisma.verificacion_correoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.verificacion_correoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.verificacion_correoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$verificacion_correoPayload>[]
+        }
+        upsert: {
+          args: Prisma.verificacion_correoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$verificacion_correoPayload>
+        }
+        aggregate: {
+          args: Prisma.Verificacion_correoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVerificacion_correo>
+        }
+        groupBy: {
+          args: Prisma.verificacion_correoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Verificacion_correoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.verificacion_correoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Verificacion_correoCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1244,6 +1319,21 @@ export const PagoScalarFieldEnum = {
 } as const
 
 export type PagoScalarFieldEnum = (typeof PagoScalarFieldEnum)[keyof typeof PagoScalarFieldEnum]
+
+
+export const Verificacion_correoScalarFieldEnum = {
+  email: 'email',
+  codigo_hash: 'codigo_hash',
+  nombre: 'nombre',
+  apellido: 'apellido',
+  telefono: 'telefono',
+  password_hash: 'password_hash',
+  intentos: 'intentos',
+  expira_en: 'expira_en',
+  enviado_en: 'enviado_en'
+} as const
+
+export type Verificacion_correoScalarFieldEnum = (typeof Verificacion_correoScalarFieldEnum)[keyof typeof Verificacion_correoScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1568,6 +1658,7 @@ export type GlobalOmitConfig = {
   ticket?: Prisma.ticketOmit
   ticket_item?: Prisma.ticket_itemOmit
   pago?: Prisma.pagoOmit
+  verificacion_correo?: Prisma.verificacion_correoOmit
 }
 
 /* Types for Logging */

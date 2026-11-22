@@ -62,3 +62,8 @@ export type ticket_item = Prisma.ticket_itemModel
  * 
  */
 export type pago = Prisma.pagoModel
+/**
+ * Model verificacion_correo
+ * 
+ */
+export type verificacion_correo = Prisma.verificacion_correoModel

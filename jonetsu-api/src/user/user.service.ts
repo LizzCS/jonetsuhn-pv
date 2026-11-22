@@ -3,6 +3,7 @@ import {
   BadRequestException,
   ConflictException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 
 import * as bcrypt from 'bcrypt';
@@ -32,17 +33,46 @@ export class UserService {
 
   // Hash de la contraseña con bcrypt (el salt va dentro del hash).
   // AuthService.login lo compara con bcrypt.compare. El largo lo valida el DTO.
-  private generarHash(password: string): Promise<string> {
+  generarHash(password: string): Promise<string> {
     return bcrypt.hash(password, BCRYPT_RONDAS);
   }
 
-  // CREATE - Registro de cliente o datos de invitado.
+  // 409 si el correo ya es de una cuenta activa con contraseña
+  async exigirCorreoSinCuenta(email: string) {
+    const existente = await this.prisma.user.findUnique({
+      where: { email },
+      select: { password_hash: true, activo: true },
+    });
+
+    if (existente?.activo && existente.password_hash !== null) {
+      throw new ConflictException(
+        'Ya existe una cuenta con ese correo. Inicia sesión',
+      );
+    }
+  }
+
+  // CREATE - Invitado (sin password) o cuenta creada por un admin.
+  // El registro público pasa por AuthService/VerificacionService, que
+  // confirma el correo con un código antes de llamar a guardar().
+  async create(dto: CreateUserDto) {
+    const password_hash =
+      dto.password !== undefined
+        ? await this.generarHash(dto.password)
+        : undefined;
+
+    return this.guardar(dto, password_hash);
+  }
+
+  // Crea o actualiza el user de ese correo:
   // - Correo nuevo: se crea el user (rol siempre cliente).
   // - Correo de un invitado: se reutiliza y se actualizan sus datos; si
-  //   viene password, el invitado pasa a ser cuenta y conserva sus pedidos.
+  //   viene password_hash, el invitado pasa a ser cuenta y conserva sus pedidos.
   // - Correo de una cuenta activa con contraseña: 409, debe iniciar sesión.
   // - Correo de una cuenta desactivada: se reactiva.
-  async create(dto: CreateUserDto) {
+  async guardar(
+    dto: Pick<CreateUserDto, 'nombre' | 'apellido' | 'telefono' | 'email'>,
+    password_hash?: string,
+  ) {
     const existente = await this.prisma.user.findUnique({
       where: { email: dto.email },
       select: { id_user: true, password_hash: true, activo: true },
@@ -53,11 +83,6 @@ export class UserService {
         'Ya existe una cuenta con ese correo. Inicia sesión',
       );
     }
-
-    const password_hash =
-      dto.password !== undefined
-        ? await this.generarHash(dto.password)
-        : undefined;
 
     const datos = {
       nombre: dto.nombre,
@@ -119,13 +144,27 @@ export class UserService {
     return user;
   }
 
-  // UPDATE - Actualizar datos (nunca el rol)
-  // TODO(auth): para cambiar la contraseña pedir la actual
-  async update(id: string, dto: UpdateUserDto) {
+  // UPDATE - Actualizar datos (nunca el rol).
+  // Para cambiar su contraseña o su correo, el usuario debe enviar la
+  // contraseña actual. Un admin que edita a otro usuario no la necesita.
+  async update(
+    id: string,
+    dto: UpdateUserDto,
+    opciones: { sinPasswordActual?: boolean } = {},
+  ) {
     await this.findOne(id);
 
-    if (Object.keys(dto).length === 0) {
+    const { password_actual, ...cambios } = dto;
+
+    if (Object.keys(cambios).length === 0) {
       throw new BadRequestException('No se enviaron campos para actualizar');
+    }
+
+    const cambiaAcceso =
+      cambios.password !== undefined || cambios.email !== undefined;
+
+    if (cambiaAcceso && !opciones.sinPasswordActual) {
+      await this.exigirPasswordActual(id, password_actual);
     }
 
     try {
@@ -134,12 +173,16 @@ export class UserService {
           id_user: id,
         },
         data: {
-          ...(dto.nombre !== undefined && { nombre: dto.nombre }),
-          ...(dto.apellido !== undefined && { apellido: dto.apellido }),
-          ...(dto.telefono !== undefined && { telefono: dto.telefono }),
-          ...(dto.email !== undefined && { email: dto.email }),
-          ...(dto.password !== undefined && {
-            password_hash: await this.generarHash(dto.password),
+          ...(cambios.nombre !== undefined && { nombre: cambios.nombre }),
+          ...(cambios.apellido !== undefined && {
+            apellido: cambios.apellido,
+          }),
+          ...(cambios.telefono !== undefined && {
+            telefono: cambios.telefono,
+          }),
+          ...(cambios.email !== undefined && { email: cambios.email }),
+          ...(cambios.password !== undefined && {
+            password_hash: await this.generarHash(cambios.password),
           }),
         },
         select: camposPublicos,
@@ -152,6 +195,28 @@ export class UserService {
       }
 
       throw error;
+    }
+  }
+
+  private async exigirPasswordActual(id: string, password?: string) {
+    if (!password) {
+      throw new BadRequestException(
+        'Para cambiar tu contraseña o tu correo envía password_actual',
+      );
+    }
+
+    const user = await this.prisma.user.findUnique({
+      where: { id_user: id },
+      select: { password_hash: true },
+    });
+
+    const valida =
+      user?.password_hash !== null &&
+      user?.password_hash !== undefined &&
+      (await bcrypt.compare(password, user.password_hash));
+
+    if (!valida) {
+      throw new UnauthorizedException('La contraseña actual no es correcta');
     }
   }
 

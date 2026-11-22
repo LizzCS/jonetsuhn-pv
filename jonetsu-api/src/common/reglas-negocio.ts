@@ -37,3 +37,8 @@ export const PREFIJO_TELEFONO_LOCAL = '+504';
 export const CODIGO_ALFABETO = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
 export const CODIGO_LONGITUD = 8;
 export const CODIGO_FORMATO = /^[2-9A-HJKMNP-Z]{4}-[2-9A-HJKMNP-Z]{4}$/;
+
+// Verificación del correo al registrarse: código de 6 dígitos
+export const MINUTOS_CODIGO_VERIFICACION = 15;
+export const MAX_INTENTOS_CODIGO = 5;
+export const SEGUNDOS_ENTRE_CODIGOS = 60;

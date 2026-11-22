@@ -33,8 +33,10 @@ function exigirMismoUsuario(usuario: UsuarioToken, id: string) {
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // POST /users  (registro público, igual que /auth/register)
+  // POST /users  (admin: crea la cuenta sin verificar el correo).
+  // El registro público es POST /auth/register + POST /auth/verificar.
   @Post()
+  @SoloAdmin()
   create(@Body() dto: CreateUserDto) {
     return this.userService.create(dto);
   }
@@ -73,7 +75,9 @@ export class UserController {
     @Usuario() usuario: UsuarioToken,
   ) {
     exigirMismoUsuario(usuario, id);
-    return this.userService.update(id, dto);
+    return this.userService.update(id, dto, {
+      sinPasswordActual: usuario.role === Role.admin && usuario.sub !== id,
+    });
   }
 
   // DELETE /users/:id  (desactivar; la misma persona o admin)

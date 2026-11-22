@@ -6,6 +6,7 @@ import type { Transporter } from 'nodemailer';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { plantillaTicket } from './plantilla-ticket.js';
 import type { MotivoCorreoTicket } from './plantilla-ticket.js';
+import { plantillaCodigo } from './plantilla-codigo.js';
 
 // Envía los correos del sistema por SMTP (nodemailer).
 // Si faltan las variables SMTP_* en .env, el envío se omite con un aviso
@@ -55,6 +56,43 @@ export class CorreoService implements OnModuleInit {
       .catch((error: unknown) =>
         this.logger.error('No se pudo conectar al servidor SMTP', error),
       );
+  }
+
+  // Código para verificar el correo al registrarse. Devuelve true si se
+  // envió. Sin SMTP y fuera de producción, el código se muestra en la
+  // consola para poder probar el registro en local.
+  async enviarCodigoVerificacion(
+    email: string,
+    nombre: string,
+    codigo: string,
+  ): Promise<boolean> {
+    if (!this.transporter) {
+      if (process.env.NODE_ENV !== 'production') {
+        this.logger.warn(
+          `[solo desarrollo, sin SMTP] Código de verificación para ${email}: ${codigo}`,
+        );
+        return true;
+      }
+
+      return false;
+    }
+
+    try {
+      const { asunto, html, texto } = plantillaCodigo(nombre, codigo);
+
+      await this.transporter.sendMail({
+        from: this.remitente,
+        to: email,
+        subject: asunto,
+        html,
+        text: texto,
+      });
+
+      return true;
+    } catch (error) {
+      this.logger.error('No se pudo enviar el código de verificación', error);
+      return false;
+    }
   }
 
   // Manda al dueño del ticket el resumen del pedido con su código de acceso.

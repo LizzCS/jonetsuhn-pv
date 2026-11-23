@@ -1,17 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Reveal from "./Reveal";
 import { cerrarSesion, useMontado, useSesion } from "@/lib/session";
 import { formatFecha } from "@/lib/data";
+import { ApiError, getMisTickets, logout } from "@/lib/api";
 import {
   estadoLabel,
   formatHora,
-  tickets,
   totalDe,
   type EstadoTicket,
+  type TicketResumen,
 } from "@/lib/tickets";
 
 const focus =
@@ -40,13 +41,44 @@ export default function PerfilContenido() {
   const sesion = useSesion();
   const montado = useMontado();
   const saliendo = useRef(false);
+  // null = cargando
+  const [tickets, setTickets] = useState<TicketResumen[] | null>(null);
+  const [errorTickets, setErrorTickets] = useState("");
+  const esCliente = sesion?.tipo === "cliente";
 
   useEffect(() => {
     if (montado && !sesion && !saliendo.current) router.replace("/login");
   }, [montado, sesion, router]);
 
-  function salir() {
+  // Historial real del API (la cookie access_token identifica al cliente)
+  useEffect(() => {
+    if (!esCliente) return;
+    let vigente = true;
+    getMisTickets()
+      .then((t) => vigente && setTickets(t))
+      .catch((err) => {
+        if (!vigente) return;
+        // La cookie venció o no existe: hay que iniciar sesión otra vez
+        if (err instanceof ApiError && err.status === 401) {
+          cerrarSesion();
+          router.replace("/login");
+          return;
+        }
+        setTickets([]);
+        setErrorTickets("No pudimos cargar tus pedidos. Intenta de nuevo más tarde.");
+      });
+    return () => {
+      vigente = false;
+    };
+  }, [esCliente, router]);
+
+  async function salir() {
     saliendo.current = true;
+    try {
+      await logout();
+    } catch {
+      // aunque el API no responda, cerramos la sesión local
+    }
     router.push("/");
     cerrarSesion();
   }
@@ -95,6 +127,12 @@ export default function PerfilContenido() {
           </Link>{" "}
           para ver tus pedidos.
         </p>
+      ) : tickets === null ? (
+        <p className="mt-5 text-lg leading-relaxed text-ink/70">Cargando pedidos…</p>
+      ) : errorTickets ? (
+        <p role="alert" className="mt-5 text-lg leading-relaxed text-sun">
+          {errorTickets}
+        </p>
       ) : tickets.length === 0 ? (
         <p className="mt-5 text-lg leading-relaxed text-ink/70">
           Todavía no tienes pedidos. Reserva en un servicio y aparecerá aquí.{" "}
@@ -141,7 +179,7 @@ export default function PerfilContenido() {
 
                   <ul className="mt-5 grid gap-2 border-t border-ink/10 pt-5 text-base">
                     {t.items.map((i) => (
-                      <li key={i.nombre} className="flex justify-between gap-4">
+                      <li key={i.id} className="flex justify-between gap-4">
                         <span>
                           {i.cantidad} × {i.nombre}
                         </span>

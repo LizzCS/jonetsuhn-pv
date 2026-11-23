@@ -1,20 +1,24 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Campo from "./Campo";
 import { guardarSesion, useMontado, useSesion } from "@/lib/session";
+import { aSesion, login } from "@/lib/api";
 
 const focus =
   "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sun";
 
-const boton = `w-full rounded-full bg-ink px-6 py-3 text-base font-medium text-paper transition-colors hover:bg-ink/85 ${focus}`;
+const boton = `w-full rounded-full bg-ink px-6 py-3 text-base font-medium text-paper transition-colors hover:bg-ink/85 disabled:cursor-wait disabled:opacity-60 ${focus}`;
 
 export default function AccesoForm() {
   const router = useRouter();
   const sesion = useSesion();
   const montado = useMontado();
   const [modo, setModo] = useState<"invitado" | "login">("invitado");
+  const [enviando, setEnviando] = useState(false);
+  const [error, setError] = useState("");
 
   // Quien ya inició sesión no necesita pasar por aquí
   useEffect(() => {
@@ -38,18 +42,23 @@ export default function AccesoForm() {
     router.push("/servicios");
   }
 
-  function iniciarSesion(e: React.FormEvent<HTMLFormElement>) {
+  async function iniciarSesion(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
-    // TODO: reemplazar por el login real del API. Por ahora acepta cualquier dato.
-    guardarSesion({
-      tipo: "cliente",
-      nombre: "Cliente",
-      apellido: "Demo",
-      email: texto(f, "email"),
-      telefono: "",
-    });
-    router.push("/perfil");
+    setEnviando(true);
+    setError("");
+    try {
+      const usuario = await login(texto(f, "email"), String(f.get("password") ?? ""));
+      guardarSesion(aSesion(usuario));
+      router.push("/perfil");
+    } catch (err) {
+      setError(
+        err instanceof Error && err.message !== "Failed to fetch"
+          ? err.message
+          : "No pudimos conectar con el servidor. Intenta de nuevo.",
+      );
+      setEnviando(false);
+    }
   }
 
   return (
@@ -67,7 +76,10 @@ export default function AccesoForm() {
             key={m}
             type="button"
             aria-pressed={modo === m}
-            onClick={() => setModo(m)}
+            onClick={() => {
+              setModo(m);
+              setError("");
+            }}
             className={`rounded-full py-2.5 text-base font-medium transition-colors ${focus} ${
               modo === m ? "bg-ink text-paper" : "text-ink/70 hover:text-ink"
             }`}
@@ -91,9 +103,20 @@ export default function AccesoForm() {
         <form onSubmit={iniciarSesion} className="mt-8 grid gap-5">
           <Campo label="Correo" name="email" type="email" autoComplete="email" maxLength={100} required />
           <Campo label="Contraseña" name="password" type="password" autoComplete="current-password" required />
-          <button type="submit" className={`${boton} mt-2`}>
-            Iniciar sesión
+          {error && (
+            <p role="alert" className="text-base text-sun">
+              {error}
+            </p>
+          )}
+          <button type="submit" disabled={enviando} className={`${boton} mt-2`}>
+            {enviando ? "Ingresando…" : "Iniciar sesión"}
           </button>
+          <p className="text-center text-base text-ink/70">
+            ¿No tienes cuenta?{" "}
+            <Link href="/registro" className={`underline underline-offset-4 hover:text-sun ${focus}`}>
+              Crear cuenta
+            </Link>
+          </p>
         </form>
       )}
     </section>

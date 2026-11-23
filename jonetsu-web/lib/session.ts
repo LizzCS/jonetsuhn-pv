@@ -1,11 +1,13 @@
 import { useSyncExternalStore } from "react";
 
-// Sesión de PROTOTIPO guardada en el navegador (localStorage).
-// Cuando exista el login en el backend, se reemplaza por la sesión real
-// (cookie o token) y estas funciones se conectan al API.
+// Sesión del navegador guardada en sessionStorage (dura lo que dura la
+// pestaña). La autenticación real la lleva la cookie httpOnly access_token
+// que pone el API; aquí solo guardamos los datos para mostrar en la UI.
 
 export type Sesion = {
   tipo: "cliente" | "invitado"; // invitado = user sin password_hash
+  id?: string; // id_user (solo clientes con cuenta)
+  rol?: "cliente" | "admin";
   nombre: string;
   apellido: string;
   email: string;
@@ -18,7 +20,7 @@ let cache: { raw: string | null; valor: Sesion | null } = { raw: null, valor: nu
 
 function leer(): Sesion | null {
   try {
-    const raw = window.localStorage.getItem(KEY);
+    const raw = window.sessionStorage.getItem(KEY);
     if (raw !== cache.raw) {
       cache = { raw, valor: raw ? (JSON.parse(raw) as Sesion) : null };
     }
@@ -30,10 +32,8 @@ function leer(): Sesion | null {
 
 function suscribir(cb: () => void) {
   oyentes.add(cb);
-  window.addEventListener("storage", cb);
   return () => {
     oyentes.delete(cb);
-    window.removeEventListener("storage", cb);
   };
 }
 
@@ -43,7 +43,7 @@ function avisar() {
 
 export function guardarSesion(s: Sesion) {
   try {
-    window.localStorage.setItem(KEY, JSON.stringify(s));
+    window.sessionStorage.setItem(KEY, JSON.stringify(s));
   } catch {
     // sin almacenamiento disponible: la sesión no persiste
   }
@@ -52,7 +52,7 @@ export function guardarSesion(s: Sesion) {
 
 export function cerrarSesion() {
   try {
-    window.localStorage.removeItem(KEY);
+    window.sessionStorage.removeItem(KEY);
   } catch {
     // nada que borrar
   }

@@ -38,6 +38,7 @@ enum rol_user {
   admin
 }
 
+
 model user {
   id_user    String     @id @default(uuid()) @db.Uuid
   nombre        String
@@ -45,6 +46,7 @@ model user {
   telefono      String
   email         String     @unique
   password_hash String?
+  salt String?
   rol           rol_user @default(cliente)
   created_at    DateTime   @default(now())
     activo       Boolean @default(true)

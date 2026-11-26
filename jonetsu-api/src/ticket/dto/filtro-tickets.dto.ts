@@ -4,7 +4,7 @@ import { estado_ticket } from '../../generated/prisma/enums.js';
 
 // GET /tickets?id_user=...&estado=...
 export class FiltroTicketsDto {
-  // TODO(auth): un cliente solo debe ver sus propios tickets
+  // Solo lo usa el admin; un cliente siempre ve únicamente sus tickets
   @IsOptional()
   @IsUUID('all', { message: 'id_user debe ser un UUID válido' })
   id_user?: string;

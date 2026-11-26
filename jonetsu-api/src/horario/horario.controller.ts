@@ -9,6 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { idValido } from '../common/id-valido.pipe.js';
+import { SoloAdmin } from '../auth/decorators/solo-admin.decorator.js';
 
 import { HorarioService } from './horario.service.js';
 import { AsignarProductoDto, UpdateCupoDto } from './dto/cupo-producto.dto.js';
@@ -18,12 +19,11 @@ import { UpdateHorarioDto } from './dto/update-horario.dto.js';
 
 @Controller('horarios')
 export class HorarioController {
-  constructor(
-    private readonly horarioService: HorarioService,
-  ) {}
+  constructor(private readonly horarioService: HorarioService) {}
 
   // POST /horarios
   @Post()
+  @SoloAdmin()
   create(@Body() dto: CreateHorarioDto) {
     return this.horarioService.create(dto);
   }
@@ -36,26 +36,21 @@ export class HorarioController {
 
   // GET /horarios/:id
   @Get(':id')
-  findOne(
-    @Param('id', idValido) id: string,
-  ) {
+  findOne(@Param('id', idValido) id: string) {
     return this.horarioService.findOne(id);
   }
 
   // PATCH /horarios/:id
   @Patch(':id')
-  update(
-    @Param('id', idValido) id: string,
-    @Body() dto: UpdateHorarioDto,
-  ) {
+  @SoloAdmin()
+  update(@Param('id', idValido) id: string, @Body() dto: UpdateHorarioDto) {
     return this.horarioService.update(id, dto);
   }
 
   // DELETE /horarios/:id
   @Delete(':id')
-  remove(
-    @Param('id', idValido) id: string,
-  ) {
+  @SoloAdmin()
+  remove(@Param('id', idValido) id: string) {
     return this.horarioService.remove(id);
   }
 
@@ -67,6 +62,7 @@ export class HorarioController {
 
   // POST /horarios/:id/productos  { id_producto, cupo_total }
   @Post(':id/productos')
+  @SoloAdmin()
   asignarProducto(
     @Param('id', idValido) id: string,
     @Body() dto: AsignarProductoDto,
@@ -76,6 +72,7 @@ export class HorarioController {
 
   // PATCH /horarios/:id/productos/:id_producto  { cupo_total }
   @Patch(':id/productos/:id_producto')
+  @SoloAdmin()
   actualizarCupo(
     @Param('id', idValido) id: string,
     @Param('id_producto', idValido) id_producto: string,
@@ -86,6 +83,7 @@ export class HorarioController {
 
   // DELETE /horarios/:id/productos/:id_producto
   @Delete(':id/productos/:id_producto')
+  @SoloAdmin()
   quitarProducto(
     @Param('id', idValido) id: string,
     @Param('id_producto', idValido) id_producto: string,

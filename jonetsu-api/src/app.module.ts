@@ -12,9 +12,15 @@ import { HorarioModule } from './horario/horario.module.js';
 import { TicketModule } from './ticket/ticket.module.js';
 import { PagoModule } from './pago/pago.module.js';
 import { ProductoModule } from './producto/producto.module.js';
+import { AuthModule } from './auth/auth.module.js';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     PrismaModule,
     ArchivosModule,
     CategoriaModule,
@@ -24,6 +30,7 @@ import { ProductoModule } from './producto/producto.module.js';
     TicketModule,
     PagoModule,
     ProductoModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

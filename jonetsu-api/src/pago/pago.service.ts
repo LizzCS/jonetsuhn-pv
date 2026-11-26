@@ -19,6 +19,12 @@ import { MINUTOS_REINTENTO_PAGO } from '../common/reglas-negocio.js';
 
 import type { ArchivoSubido } from '../common/archivos/imagen.pipe.js';
 import { ArchivosService } from '../common/archivos/archivos.service.js';
+<<<<<<< HEAD
+=======
+import { CorreoService } from '../correo/correo.service.js';
+import { exigirAccesoTicket } from '../auth/acceso.js';
+import type { Acceso } from '../auth/acceso.js';
+>>>>>>> aa7d131 (Acceso por dueño, invitados con cookie y endpoints de admin protegidos)
 import { CreatePagoDto } from './dto/create-pago.dto.js';
 import { FiltroPagosDto } from './dto/filtro-pagos.dto.js';
 import { AccionAdminDto } from '../common/dto/accion-admin.dto.js';
@@ -30,6 +36,9 @@ const PAGOS_ACTIVOS: estado_pago[] = [
   estado_pago.verificado,
 ];
 
+const PLAZO_CAMBIO_VENCIDO =
+  'El plazo para cambiar el comprobante venció. Si subiste una imagen equivocada, comunícate con el staff';
+
 const SERIALIZABLE = {
   isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
 };
@@ -38,6 +47,7 @@ const incluirRelaciones = {
   ticket: {
     select: {
       id_ticket: true,
+      id_user: true,
       codigo_acceso: true,
       total: true,
       estado: true,
@@ -61,9 +71,21 @@ export class PagoService {
 
   // CREATE - El cliente sube el comprobante de su transferencia.
   // Regla: un solo pago por el total del ticket; el monto lo pone el servidor.
-  async create(dto: CreatePagoDto, archivo: ArchivoSubido) {
+  async create(dto: CreatePagoDto, archivo: ArchivoSubido, acceso: Acceso) {
     const { id_ticket } = dto;
     const metodo = dto.metodo ?? metodo_pago.transferencia;
+
+    // Antes de guardar el archivo: el ticket debe ser de quien paga
+    const dueno = await this.prisma.ticket.findUnique({
+      where: { id_ticket },
+      select: { id_ticket: true, id_user: true },
+    });
+
+    if (!dueno) {
+      throw new NotFoundException('El ticket no existe');
+    }
+
+    exigirAccesoTicket(acceso, dueno);
 
     // Se guarda primero el archivo; si la transacción falla, se borra
     const clave = await this.archivos.guardar(
@@ -161,8 +183,8 @@ export class PagoService {
     });
   }
 
-  // READ - Obtener pago por ID
-  async findOne(id: string) {
+  // READ - Obtener pago por ID. Con "acceso" se exige ser admin o dueño
+  async findOne(id: string, acceso?: Acceso) {
     const pago = await this.prisma.pago.findUnique({
       where: {
         id_pago: id,
@@ -174,24 +196,50 @@ export class PagoService {
       throw new NotFoundException('El pago no existe');
     }
 
+    if (acceso) {
+      exigirAccesoTicket(acceso, pago.ticket);
+    }
+
     return pago;
   }
 
-  // READ - Imagen del comprobante
-  // TODO(auth): solo el dueño del ticket o un admin
-  async comprobante(id: string) {
-    const pago = await this.findOne(id);
+  // READ - Imagen del comprobante (admin o dueño)
+  async comprobante(id: string, acceso: Acceso) {
+    const pago = await this.findOne(id, acceso);
     return this.archivos.abrir(pago.comprobante_url);
   }
 
-  // UPDATE - Reemplazar la imagen mientras el pago siga pendiente
-  async reemplazarComprobante(id: string, archivo: ArchivoSubido) {
-    const pago = await this.findOne(id);
+  // UPDATE - Reemplazar la imagen si el cliente se equivocó.
+  // Solo dentro del plazo de la reserva (expira_en del ticket, que no
+  // cambia al subir el comprobante). Vencido el plazo, la imagen queda
+  // fija para que el admin la revise sin que cambie; si hay que
+  // corregirla, el admin rechaza el pago y el cliente recibe un plazo nuevo.
+  async reemplazarComprobante(
+    id: string,
+    archivo: ArchivoSubido,
+    acceso: Acceso,
+  ) {
+    const pago = await this.prisma.pago.findUnique({
+      where: { id_pago: id },
+      include: {
+        ticket: { select: { id_ticket: true, id_user: true, expira_en: true } },
+      },
+    });
+
+    if (!pago) {
+      throw new NotFoundException('El pago no existe');
+    }
+
+    exigirAccesoTicket(acceso, pago.ticket);
 
     if (pago.estado !== estado_pago.pendiente) {
       throw new ConflictException(
-        'Solo se puede cambiar el comprobante de un pago pendiente',
+        'El pago ya fue revisado; no se puede cambiar el comprobante',
       );
+    }
+
+    if (pago.ticket.expira_en <= new Date()) {
+      throw new ConflictException(PLAZO_CAMBIO_VENCIDO);
     }
 
     const clave = await this.archivos.guardar(
@@ -200,16 +248,21 @@ export class PagoService {
       archivo.mimetype,
     );
 
-    // El estado va en el filtro por si el admin lo revisa mientras tanto
+    // Estado y plazo van en el filtro por si el admin lo revisa o el
+    // plazo vence mientras se sube el archivo
     const { count } = await this.prisma.pago.updateMany({
-      where: { id_pago: id, estado: estado_pago.pendiente },
+      where: {
+        id_pago: id,
+        estado: estado_pago.pendiente,
+        ticket: { is: { expira_en: { gt: new Date() } } },
+      },
       data: { comprobante_url: clave },
     });
 
     if (count === 0) {
       await this.archivos.borrar(clave);
       throw new ConflictException(
-        'El pago ya fue revisado; no se puede cambiar el comprobante',
+        'El pago ya fue revisado o venció el plazo; no se puede cambiar el comprobante',
       );
     }
 
@@ -337,11 +390,15 @@ export class PagoService {
     );
   }
 
-  // DELETE - El cliente retira su pago pendiente
-  async remove(id: string) {
+  // DELETE - Solo admin: retira un pago pendiente (casos raros). El
+  // cliente no borra pagos: si se equivocó de imagen la reemplaza dentro
+  // del plazo, y si no, el admin rechaza el pago.
+  async remove(id: string, id_admin: string) {
     const pago = await conReintento(
       () =>
         this.prisma.$transaction(async (tx) => {
+          await exigirAdmin(tx, id_admin);
+
           const pago = await tx.pago.findUnique({
             where: { id_pago: id },
           });

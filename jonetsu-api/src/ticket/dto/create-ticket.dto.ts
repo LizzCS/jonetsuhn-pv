@@ -11,6 +11,9 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { OmitType } from '@nestjs/swagger';
+
+import { CreateUserDto } from '../../user/dto/create-user.dto.js';
 
 export class CreateTicketItemDto {
   @IsUUID('all', { message: 'id_producto debe ser un UUID válido' })
@@ -21,10 +24,18 @@ export class CreateTicketItemDto {
   cantidad!: number;
 }
 
+// Datos de contacto de quien compra sin cuenta
+export class DatosInvitadoDto extends OmitType(CreateUserDto, [
+  'password',
+] as const) {}
+
 export class CreateTicketDto {
-  // TODO(auth): tomar id_user del token cuando exista el login
-  @IsUUID('all', { message: 'id_user debe ser un UUID válido' })
-  id_user!: string;
+  // Con sesión, el pedido es del usuario del token y esto se ignora.
+  // Sin sesión es obligatorio: se crea (o reutiliza) el invitado por correo.
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => DatosInvitadoDto)
+  invitado?: DatosInvitadoDto;
 
   @IsUUID('all', { message: 'id_horario debe ser un UUID válido' })
   id_horario!: string;

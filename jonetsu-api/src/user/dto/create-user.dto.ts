@@ -42,7 +42,7 @@ export class CreateUserDto {
   @IsString({ message: 'telefono debe ser texto' })
   @Matches(/^\+\d{8,15}$/, {
     message:
-      'telefono debe tener 8 dígitos (Honduras) o incluir el código de país, por ejemplo +1 555 123 4567',
+      'telefono debe tener 8 dígitos (Honduras) o incluir el código de país, por ejemplo +504 4431-9867',
   })
   telefono!: string;
 
@@ -55,6 +55,8 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsString({ message: 'password debe ser texto' })
-  @Length(8, 128, { message: 'La contraseña debe tener entre 8 y 128 caracteres' })
+  @Length(8, 128, {
+    message: 'La contraseña debe tener entre 8 y 128 caracteres',
+  })
   password?: string;
 }
